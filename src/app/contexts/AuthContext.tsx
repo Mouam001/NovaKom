@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
+import { apiRequest, API_URL } from '../lib/supabase';
 import type { User, Session } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -41,21 +42,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, name: string, company?: string) => {
     try {
-      const response = await fetch(
-        `https://${supabase.supabaseUrl.split('//')[1]}/functions/v1/make-server-04c0d8ba/auth/signup`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`,
-          },
-          body: JSON.stringify({ email, password, name, company }),
-        }
-      );
+      const response = await apiRequest('/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({ email, password, name, company }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
+        console.error('Signup error response:', data);
         return { error: data.error || 'Erreur lors de l\'inscription' };
       }
 
