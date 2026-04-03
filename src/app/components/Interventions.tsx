@@ -243,7 +243,7 @@ export function Interventions() {
                   backgroundColor: "#0d2254",
                   border: "1px solid rgba(255,255,255,0.07)",
                 }}
-                onClick={() => alert("Lecteur vidéo : " + v.title + "\n(Intégrez l'URL de la vidéo réelle)")}
+                onClick={() => alert("Vidéo à venir : " + v.title)}
               >
                 <div className="relative h-44 overflow-hidden">
                   <img
@@ -354,142 +354,19 @@ export function Interventions() {
               </button>
             </div>
 
-            {/* Carousel */}
-            <div className="relative max-w-3xl mx-auto">
-              <div
-                className="rounded-2xl p-8 md:p-10"
+            {/* Description */}
+            <div className="max-w-4xl mx-auto text-center">
+              <Quote className="w-10 h-10 mb-5 opacity-30 mx-auto" style={{ color: "#00A86B" }} />
+              <p
+                className="text-white/80 mb-8"
                 style={{
-                  backgroundColor: "#0d2254",
-                  border: "1px solid rgba(0,168,107,0.2)",
-                  boxShadow: "0 0 60px rgba(0,168,107,0.08)",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "1.05rem",
+                  lineHeight: 1.85,
                 }}
               >
-                <Quote className="w-10 h-10 mb-5 opacity-30" style={{ color: "#00A86B" }} />
-
-                <p
-                  className="text-white/80 mb-8 italic"
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "1.05rem",
-                    lineHeight: 1.85,
-                  }}
-                >
-                  "{testimonials[reviewIdx].text}"
-                </p>
-
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center text-sm"
-                      style={{
-                        backgroundColor: testimonials[reviewIdx].color + "22",
-                        color: testimonials[reviewIdx].color,
-                        fontFamily: "Poppins, sans-serif",
-                        fontWeight: 700,
-                        border: `1px solid ${testimonials[reviewIdx].color}44`,
-                      }}
-                    >
-                      {testimonials[reviewIdx].avatar}
-                    </div>
-                    <div>
-                      <p
-                        className="text-white"
-                        style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}
-                      >
-                        {testimonials[reviewIdx].name}
-                      </p>
-                      <div className="flex items-center gap-1.5">
-                        <Building2 className="w-3 h-3 text-white/30" />
-                        <p className="text-white/40 text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
-                          {testimonials[reviewIdx].role} — {testimonials[reviewIdx].company}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: testimonials[reviewIdx].rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" style={{ color: "#f59e0b" }} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Controls */}
-              <div className="flex items-center justify-center gap-4 mt-8">
-                <button
-                  onClick={prevReview}
-                  className="w-10 h-10 rounded-full flex items-center justify-center border transition-all hover:bg-white/10"
-                  style={{ borderColor: "rgba(255,255,255,0.15)" }}
-                >
-                  <ChevronLeft className="w-4 h-4 text-white/60" />
-                </button>
-                <div className="flex gap-2">
-                  {testimonials.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setReviewIdx(i)}
-                      className="rounded-full transition-all"
-                      style={{
-                        width: i === reviewIdx ? "24px" : "8px",
-                        height: "8px",
-                        backgroundColor: i === reviewIdx ? "#00A86B" : "rgba(255,255,255,0.2)",
-                      }}
-                    />
-                  ))}
-                </div>
-                <button
-                  onClick={nextReview}
-                  className="w-10 h-10 rounded-full flex items-center justify-center border transition-all hover:bg-white/10"
-                  style={{ borderColor: "rgba(255,255,255,0.15)" }}
-                >
-                  <ChevronRight className="w-4 h-4 text-white/60" />
-                </button>
-              </div>
-            </div>
-
-            {/* Grid previews */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
-              {testimonials.map((t, i) => (
-                <div
-                  key={t.name}
-                  className={`p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 ${i === reviewIdx ? "ring-1" : ""}`}
-                  style={{
-                    backgroundColor: i === reviewIdx ? t.color + "15" : "#0d2254",
-                    border: `1px solid ${i === reviewIdx ? t.color + "44" : "rgba(255,255,255,0.06)"}`,
-                  }}
-                  onClick={() => setReviewIdx(i)}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
-                      style={{
-                        backgroundColor: t.color + "22",
-                        color: t.color,
-                        fontFamily: "Poppins, sans-serif",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {t.avatar}
-                    </div>
-                    <div>
-                      <p className="text-white text-xs" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>
-                        {t.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-0.5 mb-1.5">
-                    {Array.from({ length: t.rating }).map((_, idx) => (
-                      <Star key={idx} className="w-3 h-3 fill-current" style={{ color: "#f59e0b" }} />
-                    ))}
-                  </div>
-                  <p
-                    className="text-white/40 text-xs line-clamp-2"
-                    style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.5 }}
-                  >
-                    "{t.text.slice(0, 70)}…"
-                  </p>
-                </div>
-              ))}
+                Chez NovaKom, nous nous engageons à fournir des services de qualité pour sécuriser et optimiser les infrastructures informatiques des commerces et entreprises comoriens. Nos interventions incluent l'installation de réseaux, la configuration de serveurs, les audits de sécurité, et bien plus. Bientôt, vous pourrez découvrir les témoignages de nos premiers clients satisfaits.
+              </p>
             </div>
           </div>
         )}

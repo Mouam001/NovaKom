@@ -1,6 +1,7 @@
 import ImgMou from "@/assets/images/mouammar.jpeg";
 import Houlam from "@/assets/images/Houlam.jpeg"
-import { Linkedin } from "lucide-react";
+import Abdel from "@/assets/images/Abdel.png"
+import { Linkedin, Globe } from "lucide-react";
 
 
 const team = [
@@ -11,22 +12,33 @@ const team = [
     img:  ImgMou,
     badge: "Dev & Architecture",
     color: "#3b82f6",
+    linkedin: "https://www.linkedin.com/feed/",
+    portfolio: "https://www.mouammarsoule.fr/",
   },
   {
-    name: "Houlam",
-    role: "Ingénieur Cybersécurité",
-    desc: "Expert en protection réseau et audit sécurité. Certifié Security+ avec une expertise en tests d'intrusion.",
+    name: "DJOUNEID MOHAMED",
+    role: "Security Engineer | Pentester | AI-Driven Cybersecurity",
+    desc: "Spécialiste en tests d'intrusion et en audit de sécurité (applicatif et réseau), " +
+        "je me concentre sur l'automatisation de la détection de vulnérabilités. " +
+        "Grâce à l'analyse de données et à l'intelligence artificielle, " +
+        "j'identifie proactivement les failles pour renforcer durablement la résilience des systèmes d'information.",
     img: Houlam,
     badge: "Cybersécurité",
     color: "#00A86B",
+    linkedin: "https://www.linkedin.com/in/djouneid-mohamed-b95a98285/",
+    portfolio: "#",
   },
   {
-    name: "Abdel",
-    role: "DevSecOps",
-    desc: "Spécialiste déploiement sécurisé et automatisation CI/CD. Expert en intégration de la sécurité dans les pipelines DevOps.",
-    img: "https://images.unsplash.com/photo-1758876021212-a87517fc8954?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYWxlJTIwZGV2ZWxvcGVyJTIwRGV2T3BzJTIwcG9ydHJhaXQlMjBjb3Jwb3JhdGV8ZW58MXx8fHwxNzcyNDk2NTE1fDA&ixlib=rb-4.1.0&q=80&w=400",
+    name: "Abdourahamane AbdelWahab Ben Said",
+    role: "Security Engineer | Network & Infrastructure Security | DevSecOps",
+    desc: "Spécialiste dans la sécurisation et l'automatisation des environnements IT, " +
+        "je mets en place des pipelines DevSecOps performants. Mon objectif : " +
+        "réduire drastiquement les risques de sécurité tout en accélérant la vélocité des déploiements.",
+    img: Abdel,
     badge: "DevSecOps",
     color: "#a855f7",
+    linkedin: "https://www.linkedin.com/in/abdelwahab28/",
+    portfolio: "#",
   },
 ];
 
@@ -121,13 +133,26 @@ export function Team() {
                 >
                   {member.desc}
                 </p>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-                  style={{ color: "#0077B5", fontFamily: "Inter, sans-serif" }}
-                >
-                  <Linkedin className="w-4 h-4" /> LinkedIn
-                </a>
+                <div className="flex gap-4">
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+                    style={{ color: "#0077B5", fontFamily: "Inter, sans-serif" }}
+                  >
+                    <Linkedin className="w-4 h-4" /> LinkedIn
+                  </a>
+                  <a
+                    href={member.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+                    style={{ color: "#FFD700", fontFamily: "Inter, sans-serif" }}
+                  >
+                    <Globe className="w-4 h-4" /> Portfolio
+                  </a>
+                </div>
               </div>
             </div>
           ))}

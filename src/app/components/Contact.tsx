@@ -238,6 +238,7 @@ export function Contact() {
                 <option value="support" style={{ backgroundColor: "#0d2254" }}>Support IT</option>
                 <option value="reseau" style={{ backgroundColor: "#0d2254" }}>Administration réseau</option>
                 <option value="pack" style={{ backgroundColor: "#0d2254" }}>Offres & packs</option>
+                <option value="pack" style={{ backgroundColor: "#0d2254" }}>Développement Site & Application</option>
                 <option value="autre" style={{ backgroundColor: "#0d2254" }}>Autre</option>
               </select>
             </div>
