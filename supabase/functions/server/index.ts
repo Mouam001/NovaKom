@@ -7,7 +7,11 @@ import * as kv from './kv_store.tsx';
 const app = new Hono();
 
 // Middleware
-app.use('*', cors());
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use('*', logger(console.log));
 
 // Supabase client with service role (pour l'admin)
@@ -21,7 +25,7 @@ const supabase = createClient(
 // ============================================
 
 // Inscription utilisateur
-app.post('/make-server-04c0d8ba/auth/signup', async (c) => {
+app.post('/server/auth/signup', async (c) => {
   try {
     const { email, password, name, company } = await c.req.json();
 
@@ -58,7 +62,7 @@ app.post('/make-server-04c0d8ba/auth/signup', async (c) => {
 
 // Connexion (géré côté client avec Supabase)
 // Vérification de session (utilisé pour vérifier l'auth)
-app.get('/make-server-04c0d8ba/auth/verify', async (c) => {
+app.get('/server/auth/verify', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -104,7 +108,7 @@ const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
 };
 
 // Ajouter des créneaux disponibles (ADMIN)
-app.post('/make-server-04c0d8ba/slots/create', async (c) => {
+app.post('/server/slots/create', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -134,7 +138,7 @@ app.post('/make-server-04c0d8ba/slots/create', async (c) => {
 });
 
 // Supprimer un créneau (ADMIN)
-app.delete('/make-server-04c0d8ba/slots/:date/:time', async (c) => {
+app.delete('/server/slots/:date/:time', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -155,7 +159,7 @@ app.delete('/make-server-04c0d8ba/slots/:date/:time', async (c) => {
 });
 
 // Récupérer tous les créneaux disponibles (PUBLIC)
-app.get('/make-server-04c0d8ba/slots/available', async (c) => {
+app.get('/server/slots/available', async (c) => {
   try {
     const allSlots = await kv.getByPrefix('slot_');
     
@@ -181,7 +185,7 @@ app.get('/make-server-04c0d8ba/slots/available', async (c) => {
 });
 
 // Récupérer TOUS les créneaux (ADMIN)
-app.get('/make-server-04c0d8ba/slots/all', async (c) => {
+app.get('/server/slots/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -209,7 +213,7 @@ app.get('/make-server-04c0d8ba/slots/all', async (c) => {
 // ============================================
 
 // Créer un rendez-vous (PUBLIC)
-app.post('/make-server-04c0d8ba/appointments/create', async (c) => {
+app.post('/server/appointments/create', async (c) => {
   try {
     const { name, email, phone, date, time, message } = await c.req.json();
 
@@ -257,7 +261,7 @@ app.post('/make-server-04c0d8ba/appointments/create', async (c) => {
 });
 
 // Récupérer tous les rendez-vous (ADMIN)
-app.get('/make-server-04c0d8ba/appointments/all', async (c) => {
+app.get('/server/appointments/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -285,22 +289,9 @@ app.get('/make-server-04c0d8ba/appointments/all', async (c) => {
 // ============================================
 
 // Créer un avis (AUTHENTIFIÉ)
-app.post('/make-server-04c0d8ba/reviews/create', async (c) => {
+app.post('/server/reviews/create', async (c) => {
   try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-
-    if (!accessToken) {
-      return c.json({ error: 'Authentification requise' }, 401);
-    }
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
-
-    if (authError || !user) {
-      console.log(`Auth error while creating review: ${authError?.message}`);
-      return c.json({ error: 'Non autorisé' }, 401);
-    }
-
-    const { message, rating, company } = await c.req.json();
+    const { message, rating, company, userId, userName, userEmail } = await c.req.json();
 
     if (!message || !rating) {
       return c.json({ error: 'Message et note requis' }, 400);
@@ -311,10 +302,10 @@ app.post('/make-server-04c0d8ba/reviews/create', async (c) => {
     
     const review = {
       id: reviewId,
-      userId: user.id,
-      userName: user.user_metadata?.name || 'Utilisateur',
-      userEmail: user.email,
-      company: company || user.user_metadata?.company || '',
+      userId: userId || 'anonymous',
+      userName: userName || 'Utilisateur',
+      userEmail: userEmail || '',
+      company: company || '',
       message,
       rating: parseInt(rating),
       createdAt: new Date().toISOString(),
@@ -331,7 +322,7 @@ app.post('/make-server-04c0d8ba/reviews/create', async (c) => {
 });
 
 // Récupérer tous les avis approuvés (PUBLIC)
-app.get('/make-server-04c0d8ba/reviews/approved', async (c) => {
+app.get('/server/reviews/approved', async (c) => {
   try {
     const allReviews = await kv.getByPrefix('review_');
     
@@ -349,7 +340,7 @@ app.get('/make-server-04c0d8ba/reviews/approved', async (c) => {
 });
 
 // Récupérer TOUS les avis (ADMIN)
-app.get('/make-server-04c0d8ba/reviews/all', async (c) => {
+app.get('/server/reviews/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -371,7 +362,7 @@ app.get('/make-server-04c0d8ba/reviews/all', async (c) => {
 });
 
 // Approuver un avis (ADMIN)
-app.patch('/make-server-04c0d8ba/reviews/:reviewId/approve', async (c) => {
+app.patch('/server/reviews/:reviewId/approve', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -398,7 +389,7 @@ app.patch('/make-server-04c0d8ba/reviews/:reviewId/approve', async (c) => {
 });
 
 // Supprimer un avis (ADMIN)
-app.delete('/make-server-04c0d8ba/reviews/:reviewId', async (c) => {
+app.delete('/server/reviews/:reviewId', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
@@ -419,7 +410,7 @@ app.delete('/make-server-04c0d8ba/reviews/:reviewId', async (c) => {
 });
 
 // Route de test
-app.get('/make-server-04c0d8ba/health', (c) => {
+app.get('/server/health', (c) => {
   return c.json({ status: 'ok', message: 'NovaKom Server is running' });
 });
 

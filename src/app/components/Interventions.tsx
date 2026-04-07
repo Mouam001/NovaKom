@@ -8,31 +8,31 @@ const photos = [
   {
     id: 1,
     src: "https://images.unsplash.com/photo-1758101755915-462eddc23f57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxJVCUyMHRlY2huaWNpYW4lMjB3b3JraW5nJTIwYnVzaW5lc3MlMjBzaG9wJTIwbmV0d29yayUyMGluc3RhbGxhdGlvbnxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Déploiement réseau – Commerce Volo Volo, Moroni",
+    label: "Déploiement réseau",
     tag: "Installation réseau",
   },
   {
     id: 2,
     src: "https://images.unsplash.com/photo-1735825764457-ffdf0b5aa5dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wdXRlciUyMHNldHVwJTIwc21hbGwlMjBidXNpbmVzcyUyMG9mZmljZSUyMHByb2Zlc3Npb25hbHxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Configuration postes de travail – Boutique Tech Zone, Moroni",
+    label: "Configuration postes de travail ",
     tag: "Support IT",
   },
   {
     id: 3,
     src: "https://images.unsplash.com/photo-1663932210347-164a05ed0ccd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZXR3b3JrJTIwY2FibGUlMjByb3V0ZXIlMjBpbnN0YWxsYXRpb24lMjB0ZWNobmljaWFufGVufDF8fHx8MTc3MjQ5NzA2M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Câblage structuré – Supermarché Al Kamar, Moroni",
+    label: "Câblage structuré",
     tag: "Infrastructure réseau",
   },
   {
     id: 4,
     src: "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwaW5zdGFsbGF0aW9uJTIwZGF0YSUyMGNlbnRlciUyMG1haW50ZW5hbmNlfGVufDF8fHx8MTc3MjQ5NzA2NXww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Installation salle serveurs – Hôtel Itsandra Beach, Moroni",
+    label: "Installation salle serveurs",
     tag: "Serveurs",
   },
   {
     id: 5,
     src: "https://images.unsplash.com/photo-1585216274151-e3debff99c0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXJld2FsbCUyMHNlY3VyaXR5JTIwb2ZmaWNlJTIwaW50ZXJ2ZW50aW9uJTIwcHJvZmVzc2lvbmFsJTIwc2V0dXB8ZW58MXx8fHwxNzcyNDk3MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Mise en place firewall – Cabinet Comptable Sunrise, Mutsamudu",
+    label: "Mise en place firewall",
     tag: "Cybersécurité",
   },
 ];
@@ -42,7 +42,7 @@ const videos = [
     id: "v1",
     thumbnail: "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
     title: "Déploiement réseau Wi-Fi sécurisé",
-    subtitle: "Centre commercial Moroni Plaza · Durée : 2:34",
+    subtitle: "Centre commercial Moroni Plaza",
     url: "#",
   },
   {

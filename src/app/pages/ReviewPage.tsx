@@ -32,6 +32,9 @@ export function ReviewPage() {
           rating,
           message,
           company: company || user?.user_metadata?.company || '',
+          userId: user?.id,
+          userName: user?.user_metadata?.name || user?.email,
+          userEmail: user?.email,
         }),
       });
 
