@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Play, X, Star, ChevronLeft, ChevronRight, Quote, MapPin, Building2, MessageSquarePlus } from "lucide-react";
+import { Play, X, Star, ChevronLeft, ChevronRight, Quote, MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,56 +8,32 @@ const photos = [
   {
     id: 1,
     src: "https://images.unsplash.com/photo-1758101755915-462eddc23f57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxJVCUyMHRlY2huaWNpYW4lMjB3b3JraW5nJTIwYnVzaW5lc3MlMjBzaG9wJTIwbmV0d29yayUyMGluc3RhbGxhdGlvbnxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Déploiement réseau",
+    label: "Déploiement des réseaux",
     tag: "Installation réseau",
   },
   {
     id: 2,
     src: "https://images.unsplash.com/photo-1735825764457-ffdf0b5aa5dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wdXRlciUyMHNldHVwJTIwc21hbGwlMjBidXNpbmVzcyUyMG9mZmljZSUyMHByb2Zlc3Npb25hbHxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Configuration postes de travail ",
+    label: "Configuration des postes de travail ",
     tag: "Support IT",
   },
   {
     id: 3,
     src: "https://images.unsplash.com/photo-1663932210347-164a05ed0ccd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZXR3b3JrJTIwY2FibGUlMjByb3V0ZXIlMjBpbnN0YWxsYXRpb24lMjB0ZWNobmljaWFufGVufDF8fHx8MTc3MjQ5NzA2M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Câblage structuré",
+    label: "Câblage bien structuré",
     tag: "Infrastructure réseau",
   },
   {
     id: 4,
     src: "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwaW5zdGFsbGF0aW9uJTIwZGF0YSUyMGNlbnRlciUyMG1haW50ZW5hbmNlfGVufDF8fHx8MTc3MjQ5NzA2NXww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Installation salle serveurs",
+    label: "Installation des salles serveurs",
     tag: "Serveurs",
   },
   {
     id: 5,
     src: "https://images.unsplash.com/photo-1585216274151-e3debff99c0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXJld2FsbCUyMHNlY3VyaXR5JTIwb2ZmaWNlJTIwaW50ZXJ2ZW50aW9uJTIwcHJvZmVzc2lvbmFsJTIwc2V0dXB8ZW58MXx8fHwxNzcyNDk3MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Mise en place firewall",
+    label: "Mise en place des firewalls",
     tag: "Cybersécurité",
-  },
-];
-
-const videos = [
-  {
-    id: "v1",
-    thumbnail: "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    title: "Déploiement réseau Wi-Fi sécurisé",
-    subtitle: "Centre commercial Moroni Plaza",
-    url: "#",
-  },
-  {
-    id: "v2",
-    thumbnail: "https://images.unsplash.com/photo-1768839721176-2fa91fdce725?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    title: "Audit de sécurité en entreprise",
-    subtitle: "Banque BIC Comores · Durée : 3:12",
-    url: "#",
-  },
-  {
-    id: "v3",
-    thumbnail: "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    title: "Installation salle serveurs sécurisée",
-    subtitle: "Ministère des Finances · Durée : 4:05",
-    url: "#",
   },
 ];
 
@@ -135,7 +111,7 @@ export function Interventions() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Nos réalisations terrain
+            Nos futures réalisations terrain
           </p>
           <h2
             className="text-white mb-5"
@@ -145,14 +121,15 @@ export function Interventions() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Interventions auprès des commerces
+            Nous lançerons prochainement nos services auprès des commerces et entreprises.
+            Cette section présentera nos futures réalisations.
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Découvrez nos interventions réelles chez nos clients — photos, vidéos et
-            témoignages de commerçants et entreprises comoriens qui nous font confiance.
+            Découvrez prochainement nos interventions chez nos clients — photos, 
+            vidéos et témoignages de commerçants et entreprises comoriens qui nous feront confiance.
           </p>
         </div>
 
@@ -234,82 +211,30 @@ export function Interventions() {
 
         {/* VIDEOS */}
         {activeTab === "videos" && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {videos.map((v) => (
-              <div
-                key={v.id}
-                className="rounded-xl overflow-hidden group cursor-pointer"
-                style={{
-                  backgroundColor: "#0d2254",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                }}
-                onClick={() => alert("Vidéo à venir : " + v.title)}
-              >
-                <div className="relative h-44 overflow-hidden">
-                  <img
-                    src={v.thumbnail}
-                    alt={v.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{ background: "rgba(10,31,68,0.5)" }}
-                  >
-                    <div
-                      className="w-14 h-14 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
-                      style={{
-                        background: "linear-gradient(135deg, #00A86B, #007a4e)",
-                        boxShadow: "0 0 30px rgba(0,168,107,0.5)",
-                      }}
-                    >
-                      <Play className="w-6 h-6 text-white ml-1" fill="white" />
-                    </div>
-                  </div>
-                  {/* Duration badge */}
-                  <div
-                    className="absolute bottom-3 right-3 px-2 py-0.5 rounded text-xs"
-                    style={{ backgroundColor: "rgba(0,0,0,0.7)", color: "#fff", fontFamily: "Inter, sans-serif" }}
-                  >
-                    {v.subtitle.split("·")[1]?.trim()}
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p
-                    className="text-white text-sm mb-1"
-                    style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
-                  >
-                    {v.title}
-                  </p>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3 h-3" style={{ color: "#00A86B" }} />
-                    <p
-                      className="text-white/40 text-xs"
-                      style={{ fontFamily: "Inter, sans-serif" }}
-                    >
-                      {v.subtitle.split("·")[0]?.trim()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {/* CTA upload card */}
+          <div className="max-w-2xl mx-auto">
             <div
-              className="rounded-xl flex flex-col items-center justify-center gap-3 p-8 text-center cursor-pointer group hover:border-[#00A86B66] transition-colors"
+              className="rounded-xl flex flex-col items-center justify-center gap-4 p-10 text-center"
               style={{
                 backgroundColor: "#0d2254",
                 border: "2px dashed rgba(255,255,255,0.1)",
-                minHeight: "200px",
+                minHeight: "260px",
               }}
             >
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center"
+                className="w-14 h-14 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: "#00A86B18" }}
               >
-                <Play className="w-5 h-5" style={{ color: "#00A86B" }} />
+                <Play className="w-6 h-6" style={{ color: "#00A86B" }} />
               </div>
-              <p className="text-white/40 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
-                D'autres vidéos bientôt disponibles
+              <p
+                className="text-white text-lg"
+                style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
+              >
+                Vidéos bientôt disponibles
+              </p>
+              <p className="text-white/55 text-sm max-w-md" style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}>
+                Nous publierons prochainement les premières vidéos de nos futures interventions
+                pour permettre à nos clients de découvrir notre accompagnement sur le terrain.
               </p>
             </div>
           </div>

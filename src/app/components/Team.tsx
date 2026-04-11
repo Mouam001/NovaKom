@@ -1,6 +1,8 @@
-import ImgMou from "@/assets/images/mouammar.jpeg";
+import ImgMou from "@/assets/images/nicolas.jpg";
 import Houlam from "@/assets/images/Houlam.jpeg"
 import Abdel from "@/assets/images/Abdel.png"
+import Djae from "@/assets/images/djae.jpeg"
+import Isak from "@/assets/images/isak.jpeg"
 import { Linkedin, Globe } from "lucide-react";
 
 
@@ -10,6 +12,7 @@ const team = [
     role: "Ingénieur Logiciel",
     desc: "Spécialiste développement et architecture applicative. Expert en systèmes distribués et solutions cloud-native.",
     img:  ImgMou,
+    objectPosition: "center 8%",
     badge: "Dev & Architecture",
     color: "#3b82f6",
     linkedin: "https://www.linkedin.com/feed/",
@@ -23,10 +26,11 @@ const team = [
         "Grâce à l'analyse de données et à l'intelligence artificielle, " +
         "j'identifie proactivement les failles pour renforcer durablement la résilience des systèmes d'information.",
     img: Houlam,
+    objectPosition: "center 6%",
     badge: "Cybersécurité",
     color: "#00A86B",
     linkedin: "https://www.linkedin.com/in/djouneid-mohamed-b95a98285/",
-    portfolio: "#",
+    portfolio: "https://houlam-portfolio.vercel.app/",
   },
   {
     name: "Abdourahamane AbdelWahab Ben Said",
@@ -35,11 +39,42 @@ const team = [
         "je mets en place des pipelines DevSecOps performants. Mon objectif : " +
         "réduire drastiquement les risques de sécurité tout en accélérant la vélocité des déploiements.",
     img: Abdel,
+    objectPosition: "center 7%",
     badge: "DevSecOps",
     color: "#a855f7",
     linkedin: "https://www.linkedin.com/in/abdelwahab28/",
     portfolio: "#",
   },
+
+  {
+    name: "Ishack Ibrahim",
+    role: "Électricien spécialisé BTP & Industrie",
+    desc: "Professionnel polyvalent justifiant d’une solide expertise en maintenance industrielle et en installations électriques du bâtiment. " +
+        "Maîtrisant l’intégration des automatismes, de la mécanique, de l’électronique et de la pneumatique. " +
+        "Spécialisé en gestion de l’énergie électrique et en développement durable, " +
+        "je conçois et optimise des solutions visant à réduire l’empreinte carbone, " +
+        "améliorer l’efficacité énergétique et garantir la fiabilité des équipements de production.",
+    img: Isak,
+    objectPosition: "center 5%",
+    badge: "Électro-Énergie",
+    color: "#2563eb",
+    linkedin: "https://www.linkedin.com/in/ishack-i-81b4713b3/",
+  },
+
+  {
+    name: "Djae Insa",
+    role: "Data Analyst | Banque & Finance",
+    desc: "Spécialisé en analyse de données dans le secteur bancaire et financier, " +
+        "j’exploite les données pour produire des insights stratégiques, optimiser les performances " +
+        "et soutenir la prise de décision. Mon objectif : transformer les données en valeur concrète pour l’entreprise.",
+    img: Djae,
+    objectPosition: "center 7%",
+    badge: "Data & Finance",
+    color: "#0ea5e9",
+    linkedin: "#",
+    portfolio: "#",
+  },
+    
 ];
 
 export function Team() {
@@ -91,13 +126,8 @@ export function Team() {
                 <img
                   src={member.img}
                   alt={member.name}
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(to top, #0d2254 0%, transparent 50%)`,
-                  }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  style={{ objectPosition: member.objectPosition || "center 8%" }}
                 />
                 {/* Badge */}
                 <div
