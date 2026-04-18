@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle } from 'lucide-react';
 import { apiRequest } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 interface TimeSlot {
   date: string;
@@ -9,10 +10,24 @@ interface TimeSlot {
   available: boolean;
 }
 
+interface Appointment {
+  id: string;
+  date: string;
+  time: string;
+  name: string;
+  email: string;
+  phone: string;
+  message?: string;
+  createdAt: string;
+}
+
 export function AppointmentPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [slots, setSlots] = useState<TimeSlot[]>([]);
+  const [myAppointments, setMyAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMyAppointments, setLoadingMyAppointments] = useState(true);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -25,8 +40,21 @@ export function AppointmentPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login', { state: { from: '/appointment' } });
+    }
+  }, [authLoading, user, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+    setFormData((prev) => ({
+      ...prev,
+      name: user.user_metadata?.name || prev.name,
+      email: user.email || prev.email,
+    }));
     loadAvailableSlots();
-  }, []);
+    loadMyAppointments();
+  }, [user]);
 
   const loadAvailableSlots = async () => {
     try {
@@ -37,6 +65,21 @@ export function AppointmentPage() {
       console.error('Error loading slots:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMyAppointments = async () => {
+    setLoadingMyAppointments(true);
+    try {
+      const response = await apiRequest('/appointments/my');
+      const data = await response.json();
+      if (response.ok) {
+        setMyAppointments(data.appointments || []);
+      }
+    } catch (err) {
+      console.error('Error loading my appointments:', err);
+    } finally {
+      setLoadingMyAppointments(false);
     }
   };
 
@@ -70,6 +113,7 @@ export function AppointmentPage() {
       setSuccess(true);
       // Recharger les créneaux disponibles
       loadAvailableSlots();
+      loadMyAppointments();
     } catch (err) {
       console.error('Error creating appointment:', err);
       setError('Erreur lors de la création du rendez-vous');
@@ -86,6 +130,18 @@ export function AppointmentPage() {
     acc[slot.date].push(slot);
     return acc;
   }, {} as Record<string, TimeSlot[]>);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#ff6b35]/30 border-t-[#ff6b35] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   if (success) {
     return (
@@ -196,6 +252,10 @@ export function AppointmentPage() {
               Vos informations
             </h2>
 
+            <div className="mb-4 p-3 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300">
+              Connecté en tant que <span className="text-white font-semibold">{user.user_metadata?.name || user.email}</span>
+            </div>
+
             {error && (
               <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
                 {error}
@@ -226,16 +286,17 @@ export function AppointmentPage() {
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
-                    placeholder="exemple@email.com"
-                    required
-                  />
-                </div>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
+                  placeholder="exemple@email.com"
+                  required
+                  readOnly
+                />
               </div>
+            </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -309,6 +370,40 @@ export function AppointmentPage() {
               </button>
             </div>
           </div>
+        </div>
+
+        <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
+            Mon espace - Mes rendez-vous
+          </h2>
+          {loadingMyAppointments ? (
+            <div className="text-center py-8">
+              <div className="w-10 h-10 border-4 border-[#ff6b35]/30 border-t-[#ff6b35] rounded-full animate-spin mx-auto" />
+            </div>
+          ) : myAppointments.length === 0 ? (
+            <p className="text-gray-300">Vous n'avez encore aucun rendez-vous.</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-4">
+              {myAppointments.map((apt) => (
+                <div key={apt.id} className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                  <p className="text-white font-semibold">
+                    {new Date(apt.date).toLocaleDateString('fr-FR', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}{' '}
+                    à {apt.time}
+                  </p>
+                  <p className="text-sm text-gray-300 mt-2">Email: {apt.email}</p>
+                  <p className="text-sm text-gray-300">Téléphone: {apt.phone}</p>
+                  {apt.message && (
+                    <p className="text-sm text-gray-400 mt-2">Message: {apt.message}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

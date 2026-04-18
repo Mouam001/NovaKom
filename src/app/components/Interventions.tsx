@@ -37,7 +37,7 @@ const photos = [
   },
 ];
 
-const testimonials = [
+const testimonialsFallback = [
   {
     name: "Ibrahim Abdallah",
     role: "Gérant",
@@ -80,8 +80,46 @@ export function Interventions() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"photos" | "videos" | "avis">("photos");
   const [reviewIdx, setReviewIdx] = useState(0);
+  const [approvedReviews, setApprovedReviews] = useState<any[]>([]);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  useEffect(() => {
+    const loadApprovedReviews = async () => {
+      try {
+        const response = await apiRequest('/reviews/approved');
+        const data = await response.json();
+        if (response.ok) {
+          setApprovedReviews(data.reviews || []);
+        }
+      } catch (err) {
+        console.error('Error loading approved reviews:', err);
+      }
+    };
+
+    loadApprovedReviews();
+  }, []);
+
+  const testimonials = approvedReviews.length > 0
+    ? approvedReviews.map((review) => {
+        const displayName = review.userName || 'Client NovaKom';
+        const initials = displayName
+          .split(' ')
+          .map((word: string) => word[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase();
+        return {
+          name: displayName,
+          role: 'Client',
+          company: review.company || 'Client NovaKom',
+          avatar: initials || 'CL',
+          color: '#00A86B',
+          rating: review.rating || 5,
+          text: review.message || '',
+        };
+      })
+    : testimonialsFallback;
 
   const openLight = (id: number) => setLightbox(id);
   const closeLight = () => setLightbox(null);

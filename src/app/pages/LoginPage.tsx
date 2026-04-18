@@ -1,7 +1,9 @@
 import { useState,  useEffect} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LogIn, UserPlus, Mail, Lock, User, Building2 } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, User, Building2, Eye, EyeOff } from 'lucide-react';
+
+const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ export function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [error, setError] = useState('');
@@ -41,6 +45,16 @@ export function LoginPage() {
       } else {
         if (!name) {
           setError('Le nom est requis');
+          setLoading(false);
+          return;
+        }
+        if (!STRONG_PASSWORD_REGEX.test(password)) {
+          setError('Le mot de passe doit contenir au moins 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial.');
+          setLoading(false);
+          return;
+        }
+        if (password !== confirmPassword) {
+          setError('Les mots de passe ne correspondent pas.');
           setLoading(false);
           return;
         }
@@ -83,6 +97,7 @@ export function LoginPage() {
               onClick={() => {
                 setIsLogin(true);
                 setError('');
+                setConfirmPassword('');
               }}
               className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
                 isLogin
@@ -97,6 +112,7 @@ export function LoginPage() {
               onClick={() => {
                 setIsLogin(false);
                 setError('');
+                setConfirmPassword('');
               }}
               className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
                 !isLogin
@@ -181,21 +197,66 @@ export function LoginPage() {
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
+                  className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
                   placeholder="••••••••"
                   required
-                  minLength={6}
+                  minLength={8}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
               {!isLogin && (
                 <p className="mt-1 text-xs text-gray-400">
-                  Minimum 6 caractères
+                  Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial
                 </p>
               )}
+              {isLogin && (
+                <div className="mt-2 text-right">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/forgot-password')}
+                    className="text-sm text-gray-400 hover:text-[#ff6b35] transition-colors"
+                  >
+                    Mot de passe oublié ?
+                  </button>
+                </div>
+              )}
             </div>
+
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Confirmer le mot de passe *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onCopy={(e) => e.preventDefault()}
+                    onCut={(e) => e.preventDefault()}
+                    onPaste={(e) => e.preventDefault()}
+                    className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
+                    placeholder="Retapez votre mot de passe"
+                    required
+                    minLength={8}
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-400">
+                  Copier/coller désactivé pour confirmer le mot de passe
+                </p>
+              </div>
+            )}
 
             {/* Bouton submit */}
             <button

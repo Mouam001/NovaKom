@@ -96,12 +96,20 @@ app.get('/server/auth/verify', async (c) => {
 // GESTION DES CRÉNEAUX (ADMIN ONLY)
 // ============================================
 
+// Récupérer l'utilisateur à partir du token d'accès
+const getUserFromAccessToken = async (accessToken: string | undefined) => {
+  if (!accessToken) return null;
+
+  const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+  if (error || !user) return null;
+
+  return user;
+};
+
 // Vérifier si l'utilisateur est admin
 const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
-  if (!accessToken) return false;
-  
-  const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-  if (error || !user) return false;
+  const user = await getUserFromAccessToken(accessToken);
+  if (!user) return false;
   
   // L'admin est identifié par son email
   return user.email === 'admin@novakom.fr';
@@ -214,12 +222,19 @@ app.get('/server/slots/all', async (c) => {
 // GESTION DES RENDEZ-VOUS
 // ============================================
 
-// Créer un rendez-vous (PUBLIC)
+// Créer un rendez-vous (AUTHENTIFIÉ)
 app.post('/server/appointments/create', async (c) => {
   try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const user = await getUserFromAccessToken(accessToken);
+
+    if (!user) {
+      return c.json({ error: 'Vous devez être connecté pour prendre un rendez-vous' }, 401);
+    }
+
     const { name, email, phone, date, time, message } = await c.req.json();
 
-    if (!name || !email || !phone || !date || !time) {
+    if (!phone || !date || !time) {
       return c.json({ error: 'Tous les champs sont requis' }, 400);
     }
 
@@ -241,8 +256,9 @@ app.post('/server/appointments/create', async (c) => {
     
     const appointment = {
       id: appointmentId,
-      name,
-      email,
+      userId: user.id,
+      name: name || user.user_metadata?.name || user.email || 'Client',
+      email: user.email || email || '',
       phone,
       date,
       time,
@@ -259,6 +275,32 @@ app.post('/server/appointments/create', async (c) => {
   } catch (error) {
     console.log(`Error creating appointment: ${error}`);
     return c.json({ error: 'Erreur lors de la création du rendez-vous' }, 500);
+  }
+});
+
+// Récupérer les rendez-vous de l'utilisateur connecté
+app.get('/server/appointments/my', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const user = await getUserFromAccessToken(accessToken);
+
+    if (!user) {
+      return c.json({ error: 'Non autorisé' }, 401);
+    }
+
+    const appointments = await kv.getByPrefix('appointment_');
+    const myAppointments = appointments
+      .filter((apt: any) => apt.userId === user.id)
+      .sort((a: any, b: any) => {
+        const dateA = new Date(`${a.date} ${a.time}`);
+        const dateB = new Date(`${b.date} ${b.time}`);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+    return c.json({ appointments: myAppointments });
+  } catch (error) {
+    console.log(`Error fetching my appointments: ${error}`);
+    return c.json({ error: 'Erreur lors de la récupération de vos rendez-vous' }, 500);
   }
 });
 
@@ -293,7 +335,14 @@ app.get('/server/appointments/all', async (c) => {
 // Créer un avis (AUTHENTIFIÉ)
 app.post('/server/reviews/create', async (c) => {
   try {
-    const { message, rating, company, userId, userName, userEmail } = await c.req.json();
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const user = await getUserFromAccessToken(accessToken);
+
+    if (!user) {
+      return c.json({ error: 'Vous devez être connecté pour laisser un avis' }, 401);
+    }
+
+    const { message, rating, company } = await c.req.json();
 
     if (!message || !rating) {
       return c.json({ error: 'Message et note requis' }, 400);
@@ -304,9 +353,9 @@ app.post('/server/reviews/create', async (c) => {
     
     const review = {
       id: reviewId,
-      userId: userId || 'anonymous',
-      userName: userName || 'Utilisateur',
-      userEmail: userEmail || '',
+      userId: user.id,
+      userName: user.user_metadata?.name || user.email || 'Utilisateur',
+      userEmail: user.email || '',
       company: company || '',
       message,
       rating: parseInt(rating),
