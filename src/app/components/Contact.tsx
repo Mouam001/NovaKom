@@ -69,13 +69,13 @@ export function Contact() {
               {
                 icon: <Phone className="w-5 h-5" />,
                 label: "Téléphone",
-                value: "+269 321 00 00",
+                value: "+269 355 54 74",
                 sub: "Lun – Sam, 8h – 18h",
               },
               {
                 icon: <Mail className="w-5 h-5" />,
                 label: "Email",
-                value: "contact@novakom.km",
+                value: "contact@novakom.org",
                 sub: "Réponse sous 24h",
               },
               {

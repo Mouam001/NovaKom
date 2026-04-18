@@ -10,7 +10,7 @@ const app = new Hono();
 app.use('*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
+  allowHeaders: ['Content-Type', 'Authorization', 'apikey', 'X-Client-Info'],
 }));
 app.use('*', logger(console.log));
 
@@ -123,12 +123,14 @@ app.post('/server/slots/create', async (c) => {
     }
 
     // Créer les créneaux dans le KV store
-    const kvPairs: Array<[string, any]> = slots.map((slot: any) => {
-      const key = `slot_${slot.date}_${slot.time}`;
-      return [key, { date: slot.date, time: slot.time, available: true }];
-    });
+    const keys = slots.map((slot: any) => `slot_${slot.date}_${slot.time}`);
+    const values = slots.map((slot: any) => ({
+      date: slot.date,
+      time: slot.time,
+      available: true,
+    }));
 
-    await kv.mset(kvPairs);
+    await kv.mset(keys, values);
 
     return c.json({ success: true, count: slots.length });
   } catch (error) {
