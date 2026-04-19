@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    // Écouter les changements d'authentification
+    //On ecoute les changements d'authentification
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
-  const isAdmin = user?.email === 'admin@novakom.fr';
+  const isAdmin = user?.email === 'contactus@novakom.tech';
 
   const value = {
     user,

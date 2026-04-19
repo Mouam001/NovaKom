@@ -20,7 +20,6 @@ type Formation = {
   title: string;
   color: string;
   level: string;
-  duration: string;
   price: string;
   description: string;
   benefits: string[];
@@ -34,7 +33,6 @@ const formations: Formation[] = [
     title: "Sécurité Informatique & Cyber Défense",
     color: "#00A86B",
     level: "Débutant → Avancé",
-    duration: "40h (5 jours)",
     price: "Sur devis",
     description:
       "Protégez vos données et systèmes contre les cybermenaces croissantes. Nos experts vous enseignent les meilleures pratiques de sécurité, du renforcement des défenses à la gestion des incidents critiques.",
@@ -52,7 +50,6 @@ const formations: Formation[] = [
     title: "Développement Web & Applications",
     color: "#3b82f6",
     level: "Débutant → Intermédiaire",
-    duration: "60h (2 semaines)",
     price: "Sur devis",
     description:
       "Transformez vos idées en applications web modernes et performantes. Apprenez les technologies actuelles pour créer des solutions numériques adaptées aux besoins du marché comorien.",
@@ -70,7 +67,6 @@ const formations: Formation[] = [
     title: "Compétences Numériques Essentielles",
     color: "#a855f7",
     level: "Grand débutant",
-    duration: "16h (2 jours)",
     price: "Sur devis",
     description:
       "Maîtrisez les outils numériques indispensables au travail moderne et sécurisez vos usages. Une formation accessible pour tous, du bureautique à la collaboration en ligne.",
@@ -88,7 +84,6 @@ const formations: Formation[] = [
     title: "Administration Réseaux & Systèmes",
     color: "#f59e0b",
     level: "Intermédiaire → Avancé",
-    duration: "80h (2 semaines)",
     price: "Sur devis",
     description:
       "Concevez et administrez des infrastructures IT robustes et sécurisées. Maîtrisez les technologies essentielles pour supporter la croissance de votre organisation.",
@@ -106,7 +101,6 @@ const formations: Formation[] = [
     title: "Introduction à la Data & l'Intelligence Artificielle",
     color: "#ef4444",
     level: "Débutant → Intermédiaire",
-    duration: "32h (4 jours)",
     price: "Sur devis",
     description:
       "Exploitez vos données pour prendre de meilleures décisions. Découvrez comment l'IA et la data science peuvent transformer votre organisation et créer de la valeur.",
@@ -156,7 +150,7 @@ function FormationCard({ f }: { f: Formation }) {
             </h3>
             <div className="flex flex-wrap gap-4">
               {[
-                { icon: <Clock className="w-3 h-3" />, label: f.duration },
+                { icon: <Clock className="w-3 h-3" />},
                 { icon: <BookOpen className="w-3 h-3" />, label: f.level },
               ].map((meta) => (
                 <div

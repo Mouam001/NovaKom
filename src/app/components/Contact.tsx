@@ -75,7 +75,7 @@ export function Contact() {
               {
                 icon: <Mail className="w-5 h-5" />,
                 label: "Email",
-                value: "contact@novakom.org",
+                value: "contactus@novakom.tech",
                 sub: "Réponse sous 24h",
               },
               {
@@ -113,7 +113,7 @@ export function Contact() {
               </div>
             ))}
 
-            {/* Appointment */}
+            {/* Prise de RDV */}
             <a
               href="#"
               className="flex items-center justify-center gap-3 py-4 rounded-xl text-white transition-all hover:opacity-90"
@@ -130,7 +130,7 @@ export function Contact() {
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/26932100000"
+              href="https://wa.me/0033773779164"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 py-4 rounded-xl text-white border transition-all hover:bg-white/5"

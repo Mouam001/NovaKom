@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Play, X, Star, ChevronLeft, ChevronRight, Quote, MessageSquarePlus } from "lucide-react";
+import { Play, X, Star, Quote, MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -37,49 +37,9 @@ const photos = [
   },
 ];
 
-const testimonialsFallback = [
-  {
-    name: "Ibrahim Abdallah",
-    role: "Gérant",
-    company: "Boutique Tech Zone, Moroni",
-    avatar: "IA",
-    color: "#3b82f6",
-    rating: 5,
-    text: "NovaKom a transformé notre infrastructure informatique en seulement 3 jours. Réseau stable, postes configurés, sécurité assurée. Une équipe sérieuse et très professionnelle. Je recommande vivement !",
-  },
-  {
-    name: "Fatouma Said",
-    role: "Directrice Générale",
-    company: "Supermarché Al Kamar, Moroni",
-    avatar: "FS",
-    color: "#00A86B",
-    rating: 5,
-    text: "Depuis l'intervention de NovaKom, nous n'avons plus eu aucune panne réseau. Leur support est réactif et leurs techniciens maîtrisent leur sujet. Un vrai partenaire de confiance.",
-  },
-  {
-    name: "Youssouf Hamidou",
-    role: "Responsable IT",
-    company: "Hôtel Itsandra Beach, Moroni",
-    avatar: "YH",
-    color: "#a855f7",
-    rating: 5,
-    text: "L'équipe NovaKom a installé toute notre salle serveurs avec des standards internationaux. Monitoring 24/7, documentation complète, formation de notre personnel. Travail exemplaire.",
-  },
-  {
-    name: "Anziza Mohamed",
-    role: "Expert-Comptable",
-    company: "Cabinet Sunrise, Mutsamudu",
-    avatar: "AM",
-    color: "#f59e0b",
-    rating: 5,
-    text: "Suite à notre audit de sécurité, NovaKom a détecté plusieurs failles critiques que nous ignorions. Leur rapport détaillé et les corrections apportées nous ont mis en conformité. Service impeccable.",
-  },
-];
-
 export function Interventions() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"photos" | "videos" | "avis">("photos");
-  const [reviewIdx, setReviewIdx] = useState(0);
   const [approvedReviews, setApprovedReviews] = useState<any[]>([]);
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -100,33 +60,42 @@ export function Interventions() {
     loadApprovedReviews();
   }, []);
 
-  const testimonials = approvedReviews.length > 0
-    ? approvedReviews.map((review) => {
-        const displayName = review.userName || 'Client NovaKom';
-        const initials = displayName
-          .split(' ')
-          .map((word: string) => word[0])
-          .join('')
-          .slice(0, 2)
-          .toUpperCase();
-        return {
-          name: displayName,
-          role: 'Client',
-          company: review.company || 'Client NovaKom',
-          avatar: initials || 'CL',
-          color: '#00A86B',
-          rating: review.rating || 5,
-          text: review.message || '',
-        };
-      })
-    : testimonialsFallback;
+  const normalizedApprovedReviews = approvedReviews.map((review) => {
+    const displayName = review.userName || "Client NovaKom";
+    const initials = displayName
+      .split(" ")
+      .map((word: string) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+    const parsedRating = Number.parseInt(String(review.rating ?? 0), 10);
+
+    return {
+      id: review.id,
+      name: displayName,
+      company: review.company || "",
+      avatar: initials || "CL",
+      rating: Number.isNaN(parsedRating) ? 0 : Math.max(0, Math.min(5, parsedRating)),
+      text: review.message || "",
+    };
+  });
+
+  const ratedReviews = normalizedApprovedReviews.filter((review) => review.rating > 0);
+  const averageRating = ratedReviews.length
+    ? ratedReviews.reduce((sum, review) => sum + review.rating, 0) / ratedReviews.length
+    : 0;
+  const uniqueCompanies = new Set(
+    normalizedApprovedReviews
+      .map((review) => review.company.trim().toLowerCase())
+      .filter((company) => company.length > 0)
+  );
+  const satisfiedClientsRate = ratedReviews.length
+    ? Math.round((ratedReviews.filter((review) => review.rating >= 4).length / ratedReviews.length) * 100)
+    : 0;
 
   const openLight = (id: number) => setLightbox(id);
   const closeLight = () => setLightbox(null);
   const currentPhoto = photos.find((p) => p.id === lightbox);
-
-  const prevReview = () => setReviewIdx((i) => (i - 1 + testimonials.length) % testimonials.length);
-  const nextReview = () => setReviewIdx((i) => (i + 1) % testimonials.length);
 
   const tagColors: Record<string, string> = {
     "Installation réseau": "#3b82f6",
@@ -284,9 +253,9 @@ export function Interventions() {
             {/* Stats bar */}
             <div className="flex flex-wrap justify-center gap-8 mb-12">
               {[
-                { val: "4.9/5", label: "Note moyenne clients" },
-                { val: "20+", label: "Commerces équipés" },
-                { val: "100%", label: "Clients satisfaits" },
+                { val: `${averageRating.toFixed(1)}/5`, label: "Note moyenne clients" },
+                { val: `${uniqueCompanies.size}`, label: "Commerces équipés" },
+                { val: `${satisfiedClientsRate}%`, label: "Clients satisfaits" },
               ].map((s) => (
                 <div key={s.label} className="text-center">
                   <p
@@ -330,6 +299,60 @@ export function Interventions() {
               >
                 Chez NovaKom, nous nous engageons à fournir des services de qualité pour sécuriser et optimiser les infrastructures informatiques des commerces et entreprises comoriens. Nos interventions incluent l'installation de réseaux, la configuration de serveurs, les audits de sécurité, et bien plus. Bientôt, vous pourrez découvrir les témoignages de nos premiers clients satisfaits.
               </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              {normalizedApprovedReviews.length === 0 ? (
+                <div
+                  className="md:col-span-2 rounded-xl p-8 text-center"
+                  style={{ backgroundColor: "#0d2254", border: "1px solid rgba(255,255,255,0.1)" }}
+                >
+                  <p className="text-white/70" style={{ fontFamily: "Inter, sans-serif" }}>
+                    Aucun avis validé pour le moment.
+                  </p>
+                </div>
+              ) : (
+                normalizedApprovedReviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="rounded-xl p-6"
+                    style={{ backgroundColor: "#0d2254", border: "1px solid rgba(255,255,255,0.1)" }}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold"
+                        style={{ backgroundColor: "#00A86B22", color: "#00A86B", fontFamily: "Inter, sans-serif" }}
+                      >
+                        {review.avatar}
+                      </div>
+                      <div>
+                        <p className="text-white text-sm" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>
+                          {review.name}
+                        </p>
+                        <p className="text-white/50 text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
+                          {review.company || "Entreprise non renseignée"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 mb-3">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-600"}`}
+                        />
+                      ))}
+                      <span className="text-xs text-white/60 ml-2" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {review.rating}/5
+                      </span>
+                    </div>
+
+                    <p className="text-white/80 text-sm" style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}>
+                      {review.text}
+                    </p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-import { Shield, Monitor, Network } from "lucide-react";
+import { Shield, Monitor, Network, Code } from "lucide-react";
 
 const poles = [
   {
@@ -43,6 +43,20 @@ const poles = [
     ],
     desc: "Conception et administration d'infrastructures réseau robustes, évolutives et sécurisées pour votre organisation.",
   },
+  {
+    icon: <Code className="w-7 h-7" />,
+    pole: "Développement Logiciel & Applications Web/Mobile",
+    color: "#f59e0b",
+    items: [
+      "Applications web sur mesure",
+      "Applications mobiles (iOS/Android)",
+      "Développement logiciel métier",
+      "API & intégrations",
+      "Refonte et modernisation d'outils",
+      "Maintenance évolutive et corrective",
+    ],
+    desc: "Conception et développement de solutions digitales performantes, adaptées à vos processus métiers et à vos objectifs de croissance.",
+  },
 ];
 
 export function Services() {
@@ -68,7 +82,7 @@ export function Services() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Nos 3 pôles d'expertise
+            Nos 4 pôles d'expertise
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
@@ -79,7 +93,7 @@ export function Services() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
           {poles.map((p, i) => (
             <div
               key={i}

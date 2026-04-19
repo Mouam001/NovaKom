@@ -7,7 +7,7 @@ import { apiRequest } from '../lib/supabase';
 export function ReviewPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(0);
   const [message, setMessage] = useState('');
   const [company, setCompany] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -147,7 +147,9 @@ export function ReviewPage() {
                 ))}
               </div>
               <p className="text-sm text-gray-400 mt-2 text-center md:text-left">
-                {rating === 5
+                {rating === 0
+                  ? 'Aucune note sélectionnée'
+                  : rating === 5
                   ? 'Excellent !'
                   : rating === 4
                   ? 'Très bien'

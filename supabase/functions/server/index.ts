@@ -112,7 +112,7 @@ const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   if (!user) return false;
   
   // L'admin est identifié par son email
-  return user.email === 'admin@novakom.fr';
+  return user.email === 'contactus@novakom.tech';
 };
 
 // Ajouter des créneaux disponibles (ADMIN)
@@ -328,6 +328,40 @@ app.get('/server/appointments/all', async (c) => {
   }
 });
 
+// Supprimer un rendez-vous (ADMIN)
+app.delete('/server/appointments/:appointmentId', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!await isAdmin(accessToken)) {
+      return c.json({ error: 'Accès réservé aux administrateurs' }, 403);
+    }
+
+    const { appointmentId } = c.req.param();
+    const appointmentKey = `appointment_${appointmentId}`;
+    const appointment = await kv.get(appointmentKey);
+
+    if (!appointment) {
+      return c.json({ error: 'Rendez-vous non trouvé' }, 404);
+    }
+
+    await kv.del(appointmentKey);
+
+    if ((appointment as any).date && (appointment as any).time) {
+      const slotKey = `slot_${(appointment as any).date}_${(appointment as any).time}`;
+      const slot = await kv.get(slotKey);
+      if (slot) {
+        await kv.set(slotKey, { ...slot, available: true, appointmentId: undefined });
+      }
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.log(`Error deleting appointment: ${error}`);
+    return c.json({ error: 'Erreur lors de la suppression du rendez-vous' }, 500);
+  }
+});
+
 // ============================================
 // GESTION DES AVIS CLIENTS
 // ============================================
@@ -344,9 +378,14 @@ app.post('/server/reviews/create', async (c) => {
 
     const { message, rating, company } = await c.req.json();
 
-    if (!message || !rating) {
-      return c.json({ error: 'Message et note requis' }, 400);
+    if (!message) {
+      return c.json({ error: 'Message requis' }, 400);
     }
+
+    const parsedRating = Number.parseInt(String(rating ?? 0), 10);
+    const normalizedRating = Number.isNaN(parsedRating)
+      ? 0
+      : Math.max(0, Math.min(5, parsedRating));
 
     const reviewId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const reviewKey = `review_${reviewId}`;
@@ -358,7 +397,7 @@ app.post('/server/reviews/create', async (c) => {
       userEmail: user.email || '',
       company: company || '',
       message,
-      rating: parseInt(rating),
+      rating: normalizedRating,
       createdAt: new Date().toISOString(),
       approved: false // Les avis doivent être approuvés par l'admin
     };
@@ -423,6 +462,19 @@ app.patch('/server/reviews/:reviewId/approve', async (c) => {
 
     const { reviewId } = c.req.param();
     const reviewKey = `review_${reviewId}`;
+    let ratingFromAdmin: number | null = null;
+
+    try {
+      const body = await c.req.json();
+      if (body && body.rating !== undefined) {
+        const parsedRating = Number.parseInt(String(body.rating), 10);
+        if (!Number.isNaN(parsedRating)) {
+          ratingFromAdmin = Math.max(0, Math.min(5, parsedRating));
+        }
+      }
+    } catch {
+      ratingFromAdmin = null;
+    }
     
     const review = await kv.get(reviewKey);
 
@@ -430,12 +482,64 @@ app.patch('/server/reviews/:reviewId/approve', async (c) => {
       return c.json({ error: 'Avis non trouvé' }, 404);
     }
 
-    await kv.set(reviewKey, { ...review, approved: true });
+    const reviewRating = Number.parseInt(String((review as any).rating ?? 0), 10);
+    const normalizedExistingRating = Number.isNaN(reviewRating)
+      ? 0
+      : Math.max(0, Math.min(5, reviewRating));
+
+    await kv.set(reviewKey, {
+      ...review,
+      rating: ratingFromAdmin ?? normalizedExistingRating,
+      approved: true
+    });
 
     return c.json({ success: true });
   } catch (error) {
     console.log(`Error approving review: ${error}`);
     return c.json({ error: 'Erreur lors de l\'approbation de l\'avis' }, 500);
+  }
+});
+
+// Modifier un avis (ADMIN)
+app.patch('/server/reviews/:reviewId', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!await isAdmin(accessToken)) {
+      return c.json({ error: 'Accès réservé aux administrateurs' }, 403);
+    }
+
+    const { reviewId } = c.req.param();
+    const reviewKey = `review_${reviewId}`;
+    const review = await kv.get(reviewKey);
+
+    if (!review) {
+      return c.json({ error: 'Avis non trouvé' }, 404);
+    }
+
+    const payload = await c.req.json();
+    const nextRating = Number.parseInt(String(payload?.rating ?? (review as any).rating ?? 0), 10);
+    const normalizedRating = Number.isNaN(nextRating) ? 0 : Math.max(0, Math.min(5, nextRating));
+    const message = typeof payload?.message === 'string' ? payload.message.trim() : (review as any).message;
+
+    if (!message) {
+      return c.json({ error: 'Le message de l\'avis ne peut pas être vide' }, 400);
+    }
+
+    const updatedReview = {
+      ...review,
+      userName: typeof payload?.userName === 'string' ? payload.userName : (review as any).userName,
+      company: typeof payload?.company === 'string' ? payload.company : (review as any).company,
+      message,
+      rating: normalizedRating,
+    };
+
+    await kv.set(reviewKey, updatedReview);
+
+    return c.json({ success: true, review: updatedReview });
+  } catch (error) {
+    console.log(`Error updating review: ${error}`);
+    return c.json({ error: 'Erreur lors de la modification de l\'avis' }, 500);
   }
 });
 

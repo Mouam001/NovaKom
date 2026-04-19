@@ -300,7 +300,7 @@ export function LoginPage() {
 
         {/* Info admin */}
         <div className="mt-6 text-center text-xs text-gray-400 bg-white/5 rounded-lg p-3">
-          💡 <strong>Compte admin :</strong> admin@novakom.fr
+          💡 <strong>Compte admin :</strong> contactus@novakom.tech
         </div>
       </div>
     </div>

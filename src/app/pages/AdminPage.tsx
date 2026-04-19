@@ -32,6 +32,8 @@ export function AdminPage() {
   
   // États pour les avis
   const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewRatings, setReviewRatings] = useState<Record<string, number>>({});
+  const [reviewEdits, setReviewEdits] = useState<Record<string, { userName: string; company: string; message: string }>>({});
   const [loadingReviews, setLoadingReviews] = useState(false);
 
   useEffect(() => {
@@ -79,7 +81,21 @@ export function AdminPage() {
     try {
       const response = await apiRequest('/reviews/all');
       const data = await response.json();
-      setReviews(data.reviews || []);
+      const loadedReviews = data.reviews || [];
+      setReviews(loadedReviews);
+      const nextRatings: Record<string, number> = {};
+      const nextEdits: Record<string, { userName: string; company: string; message: string }> = {};
+      loadedReviews.forEach((review: any) => {
+        const parsed = Number.parseInt(String(review.rating ?? 0), 10);
+        nextRatings[review.id] = Number.isNaN(parsed) ? 0 : Math.max(0, Math.min(5, parsed));
+        nextEdits[review.id] = {
+          userName: review.userName || '',
+          company: review.company || '',
+          message: review.message || '',
+        };
+      });
+      setReviewRatings(nextRatings);
+      setReviewEdits(nextEdits);
     } catch (err) {
       console.error('Error loading reviews:', err);
     } finally {
@@ -129,8 +145,10 @@ export function AdminPage() {
 
   const approveReview = async (reviewId: string) => {
     try {
+      const selectedRating = reviewRatings[reviewId] ?? 0;
       const response = await apiRequest(`/reviews/${reviewId}/approve`, {
         method: 'PATCH',
+        body: JSON.stringify({ rating: selectedRating }),
       });
 
       if (response.ok) {
@@ -154,6 +172,48 @@ export function AdminPage() {
       }
     } catch (err) {
       console.error('Error deleting review:', err);
+    }
+  };
+
+  const updateReview = async (reviewId: string) => {
+    try {
+      const edit = reviewEdits[reviewId];
+      const response = await apiRequest(`/reviews/${reviewId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          userName: edit?.userName ?? '',
+          company: edit?.company ?? '',
+          message: edit?.message ?? '',
+          rating: reviewRatings[reviewId] ?? 0,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.error || 'Erreur lors de la mise à jour de l\'avis');
+        return;
+      }
+
+      loadReviews();
+    } catch (err) {
+      console.error('Error updating review:', err);
+    }
+  };
+
+  const deleteAppointment = async (appointmentId: string) => {
+    if (!confirm('Supprimer ce rendez-vous ?')) return;
+
+    try {
+      const response = await apiRequest(`/appointments/${appointmentId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        loadAppointments();
+        loadSlots();
+      }
+    } catch (err) {
+      console.error('Error deleting appointment:', err);
     }
   };
 
@@ -362,6 +422,13 @@ export function AdminPage() {
                       <div className="text-xs text-gray-400">
                         Créé le {new Date(apt.createdAt).toLocaleDateString('fr-FR')}
                       </div>
+                      <button
+                        onClick={() => deleteAppointment(apt.id)}
+                        className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-sm whitespace-nowrap"
+                      >
+                        <Trash2 className="w-4 h-4 inline mr-1" />
+                        Supprimer RDV
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -394,23 +461,80 @@ export function AdminPage() {
                   >
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-3">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg font-bold text-white">{review.userName}</span>
-                          {review.company && (
-                            <span className="text-sm text-gray-400">• {review.company}</span>
-                          )}
+                        <div className="grid md:grid-cols-2 gap-3 mb-3">
+                          <input
+                            value={reviewEdits[review.id]?.userName ?? ''}
+                            onChange={(e) =>
+                              setReviewEdits((prev) => ({
+                                ...prev,
+                                [review.id]: {
+                                  ...(prev[review.id] || { userName: '', company: '', message: '' }),
+                                  userName: e.target.value,
+                                },
+                              }))
+                            }
+                            className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                            placeholder="Nom client"
+                          />
+                          <input
+                            value={reviewEdits[review.id]?.company ?? ''}
+                            onChange={(e) =>
+                              setReviewEdits((prev) => ({
+                                ...prev,
+                                [review.id]: {
+                                  ...(prev[review.id] || { userName: '', company: '', message: '' }),
+                                  company: e.target.value,
+                                },
+                              }))
+                            }
+                            className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                            placeholder="Entreprise"
+                          />
                         </div>
                         <div className="flex items-center gap-1 mb-3">
                           {[...Array(5)].map((_, i) => (
                             <span
                               key={i}
-                              className={i < review.rating ? 'text-yellow-400' : 'text-gray-600'}
+                              className={i < (reviewRatings[review.id] ?? review.rating ?? 0) ? 'text-yellow-400' : 'text-gray-600'}
                             >
                               ★
                             </span>
                           ))}
                         </div>
-                        <p className="text-gray-300">{review.message}</p>
+                        <div className="mb-3">
+                          <label className="text-xs text-gray-400 mr-2">Note:</label>
+                          <select
+                            value={reviewRatings[review.id] ?? 0}
+                            onChange={(e) =>
+                              setReviewRatings((prev) => ({
+                                ...prev,
+                                [review.id]: Number.parseInt(e.target.value, 10),
+                              }))
+                            }
+                            className="bg-white/5 border border-white/20 rounded px-2 py-1 text-sm text-white"
+                          >
+                            {[0, 1, 2, 3, 4, 5].map((value) => (
+                              <option key={value} value={value} className="text-black">
+                                {value}/5
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <textarea
+                          value={reviewEdits[review.id]?.message ?? ''}
+                          onChange={(e) =>
+                            setReviewEdits((prev) => ({
+                              ...prev,
+                              [review.id]: {
+                                ...(prev[review.id] || { userName: '', company: '', message: '' }),
+                                message: e.target.value,
+                              },
+                            }))
+                          }
+                          rows={3}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-gray-300 text-sm"
+                          placeholder="Message de l'avis"
+                        />
                         <p className="text-xs text-gray-400 mt-2">
                           {new Date(review.createdAt).toLocaleDateString('fr-FR')}
                         </p>
@@ -425,6 +549,12 @@ export function AdminPage() {
                             Approuver
                           </button>
                         )}
+                        <button
+                          onClick={() => updateReview(review.id)}
+                          className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg hover:bg-blue-500/30 transition-colors text-sm whitespace-nowrap"
+                        >
+                          Enregistrer
+                        </button>
                         <button
                           onClick={() => deleteReview(review.id)}
                           className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-sm"
