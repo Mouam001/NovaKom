@@ -15,7 +15,7 @@ const team = [
     objectPosition: "center 8%",
     badge: "Dev & Architecture",
     color: "#3b82f6",
-    linkedin: "https://www.linkedin.com/feed/",
+    linkedin: "https://www.linkedin.com/in/soule-mouammar-134b5423a/",
     portfolio: "https://www.mouammarsoule.fr/",
   },
   {
