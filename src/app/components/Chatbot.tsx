@@ -2,62 +2,111 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Bot, User } from "lucide-react";
 
 type Message = { role: "bot" | "user"; text: string };
+type BotResponse = { text: string; options?: string[] };
 
-const responses: Record<string, { text: string; options?: string[] }> = {
+const responses: Record<string, BotResponse> = {
   start: {
-    text: "Bonjour ! Je suis l'assistant NovaKom 👋\nComment puis-je vous aider aujourd'hui ?",
-    options: ["Audit de sécurité", "Nos services", "Nos offres & tarifs", "Parler à un expert"],
+    text: "Bonjour, je suis l'assistant NovaKom 👋\nNous aidons les startups, PME et institutions à sécuriser et accélérer leur système d'information.\nChoisissez ce que vous voulez faire :",
+    options: ["Découvrir nos 4 pôles", "Demander un devis", "Prendre rendez-vous", "Parler à un expert"],
+  },
+  "Découvrir nos 4 pôles": {
+    text: "Nos 4 pôles d'expertise :\n🛡 Cybersécurité\n🖥 Support & Assistance IT\n🌐 Réseau & Systèmes\n💡 Développement Web & Application\n\nQuel pôle vous intéresse en priorité ?",
+    options: ["Cybersécurité", "Support IT", "Réseau & Systèmes", "Développement Web & Application", "Retour menu"],
   },
   "Audit de sécurité": {
-    text: "Un audit de sécurité permet d'identifier les vulnérabilités de votre système avant que des attaquants ne le fassent. NovaKom propose des audits complets incluant tests d'intrusion, analyse réseau et rapport détaillé.",
-    options: ["Demander un audit", "En savoir plus", "Retour"],
-  },
-  "Nos services": {
-    text: "NovaKom propose 3 pôles d'expertise :\n🛡 Cybersécurité\n🖥 Support & Assistance IT\n🌐 Administration Réseau & Système\n\nQuel pôle vous intéresse ?",
-    options: ["Cybersécurité", "Support IT", "Réseau & Système", "Retour"],
+    text: "Un audit de sécurité permet d'identifier les failles avant une attaque. Chez NovaKom, l'audit inclut analyse des risques, tests techniques et plan d'actions priorisé.",
+    options: ["Demander un audit", "Parler à un expert", "Retour menu"],
   },
   "Cybersécurité": {
-    text: "Notre pôle cybersécurité couvre : audit, pentest, firewall, VPN, sauvegarde sécurisée et sensibilisation des équipes. Nous protégeons votre organisation de bout en bout.",
-    options: ["Demander un audit", "Nos tarifs", "Retour"],
+    text: "Nous couvrons : audit, pentest, sécurisation réseau, sauvegarde, supervision et sensibilisation des équipes.\nObjectif : réduire les risques sans bloquer votre activité.",
+    options: ["Demander un audit", "Demander un devis", "Retour menu"],
   },
   "Support IT": {
-    text: "Notre support IT inclut maintenance, assistance utilisateurs, installation, migration et récupération de données. Disponible en présentiel à Moroni et à distance.",
-    options: ["Obtenir un devis", "Retour"],
+    text: "Nous prenons en charge la maintenance, l'assistance utilisateurs, l'installation/migration et la continuité de service.\nIntervention à distance et sur site selon vos besoins.",
+    options: ["Demander un devis", "Parler à un expert", "Retour menu"],
   },
-  "Réseau & Système": {
-    text: "Nous installons et administrons vos serveurs, Active Directory, solutions de virtualisation, WiFi sécurisé et monitoring réseau 24/7.",
-    options: ["Obtenir un devis", "Retour"],
+  "Réseau & Systèmes": {
+    text: "Nous concevons et administrons vos infrastructures : serveurs, Active Directory, virtualisation, Wi-Fi sécurisé, monitoring et optimisation des performances.",
+    options: ["Demander un devis", "Parler à un expert", "Retour menu"],
+  },
+  "Développement Web & Application": {
+    text: "Nous créons des sites vitrines, plateformes métiers et applications web sur mesure.\nApproche startup : MVP rapide, architecture évolutive, UX claire, maintenance continue.",
+    options: ["Demander un devis", "Parler à un expert", "Retour menu"],
   },
   "Nos offres & tarifs": {
-    text: "Nous proposons 3 packs :\n📦 Basic – Maintenance + sauvegarde\n📦 Standard – Maintenance + sécurité réseau\n📦 Premium – Infogérance complète + cybersécurité avancée\n\nTous nos tarifs sont sur devis selon vos besoins spécifiques.",
-    options: ["Obtenir un devis", "Parler à un expert", "Retour"],
+    text: "Nous fonctionnons principalement sur devis, car chaque besoin est différent.\nSi vous voulez, je peux vous orienter vers le bon pôle avant la prise de contact.",
+    options: ["Découvrir nos 4 pôles", "Demander un devis", "Parler à un expert", "Retour menu"],
   },
   "Demander un audit": {
-    text: "Parfait ! Notre équipe vous contactera pour planifier votre audit. Vous pouvez également remplir le formulaire de contact sur notre site.",
-    options: ["Formulaire de contact", "WhatsApp"],
+    text: "Parfait. L'équipe NovaKom peut planifier un audit rapidement.\nChoisissez votre canal de contact :",
+    options: ["Formulaire de contact", "WhatsApp", "Retour menu"],
   },
-  "Obtenir un devis": {
-    text: "Pour un devis personnalisé, contactez-nous directement. Nous répondons sous 24h.",
-    options: ["Formulaire de contact", "WhatsApp"],
+  "Demander un devis": {
+    text: "Pour un devis précis, nous analysons votre contexte (taille, objectif, urgence, existant).\nRéponse initiale sous 24h.",
+    options: ["Formulaire de contact", "WhatsApp", "Retour menu"],
+  },
+  "Prendre rendez-vous": {
+    text: "Très bien. Vous pouvez réserver un échange découverte avec notre équipe pour cadrer votre besoin.",
+    options: ["Formulaire de contact", "WhatsApp", "Retour menu"],
   },
   "Parler à un expert": {
-    text: "Je vous mets en relation avec un expert NovaKom. Choisissez votre mode de contact préféré :",
-    options: ["Formulaire de contact", "WhatsApp"],
+    text: "Je vous mets en relation avec un expert NovaKom.\nChoisissez le mode de contact le plus rapide pour vous :",
+    options: ["Formulaire de contact", "WhatsApp", "Retour menu"],
   },
   "Formulaire de contact": {
-    text: "👉 Faites défiler vers le bas jusqu'à la section Contact pour remplir notre formulaire.",
-    options: ["Recommencer"],
+    text: "👉 Faites défiler jusqu'à la section Contact pour nous envoyer votre besoin.\nNous revenons vers vous rapidement.",
+    options: ["Retour menu"],
   },
   WhatsApp: {
-    text: "👉 Contactez-nous sur WhatsApp au +269 321 00 00. Nous répondons rapidement !",
-    options: ["Recommencer"],
+    text: "👉 Contactez-nous directement sur WhatsApp : +33 7 73 77 91 64\nNous répondons rapidement.",
+    options: ["Retour menu"],
   },
   "En savoir plus": {
-    text: "NovaKom est basé à Moroni, Union des Comores. Nous intervenons localement et à distance pour les entreprises, PME et institutions.",
-    options: ["Parler à un expert", "Retour"],
+    text: "NovaKom accompagne les entreprises en cybersécurité, IT, réseau/systèmes et développement web/app.\nNous intervenons localement et à distance.",
+    options: ["Découvrir nos 4 pôles", "Parler à un expert", "Retour menu"],
   },
-  Retour: { text: "D'accord ! Comment puis-je vous aider ?", options: ["Audit de sécurité", "Nos services", "Nos offres & tarifs", "Parler à un expert"] },
-  Recommencer: { text: "Bonjour ! Comment puis-je vous aider aujourd'hui ?", options: ["Audit de sécurité", "Nos services", "Nos offres & tarifs", "Parler à un expert"] },
+  "Retour menu": {
+    text: "D'accord. Que souhaitez-vous faire maintenant ?",
+    options: ["Découvrir nos 4 pôles", "Demander un devis", "Prendre rendez-vous", "Parler à un expert"],
+  },
+  fallback: {
+    text: "Je n'ai pas bien compris. Vous pouvez choisir une option ci-dessous, ou écrire par exemple : \"devis\", \"audit\", \"support IT\" ou \"développement web\".",
+    options: ["Découvrir nos 4 pôles", "Demander un devis", "Prendre rendez-vous", "Parler à un expert"],
+  },
+};
+
+const intentRules: Array<{ key: keyof typeof responses; keywords: string[] }> = [
+  { key: "Audit de sécurité", keywords: ["audit", "pentest", "securite", "cyber"] },
+  { key: "Cybersécurité", keywords: ["cyber", "securite", "ransomware"] },
+  { key: "Support IT", keywords: ["support", "assistance", "maintenance", "it"] },
+  { key: "Réseau & Systèmes", keywords: ["reseau", "wifi", "serveur", "systeme", "active directory"] },
+  { key: "Développement Web & Application", keywords: ["dev", "developpement", "site", "application", "web", "mobile", "mvp"] },
+  { key: "Demander un devis", keywords: ["devis", "prix", "tarif", "budget", "cout"] },
+  { key: "Prendre rendez-vous", keywords: ["rdv", "rendez", "meeting", "appel"] },
+  { key: "Parler à un expert", keywords: ["expert", "contact", "parler"] },
+  { key: "WhatsApp", keywords: ["whatsapp"] },
+  { key: "Formulaire de contact", keywords: ["formulaire", "email", "mail", "contact"] },
+  { key: "Découvrir nos 4 pôles", keywords: ["service", "poles", "pole", "offre"] },
+];
+
+const normalizeText = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+const findResponseKey = (userText: string): keyof typeof responses => {
+  const normalized = normalizeText(userText);
+  const exactMatch = (Object.keys(responses) as Array<keyof typeof responses>).find(
+    (key) => normalizeText(key) === normalized,
+  );
+  if (exactMatch) return exactMatch;
+
+  const keywordMatch = intentRules.find((rule) =>
+    rule.keywords.some((keyword) => normalized.includes(keyword)),
+  );
+  return keywordMatch?.key ?? "fallback";
 };
 
 export function Chatbot() {
@@ -85,13 +134,11 @@ export function Chatbot() {
     setOptions([]);
 
     setTimeout(() => {
-      const key = Object.keys(responses).find((k) =>
-        text.toLowerCase().includes(k.toLowerCase())
-      ) || "start";
-      const resp = responses[key] || responses["start"];
+      const key = findResponseKey(text);
+      const resp = responses[key] || responses.fallback;
       setMessages((prev) => [...prev, { role: "bot", text: resp.text }]);
       setOptions(resp.options || []);
-    }, 700);
+    }, 450);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

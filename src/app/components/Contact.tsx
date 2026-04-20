@@ -69,7 +69,7 @@ export function Contact() {
               {
                 icon: <Phone className="w-5 h-5" />,
                 label: "Téléphone",
-                value: "+269 355 54 74",
+                value: "+33 7 73 77 91 64",
                 sub: "Lun – Sam, 8h – 18h",
               },
               {
@@ -130,7 +130,7 @@ export function Contact() {
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/0033773779164"
+              href="https://wa.me/33773779164?text=Bonjour%20je%20vous%20contacte"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 py-4 rounded-xl text-white border transition-all hover:bg-white/5"
@@ -215,7 +215,7 @@ export function Contact() {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  placeholder="+269 ..."
+                  placeholder="+33 ..."
                   style={inputStyle}
                 />
               </div>
