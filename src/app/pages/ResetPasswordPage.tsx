@@ -16,6 +16,19 @@ export function ResetPasswordPage() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+    
+    if (accessToken && refreshToken) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (!success) return;
 
     const timer = setTimeout(() => {

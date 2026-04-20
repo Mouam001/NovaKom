@@ -38,7 +38,7 @@ app.post('/server/auth/signup', async (c) => {
       password,
       user_metadata: { name, company: company || '' },
       // Automatically confirm the user's email since an email server hasn't been configured.
-      email_confirm: true
+      email_confirm: false
     });
 
     if (error) {
@@ -112,7 +112,7 @@ const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   if (!user) return false;
   
   // L'admin est identifié par son email
-  return user.email === 'contactus@novakom.tech';
+  return user.email === 'admin@novakom.tech';
 };
 
 // Ajouter des créneaux disponibles (ADMIN)
@@ -267,6 +267,24 @@ app.post('/server/appointments/create', async (c) => {
     };
 
     await kv.set(appointmentKey, appointment);
+
+    try {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'NovaKom <contactus@novakom.tech>',
+          to: appointment.email,
+          subject: '✅ Votre rendez-vous NovaKom est confirmé',
+          html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto"><h2 style="color:#ff6b35">Rendez-vous confirmé !</h2><p>Bonjour <strong>${appointment.name}</strong>,</p><p>Votre rendez-vous a bien été enregistré :</p><div style="background:#f5f5f5;padding:20px;border-radius:8px;margin:20px 0"><p>📅 <strong>Date :</strong> ${appointment.date}</p><p>🕐 <strong>Heure :</strong> ${appointment.time}</p></div><p>Notre équipe reviendra vers vous rapidement.</p><p style="color:#888;font-size:12px">NovaKom — contactus@novakom.tech</p></div>`
+        })
+      });
+    } catch (emailError) {
+      console.log('Erreur envoi email RDV:', emailError);
+    }
 
     // Marquer le créneau comme non disponible
     await kv.set(slotKey, { ...slot, available: false, appointmentId });

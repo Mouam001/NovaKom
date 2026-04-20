@@ -18,6 +18,7 @@ export function LoginPage() {
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Rediriger si déjà connecté
@@ -31,6 +32,7 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     setLoading(true);
 
     try {
@@ -62,8 +64,10 @@ export function LoginPage() {
         if (error) {
           setError(error.message || 'Erreur lors de l\'inscription');
         } else {
-          const from = (location.state as any)?.from || '/';
-          navigate(from, { replace: true });
+          setSuccessMessage("Inscription réussie ! Vérifiez votre boîte mail pour confirmer votre compte.");
+          setIsLogin(true);
+          setPassword('');
+          setConfirmPassword('');
         }
       }
     } catch (err) {
@@ -97,6 +101,7 @@ export function LoginPage() {
               onClick={() => {
                 setIsLogin(true);
                 setError('');
+                setSuccessMessage('');
                 setConfirmPassword('');
               }}
               className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
@@ -112,6 +117,7 @@ export function LoginPage() {
               onClick={() => {
                 setIsLogin(false);
                 setError('');
+                setSuccessMessage('');
                 setConfirmPassword('');
               }}
               className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
@@ -129,6 +135,11 @@ export function LoginPage() {
           {error && (
             <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
               {error}
+            </div>
+          )}
+          {successMessage && (
+            <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-200 text-sm">
+              {successMessage}
             </div>
           )}
 

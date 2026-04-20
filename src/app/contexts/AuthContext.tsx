@@ -41,30 +41,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, name: string, company?: string) => {
-    try {
-      const response = await apiRequest('/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify({ email, password, name, company }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Signup error response:', data);
-        return { error: data.error || 'Erreur lors de l\'inscription' };
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, company: company || '' },
+        emailRedirectTo: `${window.location.origin}/login`
       }
-
-      // Connecter automatiquement l'utilisateur après l'inscription
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      return { error: signInError };
-    } catch (error) {
-      console.error('Signup error:', error);
-      return { error: 'Erreur lors de l\'inscription' };
-    }
+    });
+    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
