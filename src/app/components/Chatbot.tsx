@@ -58,7 +58,7 @@ const responses: Record<string, BotResponse> = {
     options: ["Retour menu"],
   },
   WhatsApp: {
-    text: "👉 Contactez-nous directement sur WhatsApp :+269 355 54 74/+261 38 70 299 43/ +33 7 73 77 91 64\nNous répondons rapidement.",
+    text: "👉 Contactez-nous directement sur WhatsApp :+269 355 54 74/+269 383 52 76/ +33 7 73 77 91 64\nNous répondons rapidement.",
     options: ["Retour menu"],
   },
   "En savoir plus": {
