@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/',
+  base: '/NovaKom/', // A retirer une fois le DNS et le certificat Generé
   plugins: [
     react(),
     tailwindcss(),
