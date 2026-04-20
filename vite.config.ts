@@ -4,17 +4,12 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/NovaKom/', // A retirer une fois le DNS et le certificat Generé
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  base: process.env.VITE_BASE_URL || '/',
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
     },
   },
-  
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
