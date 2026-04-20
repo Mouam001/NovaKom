@@ -10,21 +10,22 @@ export const supabase = createClient(supabaseUrl, publicAnonKey);
 // URL de l'API serveur
 export const API_URL = `${supabaseUrl}/functions/v1/server`;
 
-async function getAccessToken(): Promise<string> {
+async function getAccessToken(): Promise<string | null> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session?.access_token) {
+  // Pas de session locale: ne pas tenter de refresh (sinon boucle/429)
+  if (!session) {
+    return null;
+  }
+
+  if (session.access_token) {
     return session.access_token;
   }
 
   const { data, error } = await supabase.auth.refreshSession();
-  if (!error && data.session?.access_token) {
-    return data.session.access_token;
-  }
-
-  return publicAnonKey;
+  return !error && data.session?.access_token ? data.session.access_token : null;
 }
 
 // Helper pour les requêtes API avec authentification
@@ -32,24 +33,32 @@ export async function apiRequest(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  const buildHeaders = async () => {
+  const buildHeaders = async (forcedToken?: string | null) => {
     const headers = new Headers(options.headers);
-    const accessToken = await getAccessToken();
+    const accessToken = forcedToken !== undefined ? forcedToken : await getAccessToken();
     headers.set('apikey', publicAnonKey);
-    headers.set('Authorization', `Bearer ${accessToken}`);
+    if (accessToken) {
+      headers.set('Authorization', `Bearer ${accessToken}`);
+    } else {
+      headers.delete('Authorization');
+    }
     headers.set('Content-Type', 'application/json');
-    return headers;
+    return { headers, accessToken };
   };
 
-  let headers = await buildHeaders();
+  let { headers, accessToken } = await buildHeaders();
   let response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
   });
 
-  if (response.status === 401) {
-    await supabase.auth.refreshSession();
-    headers = await buildHeaders();
+  if (response.status === 401 && accessToken) {
+    const { data, error } = await supabase.auth.refreshSession();
+    if (error || !data.session?.access_token) {
+      return response;
+    }
+
+    ({ headers } = await buildHeaders(data.session.access_token));
     response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,

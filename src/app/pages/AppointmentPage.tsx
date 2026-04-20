@@ -38,6 +38,7 @@ export function AppointmentPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [authFailed, setAuthFailed] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -46,7 +47,7 @@ export function AppointmentPage() {
   }, [authLoading, user, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.id || authFailed) return;
     setFormData((prev) => ({
       ...prev,
       name: user.user_metadata?.name || prev.name,
@@ -54,11 +55,16 @@ export function AppointmentPage() {
     }));
     loadAvailableSlots();
     loadMyAppointments();
-  }, [user]);
+  }, [user?.id, authFailed]);
 
   const loadAvailableSlots = async () => {
     try {
       const response = await apiRequest('/slots/available');
+      if (response.status === 401) {
+        setAuthFailed(true);
+        navigate('/login', { state: { from: '/appointment' } });
+        return;
+      }
       const data = await response.json();
       setSlots(data.slots || []);
     } catch (err) {
@@ -72,6 +78,11 @@ export function AppointmentPage() {
     setLoadingMyAppointments(true);
     try {
       const response = await apiRequest('/appointments/my');
+      if (response.status === 401) {
+        setAuthFailed(true);
+        navigate('/login', { state: { from: '/appointment' } });
+        return;
+      }
       const data = await response.json();
       if (response.ok) {
         setMyAppointments(data.appointments || []);

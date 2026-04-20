@@ -41,24 +41,34 @@ export function Interventions() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"photos" | "videos" | "avis">("photos");
   const [approvedReviews, setApprovedReviews] = useState<any[]>([]);
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
   useEffect(() => {
+    if (activeTab !== "avis" || reviewsLoaded) return;
+
     const loadApprovedReviews = async () => {
       try {
         const response = await apiRequest('/reviews/approved');
-        const data = await response.json();
-        if (response.ok) {
-          setApprovedReviews(data.reviews || []);
+        if (!response.ok) {
+          setApprovedReviews([]);
+          setReviewsLoaded(true);
+          return;
         }
+
+        const data = await response.json();
+        setApprovedReviews(data.reviews || []);
       } catch (err) {
         console.error('Error loading approved reviews:', err);
+        setApprovedReviews([]);
+      } finally {
+        setReviewsLoaded(true);
       }
     };
 
     loadApprovedReviews();
-  }, []);
+  }, [activeTab, reviewsLoaded]);
 
   const normalizedApprovedReviews = approvedReviews.map((review) => {
     const displayName = review.userName || "Client NovaKom";

@@ -150,11 +150,11 @@ function FormationCard({ f }: { f: Formation }) {
             </h3>
             <div className="flex flex-wrap gap-4">
               {[
-                { icon: <Clock className="w-3 h-3" />},
+                { key: "duration", icon: <Clock className="w-3 h-3" />, label: f.price },
                 { icon: <BookOpen className="w-3 h-3" />, label: f.level },
-              ].map((meta) => (
+              ].map((meta, index) => (
                 <div
-                  key={meta.label}
+                  key={`${meta.key ?? meta.label ?? "meta"}-${index}`}
                   className="flex items-center gap-1.5 text-xs"
                   style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Inter, sans-serif" }}
                 >
