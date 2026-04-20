@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Calendar, LogIn, LogOut, User, Shield } from "lucide-react";
 import { NovaKomLogo } from "./NovaKomLogo";
 import { useAuth } from "../contexts/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -43,7 +43,6 @@ export function Navbar() {
   };
 
   const links = [
-    { label: "Accueil", href: "#hero" },
     { label: "Services", href: "#services" },
     { label: "Offres", href: "#offres" },
     { label: "Formations", href: "#formations" },
@@ -63,9 +62,19 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <button onClick={() => handleNavClick('#hero')} className="flex items-center">
+        <Link
+          to="/"
+          className="flex items-center"
+          onClick={() => {
+            setOpen(false);
+            if (isHomePage) {
+              const element = document.querySelector('#hero');
+              element?.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+        >
           <NovaKomLogo size={42} showText={true} variant="dark" />
-        </button>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-6 xl:gap-8">

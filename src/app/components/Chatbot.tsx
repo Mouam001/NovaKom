@@ -58,7 +58,7 @@ const responses: Record<string, BotResponse> = {
     options: ["Retour menu"],
   },
   WhatsApp: {
-    text: "👉 Contactez-nous directement sur WhatsApp :+269 355 54 74/+269 383 52 76/ +33 7 73 77 91 64\nNous répondons rapidement.",
+    text: "👉 Choisissez un pôle pour obtenir le contact WhatsApp correspondant.",
     options: ["Retour menu"],
   },
   "En savoir plus": {
@@ -72,6 +72,29 @@ const responses: Record<string, BotResponse> = {
   fallback: {
     text: "Je n'ai pas bien compris. Vous pouvez choisir une option ci-dessous, ou écrire par exemple : \"devis\", \"audit\", \"support IT\" ou \"développement web\".",
     options: ["Découvrir nos 4 pôles", "Demander un devis", "Prendre rendez-vous", "Parler à un expert"],
+  },
+};
+
+const poleWhatsapp: Record<string, { label: string; display: string; wa: string }> = {
+  "Développement Web & Application": {
+    label: "Pôle Développement",
+    display: "+33 7 73 77 91 64",
+    wa: "33773779164",
+  },
+  Cybersécurité: {
+    label: "Pôle Sécurité",
+    display: "+269 383 52 76",
+    wa: "2693835276",
+  },
+  "Support IT": {
+    label: "Pôle Infrastructure",
+    display: "+261 38 50 137 80",
+    wa: "261385013780",
+  },
+  "Réseau & Systèmes": {
+    label: "Pôle Réseaux",
+    display: "+261 38 50 137 80",
+    wa: "261385013780",
   },
 };
 
@@ -114,6 +137,9 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [options, setOptions] = useState<string[]>([]);
   const [input, setInput] = useState("");
+  const [selectedPole, setSelectedPole] = useState<string | null>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -128,13 +154,52 @@ export function Chatbot() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (chatRef.current?.contains(target)) return;
+      if (toggleRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [open]);
+
   const send = (text: string) => {
+    if (poleWhatsapp[text]) {
+      setSelectedPole(text);
+    }
+    if (text === "Retour menu") {
+      setSelectedPole(null);
+    }
+
     const newMessages: Message[] = [...messages, { role: "user", text }];
     setMessages(newMessages);
     setOptions([]);
 
     setTimeout(() => {
       const key = findResponseKey(text);
+      if (key === "WhatsApp" && selectedPole && poleWhatsapp[selectedPole]) {
+        const contact = poleWhatsapp[selectedPole];
+        const whatsappLink = `https://wa.me/${contact.wa}`;
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "bot",
+            text: `👉 ${contact.label} : ${contact.display}\n${whatsappLink}`,
+          },
+        ]);
+        setOptions(["Retour menu"]);
+        return;
+      }
       const resp = responses[key] || responses.fallback;
       setMessages((prev) => [...prev, { role: "bot", text: resp.text }]);
       setOptions(resp.options || []);
@@ -153,6 +218,7 @@ export function Chatbot() {
       {/* Chat window */}
       {open && (
         <div
+          ref={chatRef}
           className="fixed bottom-24 right-6 w-80 sm:w-96 z-50 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
           style={{
             backgroundColor: "#0d2254",
@@ -209,7 +275,29 @@ export function Chatbot() {
                     border: m.role === "bot" ? "1px solid rgba(255,255,255,0.08)" : "none",
                   }}
                 >
-                  {m.text}
+                  {m.text.split("\n").map((line, index) => {
+                    const urlMatch = line.match(/https?:\/\/\S+/);
+                    if (!urlMatch) {
+                      return <div key={`${i}-${index}`}>{line}</div>;
+                    }
+                    const url = urlMatch[0];
+                    const before = line.slice(0, line.indexOf(url));
+                    const after = line.slice(line.indexOf(url) + url.length);
+                    return (
+                      <div key={`${i}-${index}`}>
+                        {before}
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="underline"
+                        >
+                          {url}
+                        </a>
+                        {after}
+                      </div>
+                    );
+                  })}
                 </div>
                 {m.role === "user" && (
                   <div
@@ -271,18 +359,17 @@ export function Chatbot() {
 
       {/* Toggle button */}
       <button
-        onClick={() => setOpen(!open)}
+        ref={toggleRef}
+        onClick={() => {
+          if (!open) setOpen(true);
+        }}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110"
         style={{
           background: "linear-gradient(135deg, #00A86B, #007a4e)",
           boxShadow: "0 8px 30px rgba(0,168,107,0.4)",
         }}
       >
-        {open ? (
-          <X className="w-6 h-6 text-white" />
-        ) : (
-          <MessageCircle className="w-6 h-6 text-white" />
-        )}
+        <MessageCircle className="w-6 h-6 text-white" />
       </button>
     </>
   );

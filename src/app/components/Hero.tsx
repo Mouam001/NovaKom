@@ -150,12 +150,6 @@ export function Hero() {
               <span style={{ color: "#00A86B", fontSize: "1.2rem" }}>🛡</span>
             </div>
             <div>
-              <p className="text-white text-xs" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>
-                CCNA · Security+
-              </p>
-              <p className="text-white/50 text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
-                Certifications internationales
-              </p>
             </div>
           </div>
         </div>
