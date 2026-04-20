@@ -8,24 +8,50 @@ const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).
 export function ResetPasswordPage() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    // Méthode 1 : capturer le token depuis l'URL hash
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+    const type = hashParams.get('type');
+
+    if (accessToken && (type === 'recovery' || refreshToken)) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken || accessToken
+      }).then(() => {
+        setReady(true);
+      });
+      return;
+    }
+
+    // Méthode 2 : écouter onAuthStateChange comme fallback
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'PASSWORD_RECOVERY') {
-          // Session reçue, on peut afficher le formulaire
+      (event, session) => {
+        if (event === 'PASSWORD_RECOVERY' && session) {
           setReady(true);
         }
       }
     );
-    return () => subscription.unsubscribe();
+
+    // Timeout de sécurité - si rien après 3s, afficher une erreur
+    const timeout = setTimeout(() => {
+      setReady(false);
+      setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+    }, 3000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
@@ -66,6 +92,8 @@ export function ResetPasswordPage() {
     navigate('/login');
     setLoading(false);
   };
+
+  if (error) return <div className="min-h-screen flex items-center justify-center px-4"><p>{error}</p><button onClick={() => navigate('/forgot-password')}>Nouvelle demande</button></div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center px-4 py-12">
