@@ -11,41 +11,25 @@ export function ResetPasswordPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Méthode 1 : capturer le token depuis l'URL hash
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const refreshToken = hashParams.get('refresh_token');
-    const type = hashParams.get('type');
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get('token_hash');
+    const type = params.get('type');
 
-    if (accessToken && (type === 'recovery' || refreshToken)) {
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken || accessToken
-      }).then(() => {
-        setReady(true);
+    if (tokenHash && type === 'recovery') {
+      supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: 'recovery'
+      }).then(({ error }) => {
+        if (error) {
+          setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+        } else {
+          setReady(true);
+        }
       });
       return;
     }
 
-    // Méthode 2 : écouter onAuthStateChange comme fallback
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'PASSWORD_RECOVERY' && session) {
-          setReady(true);
-        }
-      }
-    );
-
-    // Timeout de sécurité - si rien après 3s, afficher une erreur
-    const timeout = setTimeout(() => {
-      setReady(false);
-      setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
-    }, 3000);
-
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
-    };
+    setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
   }, []);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
