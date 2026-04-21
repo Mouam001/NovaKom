@@ -9,8 +9,9 @@ import { Linkedin, Globe } from "lucide-react";
 const team = [
   {
     name: "Mouammar Soulé",
-    role: "Ingénieur Logiciel",
-    desc: "Spécialiste développement et architecture applicative. Expert en systèmes distribués et solutions cloud-native.",
+    role: "Ingénieur Logiciel | Architecture Applicative | Cloud-Native",
+    desc: "Spécialiste du développement et de l’architecture logicielle, je conçois des applications performantes, évolutives et adaptées aux besoins métiers. " +
+        "Chez NovaKom, je développe des solutions robustes et modernes, capables de soutenir la transformation digitale de nos clients.",
     img:  ImgMou,
     objectPosition: "center 8%",
     badge: "Dev & Architecture",
@@ -21,10 +22,8 @@ const team = [
   {
     name: "DJOUNEID MOHAMED",
     role: "Security Engineer | Pentester | AI-Driven Cybersecurity",
-    desc: "Spécialiste en tests d'intrusion et en audit de sécurité (applicatif et réseau), " +
-        "je me concentre sur l'automatisation de la détection de vulnérabilités. " +
-        "Grâce à l'analyse de données et à l'intelligence artificielle, " +
-        "j'identifie proactivement les failles pour renforcer durablement la résilience des systèmes d'information.",
+    desc: "Spécialisé en tests d’intrusion et en audit de sécurité (applicatif et réseau), j’identifie les vulnérabilités et les failles critiques des systèmes d’information. " +
+        "Chez NovaKom, j’utilise l’automatisation et l’intelligence artificielle pour détecter proactivement les menaces et renforcer durablement la sécurité de nos clients.",
     img: Houlam,
     objectPosition: "center 6%",
     badge: "Cybersécurité",
@@ -35,9 +34,8 @@ const team = [
   {
     name: "Abdourahamane AbdelWahab Ben Said",
     role: "Security Engineer | Network & Infrastructure Security | DevSecOps",
-    desc: "Spécialiste dans la sécurisation et l'automatisation des environnements IT, " +
-        "je mets en place des pipelines DevSecOps performants. Mon objectif : " +
-        "réduire drastiquement les risques de sécurité tout en accélérant la vélocité des déploiements.",
+    desc: "Spécialisé dans la sécurisation des infrastructures IT et des environnements réseau, je conçois des systèmes fiables, résilients et adaptés aux exigences professionnelles. " +
+        "Chez NovaKom, je veille à protéger les systèmes de nos clients, sécuriser leurs données et intégrer la sécurité dès la conception de leurs solutions digitales.",
     img: Abdel,
     objectPosition: "center 7%",
     badge: "DevSecOps",
@@ -48,12 +46,9 @@ const team = [
 
   {
     name: "Ishack Ibrahim",
-    role: "Électricien spécialisé BTP & Industrie",
-    desc: "Professionnel polyvalent justifiant d’une solide expertise en maintenance industrielle et en installations électriques du bâtiment. " +
-        "Maîtrisant l’intégration des automatismes, de la mécanique, de l’électronique et de la pneumatique. " +
-        "Spécialisé en gestion de l’énergie électrique et en développement durable, " +
-        "je conçois et optimise des solutions visant à réduire l’empreinte carbone, " +
-        "améliorer l’efficacité énergétique et garantir la fiabilité des équipements de production.",
+    role: "Électricien Industriel | Énergie & Systèmes Techniques",
+    desc: "Spécialisé en installations électriques et en maintenance industrielle, j’interviens sur des environnements techniques complexes afin de garantir la fiabilité et la performance des équipements. " +
+        "Chez NovaKom, je contribue à l’optimisation énergétique et à l’intégration de solutions techniques durables, en lien avec les infrastructures numériques de nos clients.",
     img: Isak,
     objectPosition: "center 5%",
     badge: "Électro-Énergie",
@@ -64,9 +59,8 @@ const team = [
   {
     name: "Djae Insa",
     role: "Data Analyst | Banque & Finance",
-    desc: "Spécialisé en analyse de données dans le secteur bancaire et financier, " +
-        "j’exploite les données pour produire des insights stratégiques, optimiser les performances " +
-        "et soutenir la prise de décision. Mon objectif : transformer les données en valeur concrète pour l’entreprise.",
+    desc: "Spécialisé en analyse de données dans les environnements bancaires et financiers, j’exploite les données pour produire des insights fiables et orienter la prise de décision. " +
+        "Chez NovaKom, je transforme les données en leviers de performance afin d’optimiser les opérations et accompagner la transformation digitale de nos clients.",
     img: Djae,
     objectPosition: "center 7%",
     badge: "Data & Finance",
@@ -76,6 +70,19 @@ const team = [
   },
     
 ];
+
+function splitNovaKomDesc(desc: string) {
+  const marker = "Chez NovaKom";
+  const markerIndex = desc.indexOf(marker);
+  if (markerIndex === -1) {
+    return { before: desc, chez: "" };
+  }
+
+  return {
+    before: desc.slice(0, markerIndex).trimEnd(),
+    chez: desc.slice(markerIndex),
+  };
+}
 
 export function Team() {
   return (
@@ -112,15 +119,18 @@ export function Team() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {team.map((member) => (
-            <div
-              key={member.name}
-              className="rounded-2xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300"
-              style={{
-                backgroundColor: "#0d2254",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
+          {team.map((member) => {
+            const descParts = splitNovaKomDesc(member.desc);
+
+            return (
+              <div
+                key={member.name}
+                className="rounded-2xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300"
+                style={{
+                  backgroundColor: "#0d2254",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
               {/* Photo */}
               <div className="relative h-64 overflow-hidden">
                 <img
@@ -161,7 +171,15 @@ export function Team() {
                   className="text-white/50 text-sm mb-5"
                   style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}
                 >
-                  {member.desc}
+                  {descParts.before}
+                  {descParts.chez && (
+                    <span
+                      className="block mt-2 text-white/90 italic"
+                      style={{ fontWeight: 600 }}
+                    >
+                      {descParts.chez}
+                    </span>
+                  )}
                 </p>
                 <div className="flex gap-4">
                   <a
@@ -184,8 +202,9 @@ export function Team() {
                   </a>
                 </div>
               </div>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
