@@ -82,7 +82,7 @@ export function Navbar() {
             <button
               key={l.href}
               onClick={() => handleNavClick(l.href)}
-              className="text-white/70 hover:text-white transition-colors text-sm"
+              className="relative cursor-pointer text-white/70 text-sm transition-all duration-300 ease-in-out hover:text-[#ff6b35] hover:scale-105 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               {l.label}
@@ -152,7 +152,7 @@ export function Navbar() {
             <button
               key={l.href}
               onClick={() => handleNavClick(l.href)}
-              className="text-white/80 hover:text-white text-sm border-b border-white/10 pb-3 text-left"
+              className="relative cursor-pointer text-white/80 text-sm border-b border-white/10 pb-3 text-left transition-all duration-300 ease-in-out hover:text-[#ff6b35] hover:scale-105 after:content-[''] after:absolute after:left-0 after:bottom-2 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               {l.label}
