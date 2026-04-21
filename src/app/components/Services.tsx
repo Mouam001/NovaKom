@@ -3,59 +3,59 @@ import { Shield, Monitor, Network, Code } from "lucide-react";
 const poles = [
   {
     icon: <Shield className="w-7 h-7" />,
-    pole: "Pôle Cybersécurité",
+    pole: "Sécurité & protection des systèmes",
     color: "#00A86B",
     items: [
-      "Audit sécurité",
-      "Pentest (tests d'intrusion)",
-      "Firewall & UTM",
-      "VPN sécurisé",
-      "Sauvegarde sécurisée",
-      "Sensibilisation employés",
+      "Audit de sécurité",
+      "Tests d'intrusion (Pentest)",
+      "Firewall, VPN et protection des accès",
+      "Sauvegarde et sécurisation des données",
+      "Sensibilisation des employés",
     ],
-    desc: "Nous protégeons vos systèmes contre toutes formes d'intrusion et de compromission, de l'audit à la mise en conformité.",
+    desc: "Nous protégeons les entreprises contre les cybermenaces et assurons la sécurité de leurs données et infrastructures.",
+    objective: "Réduire les risques et sécuriser les actifs numériques.",
   },
   {
     icon: <Monitor className="w-7 h-7" />,
-    pole: "Support & Assistance IT",
+    pole: "Infrastructure IT",
     color: "#3b82f6",
     items: [
-      "Maintenance préventive & corrective",
-      "Support utilisateurs",
-      "Installation système",
-      "Migration de données",
-      "Récupération de données",
-      "Helpdesk dédié",
+      "Installation et gestion de serveurs",
+      "Administration réseau et systèmes",
+      "Supervision et monitoring",
+      "Maintenance préventive et corrective",
+      "Optimisation des performances",
     ],
-    desc: "Votre équipe IT externalisée, disponible pour résoudre chaque problème technique rapidement et efficacement.",
+    desc: "Nous structurons et administrons votre infrastructure pour garantir un environnement fiable, stable et sécurisé.",
+    objective: "Assurer la continuité et la stabilité de votre système d'information.",
   },
   {
     icon: <Network className="w-7 h-7" />,
-    pole: "Administration Réseau & Système",
+    pole: "Support & assistance IT",
     color: "#a855f7",
     items: [
-      "Installation de serveurs",
-      "Active Directory",
-      "Virtualisation (VMware/Hyper-V)",
-      "WiFi sécurisé",
-      "Monitoring réseau 24/7",
-      "Infrastructure cloud",
+      "Support utilisateurs (helpdesk)",
+      "Assistance opérationnelle quotidienne",
+      "Gestion des incidents et demandes",
+      "Formation des utilisateurs",
+      "Accompagnement des équipes métiers",
     ],
-    desc: "Conception et administration d'infrastructures réseau robustes, évolutives et sécurisées pour votre organisation.",
+    desc: "Nous assurons la gestion quotidienne de votre environnement IT avec une assistance réactive pour vos équipes.",
+    objective: "Garantir une assistance continue et améliorer la productivité des équipes.",
   },
   {
     icon: <Code className="w-7 h-7" />,
-    pole: "Développement Logiciel & Applications Web/Mobile",
+    pole: "Développement digital",
     color: "#f59e0b",
     items: [
-      "Applications web sur mesure",
-      "Applications mobiles (iOS/Android)",
-      "Développement logiciel métier",
-      "API & intégrations",
-      "Refonte et modernisation d'outils",
-      "Maintenance évolutive et corrective",
+      "Applications web",
+      "Applications mobiles",
+      "Logiciels métiers",
+      "API et intégrations",
+      "Modernisation d'outils existants",
     ],
-    desc: "Conception et développement de solutions digitales performantes, adaptées à vos processus métiers et à vos objectifs de croissance.",
+    desc: "Nous développons des applications sécurisées dès leur conception grâce à une approche DevSecOps alliant sécurité et performance.",
+    objective: "Livrer des solutions digitales sécurisées, évolutives et adaptées à vos besoins.",
   },
 ];
 
@@ -72,7 +72,7 @@ export function Services() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Ce que nous faisons
+            Nos services
           </p>
           <h2
             className="text-white mb-5"
@@ -88,8 +88,7 @@ export function Services() {
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Des services complets, structurés et adaptés aux besoins des PME,
-            institutions et entreprises aux Comores et à l'international.
+            Des solutions IT complètes pour accompagner la transformation digitale, sécuriser et optimiser les systèmes des entreprises aux Comores et à l’international.
           </p>
         </div>
 
@@ -142,6 +141,24 @@ export function Services() {
                   </li>
                 ))}
               </ul>
+
+              <div
+                className="mt-6 rounded-lg px-3 py-2"
+                style={{
+                  backgroundColor: p.color + "1A",
+                  border: `1px solid ${p.color}44`,
+                }}
+              >
+                <p
+                  className="text-sm"
+                  style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.6 }}
+                >
+                  <span style={{ color: p.color, fontWeight: 700 }}>Objectif :</span>{" "}
+                  <span className="text-white/90" style={{ fontWeight: 500 }}>
+                    {p.objective}
+                  </span>
+                </p>
+              </div>
 
               {/* Bottom line */}
               <div
