@@ -3,32 +3,32 @@ import { AlertTriangle, TrendingDown, Database, WifiOff, AlertCircle } from "luc
 const problems = [
   {
     icon: <AlertTriangle className="w-6 h-6" />,
-    title: "Risques de cyberattaques",
-    desc: "Les PME et institutions sont des cibles privilégiées. Ransomware, phishing, intrusions… les menaces numériques évoluent chaque jour.",
+    title: "Cybermenaces en constante évolution",
+    desc: "Les attaques (phishing, ransomware, intrusions) ciblent de plus en plus les entreprises, en particulier les PME et institutions.",
     color: "#e74c3c",
   },
   {
     icon: <TrendingDown className="w-6 h-6" />,
-    title: "Pertes financières",
-    desc: "Une attaque ou une panne non maîtrisée peut coûter des millions de francs en récupération, amendes et perte de clientèle.",
+    title: "Impacts financiers importants",
+    desc: "Une faille ou une panne peut entraîner des coûts élevés : récupération de données, interruption d’activité, perte de clients.",
     color: "#f39c12",
   },
   {
     icon: <Database className="w-6 h-6" />,
-    title: "Perte de données critiques",
-    desc: "Sans sauvegarde et protection adéquates, vos données — clients, contrats, finances — peuvent disparaître en quelques secondes.",
+    title: "Risque de perte de données",
+    desc: "Sans sauvegarde et protection adaptées, vos données critiques peuvent être irrémédiablement perdues.",
     color: "#9b59b6",
   },
   {
     icon: <WifiOff className="w-6 h-6" />,
     title: "Interruption d'activité",
-    desc: "Un réseau non supervisé peut tomber à tout moment. Chaque heure d'arrêt représente un coût direct pour votre entreprise.",
+    desc: "Une infrastructure non supervisée peut provoquer des arrêts de service coûteux pour votre organisation.",
     color: "#e67e22",
   },
   {
     icon: <AlertCircle className="w-6 h-6" />,
     title: "Manque de structuration IT locale",
-    desc: "Le marché comorien manque encore de prestataires IT structurés. NovaKom comble ce fossé avec une expertise de niveau international.",
+    desc: "Le marché manque encore de solutions IT complètes et structurées. NovaKom répond à ce besoin avec une approche professionnelle et intégrée.",
     color: "#00A86B",
   },
 ];
@@ -56,14 +56,13 @@ export function Problems() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Les risques auxquels votre entreprise est exposée
+            Protégez votre entreprise face aux risques numériques actuels
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Ne pas agir aujourd'hui, c'est laisser la porte ouverte aux menaces
-            de demain. Voici les réalités du terrain que nous combattons chaque jour.
+            Les entreprises sont aujourd’hui confrontées à des menaces IT de plus en plus fréquentes et complexes. Sans une infrastructure sécurisée et bien structurée, votre activité peut être exposée à des interruptions, des pertes de données et des failles de sécurité.
           </p>
         </div>
 
@@ -111,14 +110,13 @@ export function Problems() {
                 className="text-white mb-2"
                 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem" }}
               >
-                Protégez-vous dès aujourd'hui
+                Protégez votre entreprise dès aujourd’hui
               </p>
               <p
                 className="text-white/60 text-sm mb-6"
                 style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}
               >
-                NovaKom évalue votre situation actuelle et met en place une
-                stratégie adaptée à votre contexte.
+                NovaKom analyse votre infrastructure actuelle et vous propose une stratégie adaptée pour sécuriser et optimiser vos systèmes.
               </p>
             </div>
             <a
