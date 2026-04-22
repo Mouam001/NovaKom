@@ -85,70 +85,6 @@ Spécialiste déploiement sécurisé et automatisation CI/CD. Expert en intégra
 - **PostCSS** - Outil de transformation CSS
 - **Autoprefixer** - Ajout automatique des préfixes CSS
 
-## 📦 Installation
-
-### Prérequis
-- Node.js (version 18 ou supérieure)
-- npm ou pnpm
-- Git
-
-### Étapes d'installation
-
-1. **Cloner le repository**
-   ```bash
-   git clone https://github.com/votre-username/novakom-website.git
-   cd novakom-website
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   npm install
-   # ou
-   pnpm install
-   ```
-
-3. **Configurer les variables d'environnement**
-   Créer un fichier `.env` à la racine avec :
-   ```env
-   VITE_SUPABASE_URL=votre_supabase_url
-   VITE_SUPABASE_ANON_KEY=votre_supabase_anon_key
-   ```
-
-4. **Lancer le serveur de développement**
-   ```bash
-   npm run dev
-   # ou
-   pnpm dev
-   ```
-
-5. **Ouvrir dans le navigateur**
-   L'application sera accessible sur `http://localhost:5173`
-
-## 🚀 Scripts Disponibles
-
-- `npm run dev` - Lance le serveur de développement
-- `npm run build` - Construit l'application pour la production
-- `npm run preview` - Prévisualise la version de production
-
-## 📁 Structure du Projet
-
-```
-novakom-website/
-├── public/                 # Assets statiques
-├── src/
-│   ├── app/
-│   │   ├── components/     # Composants React
-│   │   ├── contexts/       # Contextes React
-│   │   ├── lib/           # Utilitaires et configurations
-│   │   ├── pages/         # Pages de l'application
-│   │   └── routes.tsx     # Configuration des routes
-│   ├── assets/            # Images et ressources
-│   ├── imports/           # Documents et spécifications
-│   └── styles/            # Styles CSS
-├── supabase/              # Fonctions Supabase
-└── utils/                 # Utilitaires supplémentaires
-```
-
 ## 🤝 Contribution
 
 Nous accueillons les contributions ! Pour contribuer :
@@ -171,9 +107,10 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 ## 📞 Contact
 
-- **Site web** : [novakom.km](https://novakom.km) (à venir)
-- **Email** : contact@novakom.km
-- **LinkedIn** : [NovaKom](https://linkedin.com/company/novakom)
+- **Site web** : [novakom.km](https://novakom.tech) 
+- **Email** : contactus@novakom.tech
+- **LinkedIn** : [NovaKom](à venir)
+- **Facebook** : [NovaKom](à venir)
 - **Adresse** : Moroni, Union des Comores
 
 ---

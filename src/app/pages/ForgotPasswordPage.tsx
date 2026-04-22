@@ -17,7 +17,7 @@ export function ForgotPasswordPage() {
     setLoading(true);
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: 'https://www.novakom.tech/reset-password',
     });
 
     if (resetError) {
