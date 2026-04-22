@@ -8,23 +8,11 @@ const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).
 export function ResetPasswordPage() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const refreshToken = hashParams.get('refresh_token');
-    
-    if (accessToken && refreshToken) {
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken
-      });
-    }
-  }, []);
-
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Chercher le token dans les query params (?token_hash=...)
     const params = new URLSearchParams(window.location.search);
     const tokenHash = params.get('token_hash');
     const type = params.get('type');
@@ -43,6 +31,26 @@ export function ResetPasswordPage() {
       return;
     }
 
+    // Chercher le token dans le hash URL (#access_token=...)
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+
+    if (accessToken && refreshToken) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken
+      }).then(({ error }) => {
+        if (error) {
+          setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+        } else {
+          setReady(true);
+        }
+      });
+      return;
+    }
+
+    // Aucun token trouvé
     setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
   }, []);
   const [password, setPassword] = useState('');

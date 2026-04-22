@@ -116,6 +116,16 @@ export function Team() {
             5 professionnels passionnés, certifiés et engagés à bâtir la
             prochaine génération d'infrastructures numériques comoriennes.
           </p>
+          <a
+            href="https://www.novakom.tech/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-5 text-sm transition-colors hover:opacity-85"
+            style={{ color: "#FFD700", fontFamily: "Inter, sans-serif", fontWeight: 600 }}
+          >
+            <Globe className="w-4 h-4" />
+            NovaKom : https://www.novakom.tech/
+          </a>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
