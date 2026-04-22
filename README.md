@@ -107,7 +107,7 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 ## 📞 Contact
 
-- **Site web** : [novakom.km](https://novakom.tech) 
+- **Site web** : [novakom](https://novakom.tech) 
 - **Email** : contactus@novakom.tech
 - **LinkedIn** : [NovaKom](à venir)
 - **Facebook** : [NovaKom](à venir)

@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <script>
-        var path = window.location.pathname;
-        window.location.replace('/?redirect=' + encodeURIComponent(path));
+        var fullPath = window.location.pathname + window.location.search + window.location.hash;
+        window.location.replace('/?redirect=' + encodeURIComponent(fullPath));
     </script>
 </head>
 </html>
