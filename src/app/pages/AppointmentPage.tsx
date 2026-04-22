@@ -23,7 +23,8 @@ interface Appointment {
 
 export function AppointmentPage() {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { session, loading: authLoading } = useAuth();
+  const user = session?.user;
   const [slots, setSlots] = useState<TimeSlot[]>([]);
   const [myAppointments, setMyAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,10 +42,16 @@ export function AppointmentPage() {
   const [authFailed, setAuthFailed] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (!authLoading && !session) {
       navigate('/login', { state: { from: '/appointment' } });
     }
-  }, [authLoading, user, navigate]);
+  }, [authLoading, session, navigate]);
+
+  useEffect(() => {
+    if (authLoading) return;
+    loadAvailableSlots();
+    if (session) loadMyAppointments();
+  }, [authLoading, session]);
 
   useEffect(() => {
     if (!user?.id || authFailed) return;
@@ -53,13 +60,11 @@ export function AppointmentPage() {
       name: user.user_metadata?.name || prev.name,
       email: user.email || prev.email,
     }));
-    loadAvailableSlots();
-    loadMyAppointments();
   }, [user?.id, authFailed]);
 
   const loadAvailableSlots = async () => {
     try {
-      const response = await apiRequest('/slots/available');
+      const response = await apiRequest('/slots/available', {}, session?.access_token);
       if (response.status === 401) {
         setAuthFailed(true);
         navigate('/login', { state: { from: '/appointment' } });
@@ -77,7 +82,7 @@ export function AppointmentPage() {
   const loadMyAppointments = async () => {
     setLoadingMyAppointments(true);
     try {
-      const response = await apiRequest('/appointments/my');
+      const response = await apiRequest('/appointments/my', {}, session?.access_token);
       if (response.status === 401) {
         setAuthFailed(true);
         navigate('/login', { state: { from: '/appointment' } });
