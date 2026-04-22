@@ -112,7 +112,7 @@ const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   if (!user) return false;
   
   // L'admin est identifié par son email
-  return user.email === 'admin@novakom.tech';
+  return user.email === 'contactus@novakom.tech';
 };
 
 // Ajouter des créneaux disponibles (ADMIN)

@@ -39,61 +39,76 @@ export function AppointmentPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [authFailed, setAuthFailed] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !session) {
-      navigate('/login', { state: { from: '/appointment' } });
+      navigate('/login', { replace: true, state: { from: '/appointment' } });
     }
-  }, [authLoading, session, navigate]);
-
-  useEffect(() => {
-    if (authLoading) return;
-    loadAvailableSlots();
-    if (session) loadMyAppointments();
   }, [authLoading, session]);
 
   useEffect(() => {
-    if (!user?.id || authFailed) return;
+    if (authLoading || !session?.access_token) return;
+    const token = session.access_token;
+    loadAvailableSlots(token);
+    loadMyAppointments(token);
+  }, [session?.access_token]);
+
+  useEffect(() => {
+    if (!user?.id) return;
     setFormData((prev) => ({
       ...prev,
       name: user.user_metadata?.name || prev.name,
       email: user.email || prev.email,
     }));
-  }, [user?.id, authFailed]);
+  }, [user?.id]);
 
-  const loadAvailableSlots = async () => {
+  const loadAvailableSlots = async (token: string) => {
     try {
-      const response = await apiRequest('/slots/available', {}, session?.access_token);
+      const response = await apiRequest('/slots/available', {}, token);
+
       if (response.status === 401) {
-        setAuthFailed(true);
-        navigate('/login', { state: { from: '/appointment' } });
+        setError("Votre session a expiré. Veuillez vous reconnecter.");
         return;
       }
+
       const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Erreur lors du chargement des créneaux');
+        return;
+      }
+
       setSlots(data.slots || []);
     } catch (err) {
       console.error('Error loading slots:', err);
+      setError('Erreur réseau lors du chargement des créneaux');
     } finally {
       setLoading(false);
     }
   };
 
-  const loadMyAppointments = async () => {
+  const loadMyAppointments = async (token: string) => {
     setLoadingMyAppointments(true);
+
     try {
-      const response = await apiRequest('/appointments/my', {}, session?.access_token);
+      const response = await apiRequest('/appointments/my', {}, token);
+
       if (response.status === 401) {
-        setAuthFailed(true);
-        navigate('/login', { state: { from: '/appointment' } });
+        setError("Votre session a expiré. Veuillez vous reconnecter.");
         return;
       }
+
       const data = await response.json();
-      if (response.ok) {
-        setMyAppointments(data.appointments || []);
+
+      if (!response.ok) {
+        setError(data.error || 'Erreur lors du chargement des rendez-vous');
+        return;
       }
+
+      setMyAppointments(data.appointments || []);
     } catch (err) {
       console.error('Error loading my appointments:', err);
+      setError('Erreur réseau lors du chargement des rendez-vous');
     } finally {
       setLoadingMyAppointments(false);
     }
@@ -101,8 +116,15 @@ export function AppointmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!selectedSlot) {
       setError('Veuillez sélectionner un créneau');
+      return;
+    }
+
+    const token = session?.access_token;
+    if (!token) {
+      setError('Session invalide. Veuillez vous reconnecter.');
       return;
     }
 
@@ -110,16 +132,25 @@ export function AppointmentPage() {
     setError('');
 
     try {
-      const response = await apiRequest('/appointments/create', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...formData,
-          date: selectedSlot.date,
-          time: selectedSlot.time,
-        }),
-      });
+      const response = await apiRequest(
+          '/appointments/create',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              ...formData,
+              date: selectedSlot.date,
+              time: selectedSlot.time,
+            }),
+          },
+          token
+      );
 
       const data = await response.json();
+
+      if (response.status === 401) {
+        setError("Votre session a expiré. Veuillez vous reconnecter.");
+        return;
+      }
 
       if (!response.ok) {
         setError(data.error || 'Erreur lors de la création du rendez-vous');
@@ -127,9 +158,8 @@ export function AppointmentPage() {
       }
 
       setSuccess(true);
-      // Recharger les créneaux disponibles
-      loadAvailableSlots();
-      loadMyAppointments();
+      await loadAvailableSlots(token);
+      await loadMyAppointments(token);
     } catch (err) {
       console.error('Error creating appointment:', err);
       setError('Erreur lors de la création du rendez-vous');
