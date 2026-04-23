@@ -1,32 +1,44 @@
 import { Award, Target, Globe, Cpu } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const cyberImage =
   "https://images.unsplash.com/photo-1768839721176-2fa91fdce725?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwbmV0d29yayUyMHByb3RlY3Rpb24lMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc3MjQ5NjUxMnww&ixlib=rb-4.1.0&q=80&w=1080";
 
-const points = [
-  {
-    icon: <Award className="w-5 h-5" />,
-    title: "Certifications internationales",
-    desc: "CCNA, CompTIA Security+, et d'autres certifications reconnues mondialement.",
-  },
-  {
-    icon: <Target className="w-5 h-5" />,
-    title: "Approche structurée",
-    desc: "Méthodologie rigoureuse basée sur les frameworks NIST, ISO 27001 et ITIL.",
-  },
-  {
-    icon: <Globe className="w-5 h-5" />,
-    title: "Vision long terme",
-    desc: "Nous construisons des infrastructures pensées pour grandir avec votre organisation.",
-  },
-  {
-    icon: <Cpu className="w-5 h-5" />,
-    title: "Adaptation au marché local",
-    desc: "Standards internationaux adaptés aux réalités spécifiques du contexte comorien.",
-  },
-];
-
 export function Expertise() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const points = [
+    {
+      icon: <Award className="w-5 h-5" />,
+      title: isFr ? "Certifications internationales" : "International certifications",
+      desc: isFr
+        ? "CCNA, CompTIA Security+, et d'autres certifications reconnues mondialement."
+        : "CCNA, CompTIA Security+, and other globally recognized certifications.",
+    },
+    {
+      icon: <Target className="w-5 h-5" />,
+      title: isFr ? "Approche structurée" : "Structured approach",
+      desc: isFr
+        ? "Méthodologie rigoureuse basée sur les frameworks NIST, ISO 27001 et ITIL."
+        : "Rigorous methodology based on NIST, ISO 27001, and ITIL frameworks.",
+    },
+    {
+      icon: <Globe className="w-5 h-5" />,
+      title: isFr ? "Vision long terme" : "Long-term vision",
+      desc: isFr
+        ? "Nous construisons des infrastructures pensées pour grandir avec votre organisation."
+        : "We build infrastructures designed to grow with your organization.",
+    },
+    {
+      icon: <Cpu className="w-5 h-5" />,
+      title: isFr ? "Adaptation au marché local" : "Local market adaptation",
+      desc: isFr
+        ? "Standards internationaux adaptés aux réalités spécifiques du contexte comorien."
+        : "International standards adapted to the specific realities of the Comorian context.",
+    },
+  ];
+
   return (
     <section
       id="expertise"
@@ -42,7 +54,7 @@ export function Expertise() {
           >
             <img
               src={cyberImage}
-              alt="Expertise NovaKom"
+              alt={isFr ? "Expertise NovaKom" : "NovaKom expertise"}
               className="w-full h-[460px] object-cover"
             />
             <div
@@ -66,13 +78,15 @@ export function Expertise() {
               className="text-white italic"
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", lineHeight: 1.6 }}
             >
-              "Nous ne réparons pas. Nous structurons. Nous sécurisons. Nous anticipons."
+              {isFr
+                ? "\"Nous ne réparons pas. Nous structurons. Nous sécurisons. Nous anticipons.\""
+                : "\"We do not just fix. We structure. We secure. We anticipate.\""}
             </p>
             <p
               className="mt-2"
               style={{ color: "#00A86B", fontFamily: "Inter, sans-serif", fontSize: "0.78rem" }}
             >
-              — L'équipe NovaKom
+              {isFr ? "— L'équipe NovaKom" : "— NovaKom team"}
             </p>
           </div>
         </div>
@@ -83,7 +97,7 @@ export function Expertise() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Notre positionnement
+            {isFr ? "Notre positionnement" : "Our positioning"}
           </p>
           <h2
             className="text-white mb-4"
@@ -94,16 +108,16 @@ export function Expertise() {
               lineHeight: 1.25,
             }}
           >
-            Un partenaire stratégique,{" "}
-            <span style={{ color: "#00A86B" }}>pas un réparateur</span>
+            {isFr ? "Un partenaire stratégique, " : "A strategic partner, "}
+            <span style={{ color: "#00A86B" }}>{isFr ? "pas un réparateur" : "not just a repair service"}</span>
           </h2>
           <p
             className="text-white/50 mb-10"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.8 }}
           >
-            NovaKom n'est pas un simple prestataire IT. Nous sommes un partenaire
-            stratégique qui accompagne les organisations dans leur transformation
-            numérique avec expertise, rigueur et engagement sur le long terme.
+            {isFr
+              ? "NovaKom n'est pas un simple prestataire IT. Nous sommes un partenaire stratégique qui accompagne les organisations dans leur transformation numérique avec expertise, rigueur et engagement sur le long terme."
+              : "NovaKom is not just an IT vendor. We are a strategic partner supporting organizations in their digital transformation with expertise, rigor, and long-term commitment."}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6">
@@ -150,10 +164,12 @@ export function Expertise() {
               className="text-white italic"
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", lineHeight: 1.6 }}
             >
-              "Nous ne réparons pas. Nous structurons. Nous sécurisons. Nous anticipons."
+              {isFr
+                ? "\"Nous ne réparons pas. Nous structurons. Nous sécurisons. Nous anticipons.\""
+                : "\"We do not just fix. We structure. We secure. We anticipate.\""}
             </p>
             <p className="mt-2 text-xs" style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}>
-              — L'équipe NovaKom
+              {isFr ? "— L'équipe NovaKom" : "— NovaKom team"}
             </p>
           </div>
         </div>

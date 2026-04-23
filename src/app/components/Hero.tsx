@@ -1,9 +1,25 @@
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const heroImage =
   "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByb29tJTIwZGF0YSUyMGNlbnRlciUyMG1vZGVybiUyMElUJTIwaW5mcmFzdHJ1Y3R1cmV8ZW58MXx8fHwxNzcyNDk2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080";
 
 export function Hero() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const stats = isFr
+    ? [
+        { val: "5+", label: "Experts certifiés" },
+        { val: "100%", label: "Approche sécurisée" },
+        { val: "24/7", label: "Support & monitoring" },
+      ]
+    : [
+        { val: "5+", label: "Certified experts" },
+        { val: "100%", label: "Security-first approach" },
+        { val: "24/7", label: "Support & monitoring" },
+      ];
+
   return (
     <section
       id="hero"
@@ -47,7 +63,7 @@ export function Hero() {
             }}
           >
             <span className="w-2 h-2 rounded-full bg-[#00A86B] animate-pulse" />
-            Basé à Moroni – Union des Comores
+            {isFr ? "Basé à Moroni – Union des Comores" : "Based in Moroni – Comoros"}
           </div>
 
           <h1
@@ -59,17 +75,19 @@ export function Hero() {
               lineHeight: 1.15,
             }}
           >
-            Sécurisez et structurez{" "}
-            <span style={{ color: "#00A86B" }}>votre infrastructure IT.</span>
+            {isFr ? "Sécurisez et structurez " : "Secure and structure "}
+            <span style={{ color: "#00A86B" }}>
+              {isFr ? "votre infrastructure IT." : "your IT infrastructure."}
+            </span>
           </h1>
 
           <p
             className="text-white/60 mb-10 max-w-lg"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", lineHeight: 1.75 }}
           >
-            NovaKom accompagne les entreprises comoriennes dans la gestion et la
-            protection complète de leur environnement numérique. Un partenaire
-            stratégique IT & Sécurité de niveau international.
+            {isFr
+              ? "NovaKom accompagne les entreprises comoriennes dans la gestion et la protection complète de leur environnement numérique. Un partenaire stratégique IT & Sécurité de niveau international."
+              : "NovaKom helps companies manage and fully protect their digital environment. An international-level IT & Security strategic partner."}
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -82,7 +100,7 @@ export function Hero() {
                 fontWeight: 600,
               }}
             >
-              Demander un audit <ArrowRight className="w-4 h-4" />
+              {isFr ? "Demander un audit" : "Request an audit"} <ArrowRight className="w-4 h-4" />
             </a>
             <a
               href="#contact"
@@ -93,17 +111,13 @@ export function Hero() {
                 fontWeight: 500,
               }}
             >
-              <MessageCircle className="w-4 h-4" /> Parler à un expert
+              <MessageCircle className="w-4 h-4" /> {isFr ? "Parler à un expert" : "Talk to an expert"}
             </a>
           </div>
 
           {/* Stats */}
           <div className="mt-14 flex flex-wrap gap-10">
-            {[
-              { val: "5+", label: "Experts certifiés" },
-              { val: "100%", label: "Approche sécurisée" },
-              { val: "24/7", label: "Support & monitoring" },
-            ].map((s) => (
+            {stats.map((s) => (
               <div key={s.label}>
                 <p
                   className="text-white"
@@ -127,7 +141,7 @@ export function Hero() {
           >
             <img
               src={heroImage}
-              alt="Infrastructure IT sécurisée"
+              alt={isFr ? "Infrastructure IT sécurisée" : "Secure IT infrastructure"}
               className="w-full h-[480px] object-cover"
             />
             <div

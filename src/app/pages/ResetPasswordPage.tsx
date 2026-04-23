@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
 export function ResetPasswordPage() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const isFr = language === 'fr';
 
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
@@ -23,7 +26,7 @@ export function ResetPasswordPage() {
         type: 'recovery'
       }).then(({ error }) => {
         if (error) {
-          setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+          setError(isFr ? 'Lien invalide ou expiré. Veuillez faire une nouvelle demande.' : 'Invalid or expired link. Please submit a new request.');
         } else {
           setReady(true);
         }
@@ -42,7 +45,7 @@ export function ResetPasswordPage() {
         refresh_token: refreshToken
       }).then(({ error }) => {
         if (error) {
-          setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+          setError(isFr ? 'Lien invalide ou expiré. Veuillez faire une nouvelle demande.' : 'Invalid or expired link. Please submit a new request.');
         } else {
           setReady(true);
         }
@@ -51,7 +54,7 @@ export function ResetPasswordPage() {
     }
 
     // Aucun token trouvé
-    setError('Lien invalide ou expiré. Veuillez faire une nouvelle demande.');
+    setError(isFr ? 'Lien invalide ou expiré. Veuillez faire une nouvelle demande.' : 'Invalid or expired link. Please submit a new request.');
   }, []);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -75,11 +78,11 @@ export function ResetPasswordPage() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
+      setError(isFr ? 'Les mots de passe ne correspondent pas' : 'Passwords do not match');
       return;
     }
     if (!STRONG_PASSWORD_REGEX.test(password)) {
-      setError('Le mot de passe doit contenir au moins 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial.');
+      setError(isFr ? 'Le mot de passe doit contenir au moins 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial.' : 'Password must be at least 8 characters with uppercase, lowercase, number and special character.');
       return;
     }
 
@@ -88,7 +91,7 @@ export function ResetPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password });
 
     if (updateError) {
-      setError(updateError.message || 'Erreur lors de la mise à jour du mot de passe');
+      setError(updateError.message || (isFr ? 'Erreur lors de la mise à jour du mot de passe' : 'Error updating password'));
       setLoading(false);
       return;
     }
@@ -99,7 +102,7 @@ export function ResetPasswordPage() {
     setLoading(false);
   };
 
-  if (error) return <div className="min-h-screen flex items-center justify-center px-4"><p>{error}</p><button onClick={() => navigate('/forgot-password')}>Nouvelle demande</button></div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center px-4"><p>{error}</p><button onClick={() => navigate('/forgot-password')}>{isFr ? 'Nouvelle demande' : 'New request'}</button></div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center px-4 py-12">
@@ -112,13 +115,13 @@ export function ResetPasswordPage() {
             <span className="text-3xl md:text-4xl font-bold text-white">NovaKom</span>
           </div>
           <p className="text-gray-300 text-sm md:text-base">
-            Choisissez un nouveau mot de passe
+            {isFr ? 'Choisissez un nouveau mot de passe' : 'Choose a new password'}
           </p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
           {!ready ? (
-            <div className="text-center text-gray-300">Chargement en cours...</div>
+            <div className="text-center text-gray-300">{isFr ? 'Chargement en cours...' : 'Loading...'}</div>
           ) : (
             <>
               {error && (
@@ -129,14 +132,14 @@ export function ResetPasswordPage() {
 
               {success && (
                 <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-200 text-sm">
-                  Mot de passe mis à jour ! Redirection vers la connexion...
+                  {isFr ? 'Mot de passe mis à jour ! Redirection vers la connexion...' : 'Password updated! Redirecting to login...'}
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Nouveau mot de passe *
+                    {isFr ? 'Nouveau mot de passe *' : 'New password *'}
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -153,19 +156,19 @@ export function ResetPasswordPage() {
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                      aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                      aria-label={showPassword ? (isFr ? 'Masquer le mot de passe' : 'Hide password') : (isFr ? 'Afficher le mot de passe' : 'Show password')}
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
                   <p className="mt-1 text-xs text-gray-400">
-                    Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial
+                    {isFr ? 'Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial' : 'Minimum 8 characters with uppercase, lowercase, number and special character'}
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Confirmer le mot de passe *
+                    {isFr ? 'Confirmer le mot de passe *' : 'Confirm password *'}
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -185,13 +188,13 @@ export function ResetPasswordPage() {
                       type="button"
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                      aria-label={showConfirmPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                      aria-label={showConfirmPassword ? (isFr ? 'Masquer le mot de passe' : 'Hide password') : (isFr ? 'Afficher le mot de passe' : 'Show password')}
                     >
                       {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
                   <p className="mt-1 text-xs text-gray-400">
-                    Copier/coller désactivé pour confirmer le mot de passe
+                    {isFr ? 'Copier/coller désactivé pour confirmer le mot de passe' : 'Copy/paste disabled to confirm password'}
                   </p>
                 </div>
 
@@ -203,10 +206,10 @@ export function ResetPasswordPage() {
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Mise à jour...
+                      {isFr ? 'Mise à jour...' : 'Updating...'}
                     </span>
                   ) : (
-                    'Mettre à jour le mot de passe'
+                    isFr ? 'Mettre à jour le mot de passe' : 'Update password'
                   )}
                 </button>
               </form>
@@ -217,7 +220,7 @@ export function ResetPasswordPage() {
                   className="text-sm text-gray-300 hover:text-[#ff6b35] transition-colors inline-flex items-center gap-2"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Retour à la connexion
+                  {isFr ? 'Retour à la connexion' : 'Back to login'}
                 </button>
               </div>
             </>

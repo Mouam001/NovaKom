@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const isFr = language === 'fr';
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -21,7 +24,7 @@ export function ForgotPasswordPage() {
     });
 
     if (resetError) {
-      setError(resetError.message || 'Erreur lors de l’envoi de l’email');
+      setError(resetError.message || (isFr ? 'Erreur lors de l’envoi de l’email' : 'Error sending email'));
       setLoading(false);
       return;
     }
@@ -41,7 +44,7 @@ export function ForgotPasswordPage() {
             <span className="text-3xl md:text-4xl font-bold text-white">NovaKom</span>
           </div>
           <p className="text-gray-300 text-sm md:text-base">
-            Réinitialiser votre mot de passe
+            {isFr ? 'Réinitialiser votre mot de passe' : 'Reset your password'}
           </p>
         </div>
 
@@ -54,7 +57,7 @@ export function ForgotPasswordPage() {
 
           {success && (
             <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-200 text-sm">
-              Email envoyé ! Vérifiez votre boîte mail.
+              {isFr ? 'Email envoyé ! Vérifiez votre boîte mail.' : 'Email sent! Please check your inbox.'}
             </div>
           )}
 
@@ -84,10 +87,10 @@ export function ForgotPasswordPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Envoi...
+                  {isFr ? 'Envoi...' : 'Sending...'}
                 </span>
               ) : (
-                'Envoyer le lien de réinitialisation'
+                isFr ? 'Envoyer le lien de réinitialisation' : 'Send reset link'
               )}
             </button>
           </form>
@@ -98,7 +101,7 @@ export function ForgotPasswordPage() {
               className="text-sm text-gray-300 hover:text-[#ff6b35] transition-colors inline-flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour à la connexion
+              {isFr ? 'Retour à la connexion' : 'Back to login'}
             </button>
           </div>
         </div>

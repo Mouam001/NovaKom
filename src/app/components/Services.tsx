@@ -1,65 +1,115 @@
 import { Shield, Monitor, Network, Code } from "lucide-react";
-
-const poles = [
-  {
-    icon: <Shield className="w-7 h-7" />,
-    pole: "Sécurité & protection des systèmes",
-    color: "#00A86B",
-    items: [
-      "Audit de sécurité",
-      "Tests d'intrusion (Pentest)",
-      "Firewall, VPN et protection des accès",
-      "Sauvegarde et sécurisation des données",
-      "Sensibilisation des employés",
-    ],
-    desc: "Nous protégeons les entreprises contre les cybermenaces et assurons la sécurité de leurs données et infrastructures.",
-    objective: "Réduire les risques et sécuriser les actifs numériques.",
-  },
-  {
-    icon: <Monitor className="w-7 h-7" />,
-    pole: "Infrastructure IT",
-    color: "#3b82f6",
-    items: [
-      "Installation et gestion de serveurs",
-      "Administration réseau et systèmes",
-      "Supervision et monitoring",
-      "Maintenance préventive et corrective",
-      "Optimisation des performances",
-    ],
-    desc: "Nous structurons et administrons votre infrastructure pour garantir un environnement fiable, stable et sécurisé.",
-    objective: "Assurer la continuité et la stabilité de votre système d'information.",
-  },
-  {
-    icon: <Network className="w-7 h-7" />,
-    pole: "Support & assistance IT",
-    color: "#a855f7",
-    items: [
-      "Support utilisateurs (helpdesk)",
-      "Assistance opérationnelle quotidienne",
-      "Gestion des incidents et demandes",
-      "Formation des utilisateurs",
-      "Accompagnement des équipes métiers",
-    ],
-    desc: "Nous assurons la gestion quotidienne de votre environnement IT avec une assistance réactive pour vos équipes.",
-    objective: "Garantir une assistance continue et améliorer la productivité des équipes.",
-  },
-  {
-    icon: <Code className="w-7 h-7" />,
-    pole: "Développement digital",
-    color: "#f59e0b",
-    items: [
-      "Applications web",
-      "Applications mobiles",
-      "Logiciels métiers",
-      "API et intégrations",
-      "Modernisation d'outils existants",
-    ],
-    desc: "Nous développons des applications sécurisées dès leur conception grâce à une approche DevSecOps alliant sécurité et performance.",
-    objective: "Livrer des solutions digitales sécurisées, évolutives et adaptées à vos besoins.",
-  },
-];
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Services() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const poles = [
+    {
+      icon: <Shield className="w-7 h-7" />,
+      pole: isFr ? "Sécurité & protection des systèmes" : "System security & protection",
+      color: "#00A86B",
+      items: isFr
+        ? [
+            "Audit de sécurité",
+            "Tests d'intrusion (Pentest)",
+            "Firewall, VPN et protection des accès",
+            "Sauvegarde et sécurisation des données",
+            "Sensibilisation des employés",
+          ]
+        : [
+            "Security audit",
+            "Penetration testing (Pentest)",
+            "Firewall, VPN and access protection",
+            "Backup and data protection",
+            "Employee awareness",
+          ],
+      desc: isFr
+        ? "Nous protégeons les entreprises contre les cybermenaces et assurons la sécurité de leurs données et infrastructures."
+        : "We protect companies against cyber threats and secure their data and infrastructure.",
+      objective: isFr ? "Réduire les risques et sécuriser les actifs numériques." : "Reduce risk and secure digital assets.",
+    },
+    {
+      icon: <Monitor className="w-7 h-7" />,
+      pole: isFr ? "Infrastructure IT" : "IT infrastructure",
+      color: "#3b82f6",
+      items: isFr
+        ? [
+            "Installation et gestion de serveurs",
+            "Administration réseau et systèmes",
+            "Supervision et monitoring",
+            "Maintenance préventive et corrective",
+            "Optimisation des performances",
+          ]
+        : [
+            "Server setup and management",
+            "Network and systems administration",
+            "Supervision and monitoring",
+            "Preventive and corrective maintenance",
+            "Performance optimization",
+          ],
+      desc: isFr
+        ? "Nous structurons et administrons votre infrastructure pour garantir un environnement fiable, stable et sécurisé."
+        : "We structure and manage your infrastructure to ensure a reliable, stable and secure environment.",
+      objective: isFr
+        ? "Assurer la continuité et la stabilité de votre système d'information."
+        : "Ensure continuity and stability of your information system.",
+    },
+    {
+      icon: <Network className="w-7 h-7" />,
+      pole: isFr ? "Support & assistance IT" : "IT support & assistance",
+      color: "#a855f7",
+      items: isFr
+        ? [
+            "Support utilisateurs (helpdesk)",
+            "Assistance opérationnelle quotidienne",
+            "Gestion des incidents et demandes",
+            "Formation des utilisateurs",
+            "Accompagnement des équipes métiers",
+          ]
+        : [
+            "User support (helpdesk)",
+            "Daily operational assistance",
+            "Incident and request management",
+            "User training",
+            "Business team support",
+          ],
+      desc: isFr
+        ? "Nous assurons la gestion quotidienne de votre environnement IT avec une assistance réactive pour vos équipes."
+        : "We manage your IT environment daily with responsive support for your teams.",
+      objective: isFr
+        ? "Garantir une assistance continue et améliorer la productivité des équipes."
+        : "Ensure continuous support and improve team productivity.",
+    },
+    {
+      icon: <Code className="w-7 h-7" />,
+      pole: isFr ? "Développement digital" : "Digital development",
+      color: "#f59e0b",
+      items: isFr
+        ? [
+            "Applications web",
+            "Applications mobiles",
+            "Logiciels métiers",
+            "API et intégrations",
+            "Modernisation d'outils existants",
+          ]
+        : [
+            "Web applications",
+            "Mobile applications",
+            "Business software",
+            "APIs and integrations",
+            "Legacy modernization",
+          ],
+      desc: isFr
+        ? "Nous développons des applications sécurisées dès leur conception grâce à une approche DevSecOps alliant sécurité et performance."
+        : "We build secure applications from day one using a DevSecOps approach combining security and performance.",
+      objective: isFr
+        ? "Livrer des solutions digitales sécurisées, évolutives et adaptées à vos besoins."
+        : "Deliver secure, scalable digital solutions tailored to your needs.",
+    },
+  ];
+
   return (
     <section
       id="services"
@@ -72,7 +122,7 @@ export function Services() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Nos services
+            {isFr ? "Nos services" : "Our services"}
           </p>
           <h2
             className="text-white mb-5"
@@ -82,13 +132,15 @@ export function Services() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Nos 4 pôles d'expertise
+            {isFr ? "Nos 4 pôles d'expertise" : "Our 4 areas of expertise"}
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Des solutions IT complètes pour accompagner la transformation digitale, sécuriser et optimiser les systèmes des entreprises aux Comores et à l’international.
+            {isFr
+              ? "Des solutions IT complètes pour accompagner la transformation digitale, sécuriser et optimiser les systèmes des entreprises aux Comores et à l’international."
+              : "Complete IT solutions to support digital transformation, secure and optimize business systems in Comoros and internationally."}
           </p>
         </div>
 
@@ -153,7 +205,7 @@ export function Services() {
                   className="text-sm"
                   style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.6 }}
                 >
-                  <span style={{ color: p.color, fontWeight: 700 }}>Objectif :</span>{" "}
+                  <span style={{ color: p.color, fontWeight: 700 }}>{isFr ? "Objectif :" : "Goal:"}</span>{" "}
                   <span className="text-white/90" style={{ fontWeight: 500 }}>
                     {p.objective}
                   </span>

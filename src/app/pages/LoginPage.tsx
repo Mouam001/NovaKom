@@ -1,6 +1,7 @@
 import { useState,  useEffect} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { LogIn, UserPlus, Mail, Lock, User, Building2, Eye, EyeOff } from 'lucide-react';
 
 const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
@@ -9,6 +10,8 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, user } = useAuth();
+  const { language } = useLanguage();
+  const isFr = language === 'fr';
   
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -39,39 +42,39 @@ export function LoginPage() {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          setError(error.message || 'Erreur de connexion');
+          setError(error.message || (isFr ? 'Erreur de connexion' : 'Login error'));
         } else {
           const from = (location.state as any)?.from || '/';
           navigate(from, { replace: true });
         }
       } else {
         if (!name) {
-          setError('Le nom est requis');
+          setError(isFr ? 'Le nom est requis' : 'Name is required');
           setLoading(false);
           return;
         }
         if (!STRONG_PASSWORD_REGEX.test(password)) {
-          setError('Le mot de passe doit contenir au moins 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial.');
+          setError(isFr ? 'Le mot de passe doit contenir au moins 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial.' : 'Password must be at least 8 characters with uppercase, lowercase, number and special character.');
           setLoading(false);
           return;
         }
         if (password !== confirmPassword) {
-          setError('Les mots de passe ne correspondent pas.');
+          setError(isFr ? 'Les mots de passe ne correspondent pas.' : 'Passwords do not match.');
           setLoading(false);
           return;
         }
         const { error } = await signUp(email, password, name, company);
         if (error) {
-          setError(error.message || 'Erreur lors de l\'inscription');
+          setError(error.message || (isFr ? 'Erreur lors de l\'inscription' : 'Sign up error'));
         } else {
-          setSuccessMessage("Inscription réussie ! Vérifiez votre boîte mail pour confirmer votre compte.");
+          setSuccessMessage(isFr ? "Inscription réussie ! Vérifiez votre boîte mail pour confirmer votre compte." : "Sign-up successful! Check your inbox to confirm your account.");
           setIsLogin(true);
           setPassword('');
           setConfirmPassword('');
         }
       }
     } catch (err) {
-      setError('Une erreur est survenue');
+      setError(isFr ? 'Une erreur est survenue' : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -89,7 +92,7 @@ export function LoginPage() {
             <span className="text-3xl md:text-4xl font-bold text-white">NovaKom</span>
           </div>
           <p className="text-gray-300 text-sm md:text-base">
-            {isLogin ? 'Connectez-vous à votre compte' : 'Créez votre compte client'}
+            {isLogin ? (isFr ? 'Connectez-vous à votre compte' : 'Log in to your account') : (isFr ? 'Créez votre compte client' : 'Create your customer account')}
           </p>
         </div>
 
@@ -111,7 +114,7 @@ export function LoginPage() {
               }`}
             >
               <LogIn className="w-4 h-4 inline mr-2" />
-              Connexion
+              {isFr ? 'Connexion' : 'Login'}
             </button>
             <button
               onClick={() => {
@@ -127,7 +130,7 @@ export function LoginPage() {
               }`}
             >
               <UserPlus className="w-4 h-4 inline mr-2" />
-              Inscription
+              {isFr ? 'Inscription' : 'Sign up'}
             </button>
           </div>
 
@@ -149,7 +152,7 @@ export function LoginPage() {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Nom complet *
+                    {isFr ? 'Nom complet *' : 'Full name *'}
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -158,7 +161,7 @@ export function LoginPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
-                      placeholder="Jean Dupont"
+                      placeholder={isFr ? 'Jean Dupont' : 'John Doe'}
                       required={!isLogin}
                     />
                   </div>
@@ -166,7 +169,7 @@ export function LoginPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Entreprise (optionnel)
+                    {isFr ? 'Entreprise (optionnel)' : 'Company (optional)'}
                   </label>
                   <div className="relative">
                     <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -175,7 +178,7 @@ export function LoginPage() {
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
-                      placeholder="Mon Entreprise"
+                      placeholder={isFr ? 'Mon Entreprise' : 'My Company'}
                     />
                   </div>
                 </div>
@@ -203,7 +206,7 @@ export function LoginPage() {
             {/* Mot de passe */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Mot de passe *
+                {isFr ? 'Mot de passe *' : 'Password *'}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -220,14 +223,14 @@ export function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                  aria-label={showPassword ? (isFr ? 'Masquer le mot de passe' : 'Hide password') : (isFr ? 'Afficher le mot de passe' : 'Show password')}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               {!isLogin && (
                 <p className="mt-1 text-xs text-gray-400">
-                  Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial
+                  {isFr ? 'Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial' : 'Minimum 8 characters with uppercase, lowercase, number and special character'}
                 </p>
               )}
               {isLogin && (
@@ -237,7 +240,7 @@ export function LoginPage() {
                     onClick={() => navigate('/forgot-password')}
                     className="text-sm text-gray-400 hover:text-[#ff6b35] transition-colors"
                   >
-                    Mot de passe oublié ?
+                    {isFr ? 'Mot de passe oublié ?' : 'Forgot password?'}
                   </button>
                 </div>
               )}
@@ -246,7 +249,7 @@ export function LoginPage() {
             {!isLogin && (
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Confirmer le mot de passe *
+                  {isFr ? 'Confirmer le mot de passe *' : 'Confirm password *'}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -258,13 +261,13 @@ export function LoginPage() {
                     onCut={(e) => e.preventDefault()}
                     onPaste={(e) => e.preventDefault()}
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-sm md:text-base"
-                    placeholder="Retapez votre mot de passe"
+                    placeholder={isFr ? 'Retapez votre mot de passe' : 'Type your password again'}
                     required
                     minLength={8}
                   />
                 </div>
                 <p className="mt-1 text-xs text-gray-400">
-                  Copier/coller désactivé pour confirmer le mot de passe
+                  {isFr ? 'Copier/coller désactivé pour confirmer le mot de passe' : 'Copy/paste disabled to confirm password'}
                 </p>
               </div>
             )}
@@ -278,19 +281,19 @@ export function LoginPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Chargement...
+                  {isFr ? 'Chargement...' : 'Loading...'}
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
                   {isLogin ? (
                     <>
                       <LogIn className="w-5 h-5" />
-                      Se connecter
+                      {isFr ? 'Se connecter' : 'Log in'}
                     </>
                   ) : (
                     <>
                       <UserPlus className="w-5 h-5" />
-                      S'inscrire
+                      {isFr ? "S'inscrire" : 'Sign up'}
                     </>
                   )}
                 </span>
@@ -304,14 +307,14 @@ export function LoginPage() {
               onClick={() => navigate('/')}
               className="text-sm text-gray-300 hover:text-[#ff6b35] transition-colors"
             >
-              ← Retour à l'accueil
+              {isFr ? "← Retour à l'accueil" : "← Back to home"}
             </button>
           </div>
         </div>
 
         {/* Info admin */}
         <div className="mt-6 text-center text-xs text-gray-400 bg-white/5 rounded-lg p-3">
-          💡 <strong>Compte admin :</strong> contactus@novakom.tech
+          💡 <strong>{isFr ? 'Compte admin :' : 'Admin account:'}</strong> contactus@novakom.tech
         </div>
       </div>
     </div>

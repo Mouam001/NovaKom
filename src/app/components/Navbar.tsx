@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 import { Menu, X, Calendar, LogIn, LogOut, User, Shield } from "lucide-react";
 import { NovaKomLogo } from "./NovaKomLogo";
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, signOut, isAdmin } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
+  const isFr = language === "fr";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -43,13 +46,34 @@ export function Navbar() {
   };
 
   const links = [
-    { label: "Services", href: "#services" },
-    { label: "Offres", href: "#offres" },
-    { label: "Formations", href: "#formations" },
-    { label: "Réalisations", href: "#interventions" },
-    { label: "Équipe", href: "#equipe" },
-    { label: "Contact", href: "#contact" },
+    { label: isFr ? "Services" : "Services", href: "#services" },
+    { label: isFr ? "Offres" : "Packages", href: "#offres" },
+    { label: isFr ? "Formations" : "Training", href: "#formations" },
+    { label: isFr ? "Réalisations" : "Work", href: "#interventions" },
+    { label: isFr ? "Équipe" : "Team", href: "#equipe" },
+    { label: isFr ? "Contact" : "Contact", href: "#contact" },
   ];
+
+  const LanguageSwitcher = () => (
+    <div className="flex items-center gap-2 px-2 py-1 bg-white/10 rounded-lg">
+      <button
+        onClick={() => setLanguage("fr")}
+        className={`px-2 py-1 rounded-md text-xs transition-colors ${
+          language === "fr" ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
+        }`}
+      >
+        🇫🇷 {isFr ? "Français" : "French"}
+      </button>
+      <button
+        onClick={() => setLanguage("en")}
+        className={`px-2 py-1 rounded-md text-xs transition-colors ${
+          language === "en" ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
+        }`}
+      >
+        🇬🇧 {isFr ? "Anglais" : "English"}
+      </button>
+    </div>
+  );
 
   return (
     <nav
@@ -97,8 +121,9 @@ export function Navbar() {
             }}
           >
             <Calendar className="w-4 h-4" />
-            Rendez-vous
+            {isFr ? "Rendez-vous" : "Book a call"}
           </button>
+          <LanguageSwitcher />
           {user ? (
             <div className="flex items-center gap-3">
               {isAdmin && (
@@ -107,19 +132,19 @@ export function Navbar() {
                   className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
                 >
                   <Shield className="w-4 h-4" />
-                  Admin
+                  {isFr ? "Admin" : "Admin"}
                 </button>
               )}
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg">
                 <User className="w-4 h-4 text-white/70" />
-                <span className="text-white/90 text-sm">{user.user_metadata?.name || 'Utilisateur'}</span>
+                <span className="text-white/90 text-sm">{user.user_metadata?.name || (isFr ? 'Utilisateur' : 'User')}</span>
               </div>
               <button
                 onClick={handleSignOut}
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                Déconnexion
+                {isFr ? "Déconnexion" : "Logout"}
               </button>
             </div>
           ) : (
@@ -128,7 +153,7 @@ export function Navbar() {
               className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
             >
               <LogIn className="w-4 h-4" />
-              Connexion
+              {isFr ? "Connexion" : "Login"}
             </button>
           )}
         </div>
@@ -164,8 +189,9 @@ export function Navbar() {
             style={{ background: "linear-gradient(135deg, #ff6b35, #f9a826)", fontFamily: "Inter, sans-serif" }}
           >
             <Calendar className="w-4 h-4" />
-            Prendre rendez-vous
+            {isFr ? "Prendre rendez-vous" : "Book a call"}
           </button>
+          <LanguageSwitcher />
           {user ? (
             <>
               {isAdmin && (
@@ -174,7 +200,7 @@ export function Navbar() {
                   className="px-5 py-2 bg-white/10 rounded-lg text-sm text-white text-center flex items-center justify-center gap-2"
                 >
                   <Shield className="w-4 h-4" />
-                  Administration
+                  {isFr ? "Administration" : "Administration"}
                 </button>
               )}
               <div className="px-3 py-2 bg-white/5 rounded-lg text-sm text-white flex items-center gap-2">
@@ -186,7 +212,7 @@ export function Navbar() {
                 className="px-5 py-2 bg-white/10 rounded-lg text-sm text-white text-center flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                Déconnexion
+                {isFr ? "Déconnexion" : "Logout"}
               </button>
             </>
           ) : (
@@ -195,7 +221,7 @@ export function Navbar() {
               className="px-5 py-2 bg-white/10 rounded-lg text-sm text-white text-center flex items-center justify-center gap-2"
             >
               <LogIn className="w-4 h-4" />
-              Connexion
+              {isFr ? "Connexion" : "Login"}
             </button>
           )}
         </div>

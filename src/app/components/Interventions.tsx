@@ -3,6 +3,7 @@ import { Play, X, Star, Quote, MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const photos = [
   {
@@ -44,6 +45,8 @@ export function Interventions() {
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { language } = useLanguage();
+  const isFr = language === "fr";
 
   useEffect(() => {
     if (activeTab !== "avis" || reviewsLoaded) return;
@@ -128,7 +131,7 @@ export function Interventions() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Nos futures réalisations terrain
+            {isFr ? "Nos futures réalisations terrain" : "Our upcoming field projects"}
           </p>
           <h2
             className="text-white mb-5"
@@ -138,15 +141,17 @@ export function Interventions() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Nous lançerons prochainement nos services auprès des commerces et entreprises.
-            Cette section présentera nos futures réalisations.
+            {isFr
+              ? "Nous lançerons prochainement nos services auprès des commerces et entreprises. Cette section présentera nos futures réalisations."
+              : "We will soon launch our services for shops and companies. This section will showcase our upcoming projects."}
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Découvrez prochainement nos interventions chez nos clients — photos, 
-            vidéos et témoignages de commerçants et entreprises comoriens qui nous feront confiance.
+            {isFr
+              ? "Découvrez prochainement nos interventions chez nos clients — photos, vidéos et témoignages de commerçants et entreprises comoriens qui nous feront confiance."
+              : "Soon discover our client interventions — photos, videos, and testimonials from shops and companies that trust us."}
           </p>
         </div>
 
@@ -164,7 +169,7 @@ export function Interventions() {
                 fontWeight: activeTab === tab ? 600 : 400,
               }}
             >
-              {tab === "photos" ? "📸 Photos" : tab === "videos" ? "🎬 Vidéos" : "⭐ Avis clients"}
+              {tab === "photos" ? (isFr ? "📸 Photos" : "📸 Photos") : tab === "videos" ? (isFr ? "🎬 Vidéos" : "🎬 Videos") : (isFr ? "⭐ Avis clients" : "⭐ Client reviews")}
             </button>
           ))}
         </div>
@@ -247,11 +252,12 @@ export function Interventions() {
                 className="text-white text-lg"
                 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
               >
-                Vidéos bientôt disponibles
+                {isFr ? "Vidéos bientôt disponibles" : "Videos coming soon"}
               </p>
               <p className="text-white/55 text-sm max-w-md" style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}>
-                Nous publierons prochainement les premières vidéos de nos futures interventions
-                pour permettre à nos clients de découvrir notre accompagnement sur le terrain.
+                {isFr
+                  ? "Nous publierons prochainement les premières vidéos de nos futures interventions pour permettre à nos clients de découvrir notre accompagnement sur le terrain."
+                  : "We will soon publish the first videos of our upcoming interventions so clients can discover our field support."}
               </p>
             </div>
           </div>
@@ -263,9 +269,9 @@ export function Interventions() {
             {/* Stats bar */}
             <div className="flex flex-wrap justify-center gap-8 mb-12">
               {[
-                { val: `${averageRating.toFixed(1)}/5`, label: "Note moyenne clients" },
-                { val: `${uniqueCompanies.size}`, label: "Commerces équipés" },
-                { val: `${satisfiedClientsRate}%`, label: "Clients satisfaits" },
+                { val: `${averageRating.toFixed(1)}/5`, label: isFr ? "Note moyenne clients" : "Average rating" },
+                { val: `${uniqueCompanies.size}`, label: isFr ? "Commerces équipés" : "Equipped businesses" },
+                { val: `${satisfiedClientsRate}%`, label: isFr ? "Clients satisfaits" : "Satisfied clients" },
               ].map((s) => (
                 <div key={s.label} className="text-center">
                   <p
@@ -292,7 +298,7 @@ export function Interventions() {
                 }}
               >
                 <MessageSquarePlus className="w-5 h-5" />
-                {user ? 'Laisser un avis' : 'Connectez-vous pour laisser un avis'}
+                {user ? (isFr ? 'Laisser un avis' : 'Leave a review') : (isFr ? 'Connectez-vous pour laisser un avis' : 'Sign in to leave a review')}
               </button>
             </div>
 
@@ -307,7 +313,9 @@ export function Interventions() {
                   lineHeight: 1.85,
                 }}
               >
-                Chez NovaKom, nous nous engageons à fournir des services de qualité pour sécuriser et optimiser les infrastructures informatiques des commerces et entreprises comoriens. Nos interventions incluent l'installation de réseaux, la configuration de serveurs, les audits de sécurité, et bien plus. Bientôt, vous pourrez découvrir les témoignages de nos premiers clients satisfaits.
+                {isFr
+                  ? "Chez NovaKom, nous nous engageons à fournir des services de qualité pour sécuriser et optimiser les infrastructures informatiques des commerces et entreprises comoriens. Nos interventions incluent l'installation de réseaux, la configuration de serveurs, les audits de sécurité, et bien plus. Bientôt, vous pourrez découvrir les témoignages de nos premiers clients satisfaits."
+                  : "At NovaKom, we are committed to delivering high-quality services to secure and optimize IT infrastructures for businesses. Our interventions include network setup, server configuration, security audits, and more. Soon you will discover testimonials from our first satisfied clients."}
               </p>
             </div>
 
@@ -318,7 +326,7 @@ export function Interventions() {
                   style={{ backgroundColor: "#0d2254", border: "1px solid rgba(255,255,255,0.1)" }}
                 >
                   <p className="text-white/70" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Aucun avis validé pour le moment.
+                    {isFr ? "Aucun avis validé pour le moment." : "No approved reviews yet."}
                   </p>
                 </div>
               ) : (
@@ -340,7 +348,7 @@ export function Interventions() {
                           {review.name}
                         </p>
                         <p className="text-white/50 text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
-                          {review.company || "Entreprise non renseignée"}
+                          {review.company || (isFr ? "Entreprise non renseignée" : "Company not specified")}
                         </p>
                       </div>
                     </div>

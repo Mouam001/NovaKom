@@ -1,7 +1,37 @@
 import { Facebook, Linkedin } from "lucide-react";
 import { NovaKomLogo } from "./NovaKomLogo";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Footer() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const serviceLinks = isFr
+    ? ["Audit de sécurité", "Pentest", "Administration réseau", "Support IT", "Virtualisation", "Infogérance"]
+    : ["Security audit", "Pentest", "Network administration", "IT support", "Virtualization", "Managed services"];
+
+  const companyLinks = isFr
+    ? [
+        { label: "À propos", href: "#expertise" },
+        { label: "Notre équipe", href: "#equipe" },
+        { label: "Nos offres", href: "#offres" },
+        { label: "Formations", href: "#formations" },
+        { label: "Réalisations", href: "#interventions" },
+        { label: "Contact", href: "#contact" },
+        { label: "Mentions légales", href: "#" },
+        { label: "Politique de confidentialité", href: "#" },
+      ]
+    : [
+        { label: "About", href: "#expertise" },
+        { label: "Our team", href: "#equipe" },
+        { label: "Our offers", href: "#offres" },
+        { label: "Training", href: "#formations" },
+        { label: "Work", href: "#interventions" },
+        { label: "Contact", href: "#contact" },
+        { label: "Legal notice", href: "#" },
+        { label: "Privacy policy", href: "#" },
+      ];
+
   return (
     <footer style={{ backgroundColor: "#060f22", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -15,8 +45,9 @@ export function Footer() {
               className="text-white/40 text-sm max-w-sm mb-6"
               style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.8 }}
             >
-              NovaKom – La nouvelle ère numérique comorienne. Votre partenaire
-              stratégique en infrastructure IT et cybersécurité, basé à Moroni.
+              {isFr
+                ? "NovaKom – La nouvelle ère numérique comorienne. Votre partenaire stratégique en infrastructure IT et cybersécurité, basé à Moroni."
+                : "NovaKom – The new Comorian digital era. Your strategic IT infrastructure and cybersecurity partner, based in Moroni."}
             </p>
             <div className="flex gap-3">
               <a
@@ -42,17 +73,10 @@ export function Footer() {
               className="text-white text-sm mb-5"
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
             >
-              Services
+              {isFr ? "Services" : "Services"}
             </p>
             <ul className="flex flex-col gap-3">
-              {[
-                "Audit de sécurité",
-                "Pentest",
-                "Administration réseau",
-                "Support IT",
-                "Virtualisation",
-                "Infogérance",
-              ].map((s) => (
+              {serviceLinks.map((s) => (
                 <li key={s}>
                   <a
                     href="#services"
@@ -72,19 +96,10 @@ export function Footer() {
               className="text-white text-sm mb-5"
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
             >
-              Entreprise
+              {isFr ? "Entreprise" : "Company"}
             </p>
             <ul className="flex flex-col gap-3">
-              {[
-                { label: "À propos", href: "#expertise" },
-                { label: "Notre équipe", href: "#equipe" },
-                { label: "Nos offres", href: "#offres" },
-                { label: "Formations", href: "#formations" },
-                { label: "Réalisations", href: "#interventions" },
-                { label: "Contact", href: "#contact" },
-                { label: "Mentions légales", href: "#" },
-                { label: "Politique de confidentialité", href: "#" },
-              ].map((l) => (
+              {companyLinks.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -107,7 +122,7 @@ export function Footer() {
             className="text-white/30 text-xs"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            © {new Date().getFullYear()} NovaKom – Tous droits réservés. Moroni, Union des Comores.
+            © {new Date().getFullYear()} NovaKom – {isFr ? "Tous droits réservés. Moroni, Union des Comores." : "All rights reserved. Moroni, Comoros Union."}
           </p>
           <p
             className="text-white/20 text-xs"

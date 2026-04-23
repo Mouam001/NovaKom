@@ -1,57 +1,94 @@
 import { Check, Star } from "lucide-react";
-
-const packs = [
-  {
-    name: "Pack Basic",
-    tag: "Essentiel",
-    price: "Sur devis",
-    highlight: false,
-    color: "#3b82f6",
-    desc: "Idéal pour les petites structures souhaitant sécuriser leurs bases.",
-    features: [
-      "Maintenance préventive mensuelle",
-      "Sauvegarde sécurisée des données",
-      "Support utilisateur (horaires ouvrés)",
-      "Rapport mensuel",
-      "Antivirus & patch management",
-    ],
-  },
-  {
-    name: "Pack Standard",
-    tag: "Recommandé",
-    price: "Sur devis",
-    highlight: true,
-    color: "#00A86B",
-    desc: "Pour les PME en croissance voulant une protection réseau proactive.",
-    features: [
-      "Tout le Pack Basic",
-      "Sécurité réseau & firewall",
-      "VPN entreprise configuré",
-      "Monitoring réseau 5j/7",
-      "Audit sécurité semestriel",
-      "Support prioritaire",
-    ],
-  },
-  {
-    name: "Pack Premium",
-    tag: "Complet",
-    price: "Sur devis",
-    highlight: false,
-    color: "#a855f7",
-    desc: "Infogérance complète avec cybersécurité avancée pour les structures exigeantes.",
-    features: [
-      "Tout le Pack Standard",
-      "Infogérance IT complète",
-      "Cybersécurité avancée (pentest inclus)",
-      "Monitoring 24/7",
-      "Administration serveurs & AD",
-      "Sensibilisation & formation équipes",
-      "RSSI externalisé",
-    ],
-  },
-];
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Packages() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const packs = [
+    {
+      name: "Pack Basic",
+      tag: isFr ? "Essentiel" : "Essential",
+      price: isFr ? "Sur devis" : "On request",
+      highlight: false,
+      color: "#3b82f6",
+      desc: isFr
+        ? "Idéal pour les petites structures souhaitant sécuriser leurs bases."
+        : "Ideal for small organizations looking to secure the essentials.",
+      features: isFr
+        ? [
+            "Maintenance préventive mensuelle",
+            "Sauvegarde sécurisée des données",
+            "Support utilisateur (horaires ouvrés)",
+            "Rapport mensuel",
+            "Antivirus & patch management",
+          ]
+        : [
+            "Monthly preventive maintenance",
+            "Secure data backup",
+            "User support (business hours)",
+            "Monthly report",
+            "Antivirus & patch management",
+          ],
+    },
+    {
+      name: "Pack Standard",
+      tag: isFr ? "Recommandé" : "Recommended",
+      price: isFr ? "Sur devis" : "On request",
+      highlight: true,
+      color: "#00A86B",
+      desc: isFr
+        ? "Pour les PME en croissance voulant une protection réseau proactive."
+        : "For growing SMEs that need proactive network protection.",
+      features: isFr
+        ? [
+            "Tout le Pack Basic",
+            "Sécurité réseau & firewall",
+            "VPN entreprise configuré",
+            "Monitoring réseau 5j/7",
+            "Audit sécurité semestriel",
+            "Support prioritaire",
+          ]
+        : [
+            "Everything in Basic Pack",
+            "Network security & firewall",
+            "Configured business VPN",
+            "Network monitoring 5d/7",
+            "Semiannual security audit",
+            "Priority support",
+          ],
+    },
+    {
+      name: "Pack Premium",
+      tag: isFr ? "Complet" : "Complete",
+      price: isFr ? "Sur devis" : "On request",
+      highlight: false,
+      color: "#a855f7",
+      desc: isFr
+        ? "Infogérance complète avec cybersécurité avancée pour les structures exigeantes."
+        : "Full managed services with advanced cybersecurity for demanding organizations.",
+      features: isFr
+        ? [
+            "Tout le Pack Standard",
+            "Infogérance IT complète",
+            "Cybersécurité avancée (pentest inclus)",
+            "Monitoring 24/7",
+            "Administration serveurs & AD",
+            "Sensibilisation & formation équipes",
+            "RSSI externalisé",
+          ]
+        : [
+            "Everything in Standard Pack",
+            "Full IT managed services",
+            "Advanced cybersecurity (pentest included)",
+            "24/7 monitoring",
+            "Servers & AD administration",
+            "Security awareness & team training",
+            "External CISO",
+          ],
+    },
+  ];
+
   return (
     <section
       id="offres"
@@ -64,7 +101,7 @@ export function Packages() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Nos offres
+            {isFr ? "Nos offres" : "Our offers"}
           </p>
           <h2
             className="text-white mb-5"
@@ -74,14 +111,15 @@ export function Packages() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Des packs adaptés à chaque besoin
+            {isFr ? "Des packs adaptés à chaque besoin" : "Packages tailored to every need"}
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Des offres claires et transparentes, conçues pour s'adapter à la
-            taille et aux ambitions de votre organisation.
+            {isFr
+              ? "Des offres claires et transparentes, conçues pour s'adapter à la taille et aux ambitions de votre organisation."
+              : "Clear and transparent offers, designed to match the size and ambitions of your organization."}
           </p>
         </div>
 
@@ -160,7 +198,7 @@ export function Packages() {
                   className="text-white/40 text-xs mb-3"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
-                  Tarification personnalisée
+                  {isFr ? "Tarification personnalisée" : "Custom pricing"}
                 </p>
                 <a
                   href="#contact"
@@ -175,7 +213,7 @@ export function Packages() {
                     color: pack.highlight ? "#fff" : pack.color,
                   }}
                 >
-                  Obtenir un devis
+                  {isFr ? "Obtenir un devis" : "Get a quote"}
                 </a>
               </div>
             </div>

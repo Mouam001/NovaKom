@@ -1,39 +1,53 @@
 import { AlertTriangle, TrendingDown, Database, WifiOff, AlertCircle } from "lucide-react";
-
-const problems = [
-  {
-    icon: <AlertTriangle className="w-6 h-6" />,
-    title: "Cybermenaces en constante évolution",
-    desc: "Les attaques (phishing, ransomware, intrusions) ciblent de plus en plus les entreprises, en particulier les PME et institutions.",
-    color: "#e74c3c",
-  },
-  {
-    icon: <TrendingDown className="w-6 h-6" />,
-    title: "Impacts financiers importants",
-    desc: "Une faille ou une panne peut entraîner des coûts élevés : récupération de données, interruption d’activité, perte de clients.",
-    color: "#f39c12",
-  },
-  {
-    icon: <Database className="w-6 h-6" />,
-    title: "Risque de perte de données",
-    desc: "Sans sauvegarde et protection adaptées, vos données critiques peuvent être irrémédiablement perdues.",
-    color: "#9b59b6",
-  },
-  {
-    icon: <WifiOff className="w-6 h-6" />,
-    title: "Interruption d'activité",
-    desc: "Une infrastructure non supervisée peut provoquer des arrêts de service coûteux pour votre organisation.",
-    color: "#e67e22",
-  },
-  {
-    icon: <AlertCircle className="w-6 h-6" />,
-    title: "Manque de structuration IT locale",
-    desc: "Le marché manque encore de solutions IT complètes et structurées. NovaKom répond à ce besoin avec une approche professionnelle et intégrée.",
-    color: "#00A86B",
-  },
-];
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Problems() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
+  const problems = [
+    {
+      icon: <AlertTriangle className="w-6 h-6" />,
+      title: isFr ? "Cybermenaces en constante évolution" : "Constantly evolving cyber threats",
+      desc: isFr
+        ? "Les attaques (phishing, ransomware, intrusions) ciblent de plus en plus les entreprises, en particulier les PME et institutions."
+        : "Attacks (phishing, ransomware, intrusions) increasingly target companies, especially SMEs and institutions.",
+      color: "#e74c3c",
+    },
+    {
+      icon: <TrendingDown className="w-6 h-6" />,
+      title: isFr ? "Impacts financiers importants" : "Major financial impact",
+      desc: isFr
+        ? "Une faille ou une panne peut entraîner des coûts élevés : récupération de données, interruption d’activité, perte de clients."
+        : "A breach or outage can cause major costs: data recovery, business interruption, and client loss.",
+      color: "#f39c12",
+    },
+    {
+      icon: <Database className="w-6 h-6" />,
+      title: isFr ? "Risque de perte de données" : "Risk of data loss",
+      desc: isFr
+        ? "Sans sauvegarde et protection adaptées, vos données critiques peuvent être irrémédiablement perdues."
+        : "Without proper backup and protection, critical data may be permanently lost.",
+      color: "#9b59b6",
+    },
+    {
+      icon: <WifiOff className="w-6 h-6" />,
+      title: isFr ? "Interruption d'activité" : "Business disruption",
+      desc: isFr
+        ? "Une infrastructure non supervisée peut provoquer des arrêts de service coûteux pour votre organisation."
+        : "Unsupervised infrastructure can cause costly downtime for your organization.",
+      color: "#e67e22",
+    },
+    {
+      icon: <AlertCircle className="w-6 h-6" />,
+      title: isFr ? "Manque de structuration IT locale" : "Lack of local IT structuring",
+      desc: isFr
+        ? "Le marché manque encore de solutions IT complètes et structurées. NovaKom répond à ce besoin avec une approche professionnelle et intégrée."
+        : "The market still lacks complete and structured IT solutions. NovaKom addresses this with a professional integrated approach.",
+      color: "#00A86B",
+    },
+  ];
+
   return (
     <section
       id="problematique"
@@ -46,7 +60,7 @@ export function Problems() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Pourquoi agir maintenant ?
+            {isFr ? "Pourquoi agir maintenant ?" : "Why act now?"}
           </p>
           <h2
             className="text-white mb-5"
@@ -56,13 +70,15 @@ export function Problems() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Protégez votre entreprise face aux risques numériques actuels
+            {isFr ? "Protégez votre entreprise face aux risques numériques actuels" : "Protect your company against today’s digital risks"}
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Les entreprises sont aujourd’hui confrontées à des menaces IT de plus en plus fréquentes et complexes. Sans une infrastructure sécurisée et bien structurée, votre activité peut être exposée à des interruptions, des pertes de données et des failles de sécurité.
+            {isFr
+              ? "Les entreprises sont aujourd’hui confrontées à des menaces IT de plus en plus fréquentes et complexes. Sans une infrastructure sécurisée et bien structurée, votre activité peut être exposée à des interruptions, des pertes de données et des failles de sécurité."
+              : "Companies now face increasingly frequent and complex IT threats. Without a secure, well-structured infrastructure, your business can be exposed to downtime, data loss, and security breaches."}
           </p>
         </div>
 
@@ -110,13 +126,15 @@ export function Problems() {
                 className="text-white mb-2"
                 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem" }}
               >
-                Protégez votre entreprise dès aujourd’hui
+                {isFr ? "Protégez votre entreprise dès aujourd’hui" : "Protect your company now"}
               </p>
               <p
                 className="text-white/60 text-sm mb-6"
                 style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.7 }}
               >
-                NovaKom analyse votre infrastructure actuelle et vous propose une stratégie adaptée pour sécuriser et optimiser vos systèmes.
+                {isFr
+                  ? "NovaKom analyse votre infrastructure actuelle et vous propose une stratégie adaptée pour sécuriser et optimiser vos systèmes."
+                  : "NovaKom analyzes your current infrastructure and proposes a tailored strategy to secure and optimize your systems."}
               </p>
             </div>
             <a
@@ -128,7 +146,7 @@ export function Problems() {
                 fontWeight: 600,
               }}
             >
-              Demander un audit gratuit
+              {isFr ? "Demander un audit gratuit" : "Request a free audit"}
             </a>
           </div>
         </div>

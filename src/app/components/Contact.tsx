@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Phone, Mail, MapPin, Calendar, Send } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Contact() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
   const [form, setForm] = useState({ name: "", company: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
 
@@ -41,7 +44,7 @@ export function Contact() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Prenons contact
+            {isFr ? "Prenons contact" : "Let's connect"}
           </p>
           <h2
             className="text-white mb-5"
@@ -51,14 +54,15 @@ export function Contact() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Discutons de votre projet
+            {isFr ? "Discutons de votre projet" : "Let's discuss your project"}
           </h2>
           <p
             className="text-white/50 max-w-xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.75 }}
           >
-            Que vous souhaitiez un audit, une démo ou simplement des informations,
-            notre équipe est disponible pour vous répondre.
+            {isFr
+              ? "Que vous souhaitiez un audit, une démo ou simplement des informations, notre équipe est disponible pour vous répondre."
+              : "Whether you need an audit, a demo, or simple information, our team is ready to help."}
           </p>
         </div>
 
@@ -68,21 +72,21 @@ export function Contact() {
             {[
               {
                 icon: <Phone className="w-5 h-5" />,
-                label: "Téléphone",
+                label: isFr ? "Téléphone" : "Phone",
                 value: "+33 7 73 77 91 64",
-                sub: "Lun – Sam, 8h – 18h",
+                sub: isFr ? "Lun – Sam, 8h – 18h" : "Mon – Sat, 8am – 6pm",
               },
               {
                 icon: <Mail className="w-5 h-5" />,
                 label: "Email",
                 value: "contactus@novakom.tech",
-                sub: "Réponse sous 24h",
+                sub: isFr ? "Réponse sous 24h" : "Reply within 24h",
               },
               {
                 icon: <MapPin className="w-5 h-5" />,
-                label: "Adresse",
+                label: isFr ? "Adresse" : "Address",
                 value: "Moroni, Union des Comores",
-                sub: "Intervention locale & distancielle",
+                sub: isFr ? "Intervention locale & distancielle" : "On-site & remote support",
               },
             ].map((item) => (
               <div
@@ -125,7 +129,7 @@ export function Contact() {
               }}
             >
               <Calendar className="w-4 h-4" />
-              Prendre un rendez-vous
+              {isFr ? "Prendre un rendez-vous" : "Book an appointment"}
             </a>
 
             {/* WhatsApp */}
@@ -144,7 +148,7 @@ export function Contact() {
               <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" style={{ color: "#25D366" }}>
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
-              Contacter sur WhatsApp
+              {isFr ? "Contacter sur WhatsApp" : "Contact on WhatsApp"}
             </a>
           </div>
 
@@ -161,32 +165,32 @@ export function Contact() {
               className="text-white mb-2"
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem" }}
             >
-              Formulaire de contact
+              {isFr ? "Formulaire de contact" : "Contact form"}
             </h3>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-white/50 text-xs block mb-1.5" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Nom complet *
+                  {isFr ? "Nom complet *" : "Full name *"}
                 </label>
                 <input
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   required
-                  placeholder="Votre nom"
+                  placeholder={isFr ? "Votre nom" : "Your name"}
                   style={inputStyle}
                 />
               </div>
               <div>
                 <label className="text-white/50 text-xs block mb-1.5" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Entreprise
+                  {isFr ? "Entreprise" : "Company"}
                 </label>
                 <input
                   name="company"
                   value={form.company}
                   onChange={handleChange}
-                  placeholder="Votre entreprise"
+                  placeholder={isFr ? "Votre entreprise" : "Your company"}
                   style={inputStyle}
                 />
               </div>
@@ -209,7 +213,7 @@ export function Contact() {
               </div>
               <div>
                 <label className="text-white/50 text-xs block mb-1.5" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Téléphone
+                  {isFr ? "Téléphone" : "Phone"}
                 </label>
                 <input
                   name="phone"
@@ -223,7 +227,7 @@ export function Contact() {
 
             <div>
               <label className="text-white/50 text-xs block mb-1.5" style={{ fontFamily: "Inter, sans-serif" }}>
-                Sujet *
+              {isFr ? "Sujet *" : "Subject *"}
               </label>
               <select
                 name="subject"
@@ -232,20 +236,20 @@ export function Contact() {
                 required
                 style={{ ...inputStyle, cursor: "pointer" }}
               >
-                <option value="" style={{ backgroundColor: "#0d2254" }}>Sélectionnez un sujet</option>
-                <option value="audit" style={{ backgroundColor: "#0d2254" }}>Demande d'audit</option>
-                <option value="cybersec" style={{ backgroundColor: "#0d2254" }}>Cybersécurité</option>
-                <option value="support" style={{ backgroundColor: "#0d2254" }}>Support IT</option>
-                <option value="reseau" style={{ backgroundColor: "#0d2254" }}>Administration réseau</option>
-                <option value="pack" style={{ backgroundColor: "#0d2254" }}>Offres & packs</option>
-                <option value="pack" style={{ backgroundColor: "#0d2254" }}>Développement Site & Application</option>
-                <option value="autre" style={{ backgroundColor: "#0d2254" }}>Autre</option>
+                <option value="" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Sélectionnez un sujet" : "Select a subject"}</option>
+                <option value="audit" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Demande d'audit" : "Audit request"}</option>
+                <option value="cybersec" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Cybersécurité" : "Cybersecurity"}</option>
+                <option value="support" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Support IT" : "IT support"}</option>
+                <option value="reseau" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Administration réseau" : "Network administration"}</option>
+                <option value="pack" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Offres & packs" : "Offers & packages"}</option>
+                <option value="pack" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Développement Site & Application" : "Website & app development"}</option>
+                <option value="autre" style={{ backgroundColor: "#0d2254" }}>{isFr ? "Autre" : "Other"}</option>
               </select>
             </div>
 
             <div>
               <label className="text-white/50 text-xs block mb-1.5" style={{ fontFamily: "Inter, sans-serif" }}>
-                Message *
+                {isFr ? "Message *" : "Message *"}
               </label>
               <textarea
                 name="message"
@@ -253,7 +257,7 @@ export function Contact() {
                 onChange={handleChange}
                 required
                 rows={5}
-                placeholder="Décrivez votre besoin..."
+                placeholder={isFr ? "Décrivez votre besoin..." : "Describe your needs..."}
                 style={{ ...inputStyle, resize: "none" }}
               />
             </div>
@@ -268,10 +272,10 @@ export function Contact() {
               }}
             >
               {sent ? (
-                "✅ Message envoyé avec succès !"
+                isFr ? "✅ Message envoyé avec succès !" : "✅ Message sent successfully!"
               ) : (
                 <>
-                  <Send className="w-4 h-4" /> Envoyer le message
+                  <Send className="w-4 h-4" /> {isFr ? "Envoyer le message" : "Send message"}
                 </>
               )}
             </button>

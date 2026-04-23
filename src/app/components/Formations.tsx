@@ -11,6 +11,7 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 
 type Formation = {
@@ -114,6 +115,9 @@ const formations: Formation[] = [
 ];
 
 function FormationCard({ f }: { f: Formation }) {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
   return (
     <div
       className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2"
@@ -201,7 +205,7 @@ function FormationCard({ f }: { f: Formation }) {
             fontWeight: 600,
           }}
         >
-          En savoir plus <ArrowRight className="w-4 h-4" />
+          {isFr ? "En savoir plus" : "Learn more"} <ArrowRight className="w-4 h-4" />
         </a>
       </div>
     </div>
@@ -209,6 +213,9 @@ function FormationCard({ f }: { f: Formation }) {
 }
 
 export function Formations() {
+  const { language } = useLanguage();
+  const isFr = language === "fr";
+
   return (
     <section
       id="formations"
@@ -222,7 +229,7 @@ export function Formations() {
             className="text-xs tracking-widest uppercase mb-3"
             style={{ color: "#00A86B", fontFamily: "Inter, sans-serif" }}
           >
-            Centre de formation NovaKom
+            {isFr ? "Centre de formation NovaKom" : "NovaKom Training Center"}
           </p>
           <h2
             className="text-white mb-5"
@@ -232,25 +239,25 @@ export function Formations() {
               fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
             }}
           >
-            Formations certifiantes en digital & cybersécurité
+            {isFr ? "Formations certifiantes en digital & cybersécurité" : "Certified training in digital & cybersecurity"}
           </h2>
           <p
             className="text-white/50 max-w-2xl mx-auto"
             style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", lineHeight: 1.8 }}
           >
-            NovaKom propose des accompagnements professionnels intensifs et pratiques pour 
-            acquérir des compétences recherchées sur le marché. Formations personnalisées 
-            adaptées à votre contexte et vos besoins réels.
+            {isFr
+              ? "NovaKom propose des accompagnements professionnels intensifs et pratiques pour acquérir des compétences recherchées sur le marché. Formations personnalisées adaptées à votre contexte et vos besoins réels."
+              : "NovaKom provides intensive, hands-on professional support to build in-demand skills. Tailored training adapted to your context and real needs."}
           </p>
         </div>
 
         {/* Trust badges */}
         <div className="flex flex-wrap justify-center gap-4 mb-14">
           {[
-            { icon: <Award className="w-4 h-4" />, label: "Formateurs experts en terrain" },
-            { icon: <Star className="w-4 h-4" />, label: "Cas concrets comoriens" },
-            { icon: <GraduationCap className="w-4 h-4" />, label: "Sessions groupes & entreprises" },
-            { icon: <BookOpen className="w-4 h-4" />, label: "Accompagnement personnalisé" },
+            { icon: <Award className="w-4 h-4" />, label: isFr ? "Formateurs experts en terrain" : "Field expert trainers" },
+            { icon: <Star className="w-4 h-4" />, label: isFr ? "Cas concrets comoriens" : "Real local use cases" },
+            { icon: <GraduationCap className="w-4 h-4" />, label: isFr ? "Sessions groupes & entreprises" : "Group & corporate sessions" },
+            { icon: <BookOpen className="w-4 h-4" />, label: isFr ? "Accompagnement personnalisé" : "Personalized support" },
           ].map((b, index) => (
             <div
               key={`badge-${index}`}
@@ -288,15 +295,15 @@ export function Formations() {
             className="text-white mb-3"
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.3rem" }}
           >
-            Vous avez un besoin spécifique ?
+            {isFr ? "Vous avez un besoin spécifique ?" : "Do you have a specific need?"}
           </h3>
           <p
             className="text-white/50 max-w-xl mx-auto mb-7 text-sm"
             style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.8 }}
           >
-            NovaKom conçoit des accompagnements professionnels entièrement personnalisés 
-            pour les entreprises, institutions et équipes. Parlons de vos besoins en sécurité, 
-            développement ou transformation numérique.
+            {isFr
+              ? "NovaKom conçoit des accompagnements professionnels entièrement personnalisés pour les entreprises, institutions et équipes. Parlons de vos besoins en sécurité, développement ou transformation numérique."
+              : "NovaKom designs fully tailored professional support for businesses, institutions and teams. Let’s discuss your security, development or digital transformation needs."}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a
@@ -309,7 +316,7 @@ export function Formations() {
               }}
             >
               <BookOpen className="w-4 h-4" />
-              Discuter de votre projet
+              {isFr ? "Discuter de votre projet" : "Discuss your project"}
             </a>
             <a
               href="#contact"
@@ -320,7 +327,7 @@ export function Formations() {
                 fontFamily: "Inter, sans-serif",
               }}
             >
-              Nous contacter
+              {isFr ? "Nous contacter" : "Contact us"}
             </a>
           </div>
         </div>
