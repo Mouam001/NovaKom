@@ -6,9 +6,16 @@ import * as kv from './kv_store.tsx';
 
 const app = new Hono();
 
+const escapeHtml = (str: string) =>
+  String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
 // Middleware
 app.use('*', cors({
-  origin: '*',
+  origin: ['https://www.novakom.tech', 'http://localhost:5173'],
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'apikey', 'X-Client-Info'],
 }));
@@ -23,42 +30,6 @@ const supabase = createClient(
 // ============================================
 // AUTHENTIFICATION ROUTES
 // ============================================
-
-// Inscription utilisateur
-app.post('/server/auth/signup', async (c) => {
-  try {
-    const { email, password, name, company } = await c.req.json();
-
-    if (!email || !password || !name) {
-      return c.json({ error: 'Email, mot de passe et nom requis' }, 400);
-    }
-
-    const { data, error } = await supabase.auth.admin.createUser({
-      email,
-      password,
-      user_metadata: { name, company: company || '' },
-      // Automatically confirm the user's email since an email server hasn't been configured.
-      email_confirm: false
-    });
-
-    if (error) {
-      console.log(`Error during signup for ${email}: ${error.message}`);
-      return c.json({ error: error.message }, 400);
-    }
-
-    return c.json({ 
-      success: true, 
-      user: { 
-        id: data.user?.id, 
-        email: data.user?.email,
-        name: data.user?.user_metadata?.name 
-      } 
-    });
-  } catch (error) {
-    console.log(`Signup error: ${error}`);
-    return c.json({ error: 'Erreur lors de l\'inscription' }, 500);
-  }
-});
 
 // Connexion (géré côté client avec Supabase)
 // Vérification de session (utilisé pour vérifier l'auth)
@@ -96,7 +67,7 @@ app.get('/server/auth/verify', async (c) => {
 // GESTION DES CRÉNEAUX (ADMIN ONLY)
 // ============================================
 
-// Récupérer l'utilisateur à partir du token d'accès
+// Récupération l'utilisateur à partir du token d'accès
 const getUserFromAccessToken = async (accessToken: string | undefined) => {
   if (!accessToken) return null;
 
@@ -106,7 +77,7 @@ const getUserFromAccessToken = async (accessToken: string | undefined) => {
   return user;
 };
 
-// Vérifier si l'utilisateur est admin
+// Vérification si l'utilisateur est admin
 const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   const user = await getUserFromAccessToken(accessToken);
   if (!user) return false;
@@ -115,7 +86,7 @@ const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   return user.email === 'contactus@novakom.tech';
 };
 
-// Ajouter des créneaux disponibles (ADMIN)
+// Ajout des créneaux disponibles (ADMIN)
 app.post('/server/slots/create', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -279,7 +250,7 @@ app.post('/server/appointments/create', async (c) => {
           from: 'NovaKom <contactus@novakom.tech>',
           to: appointment.email,
           subject: '✅ Votre rendez-vous NovaKom est confirmé',
-          html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto"><h2 style="color:#ff6b35">Rendez-vous confirmé !</h2><p>Bonjour <strong>${appointment.name}</strong>,</p><p>Votre rendez-vous a bien été enregistré :</p><div style="background:#f5f5f5;padding:20px;border-radius:8px;margin:20px 0"><p>📅 <strong>Date :</strong> ${appointment.date}</p><p>🕐 <strong>Heure :</strong> ${appointment.time}</p></div><p>Notre équipe reviendra vers vous rapidement.</p><p style="color:#888;font-size:12px">NovaKom — contactus@novakom.tech</p></div>`
+          html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto"><h2 style="color:#ff6b35">Rendez-vous confirmé !</h2><p>Bonjour <strong>${escapeHtml(appointment.name)}</strong>,</p><p>Votre rendez-vous a bien été enregistré :</p><div style="background:#f5f5f5;padding:20px;border-radius:8px;margin:20px 0"><p>📅 <strong>Date :</strong> ${escapeHtml(appointment.date)}</p><p>🕐 <strong>Heure :</strong> ${escapeHtml(appointment.time)}</p></div><p>Notre équipe reviendra vers vous rapidement.</p><p style="color:#888;font-size:12px">NovaKom — contactus@novakom.tech</p></div>`
         })
       });
     } catch (emailError) {
