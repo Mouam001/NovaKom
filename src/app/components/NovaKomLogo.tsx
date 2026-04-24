@@ -1,4 +1,4 @@
-import logoImage from "../../assets/images/Logo.jpeg";
+import logoImage from "../../assets/images/logo.png";
 
 interface NovaKomLogoProps {
   size?: number;
@@ -62,7 +62,7 @@ export function NovaKomLogo({
               marginTop: "2px",
             }}
           >
-            IT &amp; Cyber Defense
+            IT &amp; Cybersécurité
           </span>
         </div>
       )}

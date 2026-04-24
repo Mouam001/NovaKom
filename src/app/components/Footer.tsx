@@ -51,14 +51,14 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://www.facebook.com/"
                 className="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110"
                 style={{ backgroundColor: "#1877F222", border: "1px solid #1877F244" }}
               >
                 <Facebook className="w-4 h-4 text-[#1877F2]" />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/novakom"
                 className="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110"
                 style={{ backgroundColor: "#0077B522", border: "1px solid #0077B544" }}
               >
@@ -128,7 +128,7 @@ export function Footer() {
             className="text-white/20 text-xs"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            IT Infrastructure & Cyber Defense
+            IT Infrastructure & Cybersécurité
           </p>
         </div>
       </div>
