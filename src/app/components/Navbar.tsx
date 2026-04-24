@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Menu, X, Calendar, LogIn, LogOut, User, Shield } from "lucide-react";
+import { useState, useEffect, useRef, type RefObject } from "react";
+import { Menu, X, Calendar, LogIn, LogOut, User, Shield, ChevronDown, Check } from "lucide-react";
 import { NovaKomLogo } from "./NovaKomLogo";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -7,11 +7,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, signOut, isAdmin } = useAuth();
   const { language, setLanguage } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
+  const desktopUserMenuRef = useRef<HTMLDivElement>(null);
+  const mobileUserMenuRef = useRef<HTMLDivElement>(null);
   const isHomePage = location.pathname === '/';
   const isFr = language === "fr";
 
@@ -19,6 +22,25 @@ export function Navbar() {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      const insideDesktop = !!desktopUserMenuRef.current?.contains(target);
+      const insideMobile = !!mobileUserMenuRef.current?.contains(target);
+
+      if (!insideDesktop && !insideMobile) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const handleNavClick = (href: string) => {
@@ -37,12 +59,14 @@ export function Navbar() {
       navigate(href);
     }
     setOpen(false);
+    setUserMenuOpen(false);
   };
 
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
     setOpen(false);
+    setUserMenuOpen(false);
   };
 
   const links = [
@@ -54,24 +78,85 @@ export function Navbar() {
     { label: isFr ? "Contact" : "Contact", href: "#contact" },
   ];
 
-  const LanguageSwitcher = () => (
-    <div className="flex items-center gap-2 px-2 py-1 bg-white/10 rounded-lg">
+  const ProfileMenu = ({ menuRef }: { menuRef: RefObject<HTMLDivElement | null> }) => (
+    <div className="relative" ref={menuRef}>
       <button
-        onClick={() => setLanguage("fr")}
-        className={`px-2 py-1 rounded-md text-xs transition-colors ${
-          language === "fr" ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
-        }`}
+        onClick={() => setUserMenuOpen((prev) => !prev)}
+        aria-haspopup="menu"
+        aria-expanded={userMenuOpen}
+        className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-white transition-all hover:bg-white/20"
       >
-        🇫🇷 {isFr ? "Français" : "French"}
+        <User className="h-4 w-4" />
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
       </button>
-      <button
-        onClick={() => setLanguage("en")}
-        className={`px-2 py-1 rounded-md text-xs transition-colors ${
-          language === "en" ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
-        }`}
-      >
-        🇬🇧 {isFr ? "Anglais" : "English"}
-      </button>
+
+      {userMenuOpen && (
+        <div
+          className="absolute right-0 top-full z-[60] mt-2 w-56 rounded-xl border border-blue-200/20 bg-[#0c2854]/95 p-2 shadow-2xl backdrop-blur-xl"
+          role="menu"
+        >
+          <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
+            {isFr ? "Compte" : "Account"}
+          </p>
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+              role="menuitem"
+            >
+              <LogOut className="h-4 w-4" />
+              {isFr ? "Déconnexion" : "Logout"}
+            </button>
+          ) : (
+            <button
+              onClick={() => handleNavClick("/login")}
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+              role="menuitem"
+            >
+              <LogIn className="h-4 w-4" />
+              {isFr ? "Connexion" : "Login"}
+            </button>
+          )}
+
+          <div className="my-2 h-px bg-white/10" />
+
+          <p className="px-3 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
+            {isFr ? "Langue" : "Language"}
+          </p>
+          <button
+            onClick={() => {
+              setLanguage("fr");
+              setUserMenuOpen(false);
+            }}
+            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
+              language === "fr"
+                ? "bg-white/15 text-white"
+                : "text-white/80 hover:bg-white/10 hover:text-white"
+            }`}
+            role="menuitemradio"
+            aria-checked={language === "fr"}
+          >
+            <span>Français</span>
+            {language === "fr" && <Check className="h-4 w-4 text-[#ffb27a]" />}
+          </button>
+          <button
+            onClick={() => {
+              setLanguage("en");
+              setUserMenuOpen(false);
+            }}
+            className={`mt-1 flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
+              language === "en"
+                ? "bg-white/15 text-white"
+                : "text-white/80 hover:bg-white/10 hover:text-white"
+            }`}
+            role="menuitemradio"
+            aria-checked={language === "en"}
+          >
+            <span>English</span>
+            {language === "en" && <Check className="h-4 w-4 text-[#ffb27a]" />}
+          </button>
+        </div>
+      )}
     </div>
   );
 
@@ -123,48 +208,27 @@ export function Navbar() {
             <Calendar className="w-4 h-4" />
             {isFr ? "Rendez-vous" : "Book a call"}
           </button>
-          <LanguageSwitcher />
-          {user ? (
-            <div className="flex items-center gap-3">
-              {isAdmin && (
-                <button
-                  onClick={() => handleNavClick('/admin')}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
-                >
-                  <Shield className="w-4 h-4" />
-                  {isFr ? "Admin" : "Admin"}
-                </button>
-              )}
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg">
-                <User className="w-4 h-4 text-white/70" />
-                <span className="text-white/90 text-sm">{user.user_metadata?.name || (isFr ? 'Utilisateur' : 'User')}</span>
-              </div>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                {isFr ? "Déconnexion" : "Logout"}
-              </button>
-            </div>
-          ) : (
+          {isAdmin && (
             <button
-              onClick={() => handleNavClick('/login')}
+              onClick={() => handleNavClick('/admin')}
               className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
             >
-              <LogIn className="w-4 h-4" />
-              {isFr ? "Connexion" : "Login"}
+              <Shield className="w-4 h-4" />
+              {isFr ? "Admin" : "Admin"}
             </button>
           )}
+          <ProfileMenu menuRef={desktopUserMenuRef} />
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="lg:hidden text-white"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ProfileMenu menuRef={mobileUserMenuRef} />
+          <button
+            className="text-white"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -191,7 +255,6 @@ export function Navbar() {
             <Calendar className="w-4 h-4" />
             {isFr ? "Prendre rendez-vous" : "Book a call"}
           </button>
-          <LanguageSwitcher />
           {user ? (
             <>
               {isAdmin && (
@@ -203,27 +266,8 @@ export function Navbar() {
                   {isFr ? "Administration" : "Administration"}
                 </button>
               )}
-              <div className="px-3 py-2 bg-white/5 rounded-lg text-sm text-white flex items-center gap-2">
-                <User className="w-4 h-4" />
-                {user.user_metadata?.name || user.email}
-              </div>
-              <button
-                onClick={handleSignOut}
-                className="px-5 py-2 bg-white/10 rounded-lg text-sm text-white text-center flex items-center justify-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                {isFr ? "Déconnexion" : "Logout"}
-              </button>
             </>
-          ) : (
-            <button
-              onClick={() => handleNavClick('/login')}
-              className="px-5 py-2 bg-white/10 rounded-lg text-sm text-white text-center flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-4 h-4" />
-              {isFr ? "Connexion" : "Login"}
-            </button>
-          )}
+          ) : null}
         </div>
       )}
     </nav>
