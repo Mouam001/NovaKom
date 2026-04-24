@@ -67,7 +67,6 @@ export function Contact() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
-          {/* Info */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {[
               {
@@ -117,7 +116,6 @@ export function Contact() {
               </div>
             ))}
 
-            {/* Prise de RDV */}
             <a
               href="#"
               className="flex items-center justify-center gap-3 py-4 rounded-xl text-white transition-all hover:opacity-90"
@@ -132,7 +130,6 @@ export function Contact() {
               {isFr ? "Prendre un rendez-vous" : "Book an appointment"}
             </a>
 
-            {/* WhatsApp */}
             <a
               href="https://wa.me/33773779164?text=Bonjour%20je%20vous%20contacte"
               target="_blank"
@@ -152,7 +149,6 @@ export function Contact() {
             </a>
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit}
             className="lg:col-span-3 rounded-2xl p-8 flex flex-col gap-4"

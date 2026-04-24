@@ -20,17 +20,14 @@ export function AdminPage() {
   const { user, isAdmin, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<'slots' | 'appointments' | 'reviews'>('slots');
   
-  // États pour les créneaux
   const [slots, setSlots] = useState<any[]>([]);
   const [newSlotDate, setNewSlotDate] = useState('');
   const [newSlotTime, setNewSlotTime] = useState('');
   const [loadingSlots, setLoadingSlots] = useState(false);
   
-  // États pour les rendez-vous
   const [appointments, setAppointments] = useState<any[]>([]);
   const [loadingAppointments, setLoadingAppointments] = useState(false);
   
-  // États pour les avis
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewRatings, setReviewRatings] = useState<Record<string, number>>({});
   const [reviewEdits, setReviewEdits] = useState<Record<string, { userName: string; company: string; message: string }>>({});
@@ -232,7 +229,6 @@ export function AdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] py-8 md:py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Tableau de bord Admin
@@ -248,7 +244,6 @@ export function AdminPage() {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-8 bg-white/5 rounded-lg p-2">
           <button
             onClick={() => setActiveTab('slots')}
@@ -285,10 +280,8 @@ export function AdminPage() {
           </button>
         </div>
 
-        {/* Content */}
         {activeTab === 'slots' && (
           <div className="space-y-6">
-            {/* Ajouter un créneau */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Ajouter des créneaux
@@ -317,7 +310,6 @@ export function AdminPage() {
               </div>
             </div>
 
-            {/* Liste des créneaux */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Tous les créneaux ({slots.length})

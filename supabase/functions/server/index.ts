@@ -13,7 +13,7 @@ const escapeHtml = (str: string) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-// Middleware
+// Middleware globaux: CORS et logs.
 app.use('*', cors({
   origin: ['https://www.novakom.tech', 'http://localhost:5173'],
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -21,18 +21,15 @@ app.use('*', cors({
 }));
 app.use('*', logger(console.log));
 
-// Supabase client with service role (pour l'admin)
+// Client Supabase avec rôle service pour les opérations backend.
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 );
 
-// ============================================
-// AUTHENTIFICATION ROUTES
-// ============================================
+// --- Authentification ---
 
-// Connexion (géré côté client avec Supabase)
-// Vérification de session (utilisé pour vérifier l'auth)
+// Vérifie la validité du token d'accès côté API.
 app.get('/server/auth/verify', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -63,11 +60,9 @@ app.get('/server/auth/verify', async (c) => {
   }
 });
 
-// ============================================
-// GESTION DES CRÉNEAUX (ADMIN ONLY)
-// ============================================
+// --- Gestion des créneaux (admin) ---
 
-// Récupération l'utilisateur à partir du token d'accès
+// Récupère l'utilisateur associé au token d'accès.
 const getUserFromAccessToken = async (accessToken: string | undefined) => {
   if (!accessToken) return null;
 
@@ -77,16 +72,16 @@ const getUserFromAccessToken = async (accessToken: string | undefined) => {
   return user;
 };
 
-// Vérification si l'utilisateur est admin
+// Vérifie les droits administrateur.
 const isAdmin = async (accessToken: string | undefined): Promise<boolean> => {
   const user = await getUserFromAccessToken(accessToken);
   if (!user) return false;
   
-  // L'admin est identifié par son email
+  // Règle actuelle: compte admin identifié par son email.
   return user.email === 'contactus@novakom.tech';
 };
 
-// Ajout des créneaux disponibles (ADMIN)
+// Crée des créneaux disponibles.
 app.post('/server/slots/create', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -101,7 +96,7 @@ app.post('/server/slots/create', async (c) => {
       return c.json({ error: 'Format de créneaux invalide' }, 400);
     }
 
-    // Créer les créneaux dans le KV store
+    // Écrit les créneaux dans le KV store.
     const keys = slots.map((slot: any) => `slot_${slot.date}_${slot.time}`);
     const values = slots.map((slot: any) => ({
       date: slot.date,
@@ -118,7 +113,7 @@ app.post('/server/slots/create', async (c) => {
   }
 });
 
-// Supprimer un créneau (ADMIN)
+// Supprime un créneau.
 app.delete('/server/slots/:date/:time', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -139,12 +134,12 @@ app.delete('/server/slots/:date/:time', async (c) => {
   }
 });
 
-// Récupérer tous les créneaux disponibles (PUBLIC)
+// Retourne les créneaux disponibles visibles publiquement.
 app.get('/server/slots/available', async (c) => {
   try {
     const allSlots = await kv.getByPrefix('slot_');
     
-    // Filtrer uniquement les créneaux disponibles et futurs
+    // Conserve uniquement les créneaux disponibles et non passés.
     const now = new Date();
     const availableSlots = allSlots
       .filter((slot: any) => slot.available)
@@ -165,7 +160,7 @@ app.get('/server/slots/available', async (c) => {
   }
 });
 
-// Récupérer TOUS les créneaux (ADMIN)
+// Retourne tous les créneaux pour l'interface admin.
 app.get('/server/slots/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -189,11 +184,9 @@ app.get('/server/slots/all', async (c) => {
   }
 });
 
-// ============================================
-// GESTION DES RENDEZ-VOUS
-// ============================================
+// --- Gestion des rendez-vous ---
 
-// Créer un rendez-vous (AUTHENTIFIÉ)
+// Crée un rendez-vous pour un utilisateur authentifié.
 app.post('/server/appointments/create', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -209,7 +202,7 @@ app.post('/server/appointments/create', async (c) => {
       return c.json({ error: 'Tous les champs sont requis' }, 400);
     }
 
-    // Vérifier si le créneau est disponible
+    // Vérifie la disponibilité du créneau.
     const slotKey = `slot_${date}_${time}`;
     const slot = await kv.get(slotKey);
 
@@ -221,7 +214,7 @@ app.post('/server/appointments/create', async (c) => {
       return c.json({ error: 'Créneau déjà réservé' }, 400);
     }
 
-    // Créer le rendez-vous
+    // Enregistre le rendez-vous.
     const appointmentId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const appointmentKey = `appointment_${appointmentId}`;
     
@@ -257,7 +250,7 @@ app.post('/server/appointments/create', async (c) => {
       console.log('Erreur envoi email RDV:', emailError);
     }
 
-    // Marquer le créneau comme non disponible
+    // Marque le créneau comme réservé.
     await kv.set(slotKey, { ...slot, available: false, appointmentId });
 
     return c.json({ success: true, appointment });
@@ -267,7 +260,7 @@ app.post('/server/appointments/create', async (c) => {
   }
 });
 
-// Récupérer les rendez-vous de l'utilisateur connecté
+// Retourne les rendez-vous de l'utilisateur connecté.
 app.get('/server/appointments/my', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -293,7 +286,7 @@ app.get('/server/appointments/my', async (c) => {
   }
 });
 
-// Récupérer tous les rendez-vous (ADMIN)
+// Retourne tous les rendez-vous pour l'admin.
 app.get('/server/appointments/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -317,7 +310,7 @@ app.get('/server/appointments/all', async (c) => {
   }
 });
 
-// Supprimer un rendez-vous (ADMIN)
+// Supprime un rendez-vous et libère le créneau associé.
 app.delete('/server/appointments/:appointmentId', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -351,11 +344,9 @@ app.delete('/server/appointments/:appointmentId', async (c) => {
   }
 });
 
-// ============================================
-// GESTION DES AVIS CLIENTS
-// ============================================
+// --- Gestion des avis clients ---
 
-// Créer un avis (AUTHENTIFIÉ)
+// Crée un avis soumis par un utilisateur authentifié.
 app.post('/server/reviews/create', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -388,7 +379,7 @@ app.post('/server/reviews/create', async (c) => {
       message,
       rating: normalizedRating,
       createdAt: new Date().toISOString(),
-      approved: false // Les avis doivent être approuvés par l'admin
+      approved: false // Les avis sont modérés avant publication.
     };
 
     await kv.set(reviewKey, review);
@@ -400,7 +391,7 @@ app.post('/server/reviews/create', async (c) => {
   }
 });
 
-// Récupérer tous les avis approuvés (PUBLIC)
+// Retourne les avis approuvés visibles publiquement.
 app.get('/server/reviews/approved', async (c) => {
   try {
     const allReviews = await kv.getByPrefix('review_');
@@ -418,7 +409,7 @@ app.get('/server/reviews/approved', async (c) => {
   }
 });
 
-// Récupérer TOUS les avis (ADMIN)
+// Retourne tous les avis pour l'interface admin.
 app.get('/server/reviews/all', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -440,7 +431,7 @@ app.get('/server/reviews/all', async (c) => {
   }
 });
 
-// Approuver un avis (ADMIN)
+// Approuve un avis et, si fourni, met à jour sa note.
 app.patch('/server/reviews/:reviewId/approve', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -489,7 +480,7 @@ app.patch('/server/reviews/:reviewId/approve', async (c) => {
   }
 });
 
-// Modifier un avis (ADMIN)
+// Met à jour le contenu d'un avis.
 app.patch('/server/reviews/:reviewId', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -532,7 +523,7 @@ app.patch('/server/reviews/:reviewId', async (c) => {
   }
 });
 
-// Supprimer un avis (ADMIN)
+// Supprime un avis.
 app.delete('/server/reviews/:reviewId', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -553,7 +544,7 @@ app.delete('/server/reviews/:reviewId', async (c) => {
   }
 });
 
-// Route de test
+// Endpoint de santé.
 app.get('/server/health', (c) => {
   return c.json({ status: 'ok', message: 'NovaKom Server is running' });
 });

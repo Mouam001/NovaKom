@@ -100,7 +100,6 @@ export function ReviewPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] py-12 md:py-20 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
             {isFr ? 'Partagez votre expérience' : 'Share your experience'}
@@ -110,7 +109,6 @@ export function ReviewPage() {
           </p>
         </div>
 
-        {/* Formulaire */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
           <div className="mb-6">
             <p className="text-gray-300">
@@ -128,7 +126,6 @@ export function ReviewPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Note */}
             <div>
               <label className="block text-lg font-semibold text-white mb-4">
                 {isFr ? 'Votre note *' : 'Your rating *'}
@@ -166,7 +163,6 @@ export function ReviewPage() {
               </p>
             </div>
 
-            {/* Entreprise */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {isFr ? 'Entreprise (optionnel)' : 'Company (optional)'}
@@ -183,7 +179,6 @@ export function ReviewPage() {
               </div>
             </div>
 
-            {/* Message */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {isFr ? 'Votre avis * ' : 'Your review * '}<span className="text-xs text-gray-400">{isFr ? '(minimum 20 caractères)' : '(minimum 20 characters)'}</span>
@@ -205,14 +200,12 @@ export function ReviewPage() {
               </p>
             </div>
 
-            {/* Info */}
             <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
               <p className="text-sm text-blue-200">
                 {isFr ? "ℹ️ Votre avis sera vérifié par notre équipe avant d'être publié sur le site." : "ℹ️ Your review will be verified by our team before being published on the site."}
               </p>
             </div>
 
-            {/* Boutons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 type="button"

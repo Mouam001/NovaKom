@@ -113,7 +113,6 @@ export function Problems() {
             </div>
           ))}
 
-          {/* CTA card */}
           <div
             className="p-6 rounded-xl flex flex-col justify-between"
             style={{

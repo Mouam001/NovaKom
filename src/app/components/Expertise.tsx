@@ -46,7 +46,6 @@ export function Expertise() {
       style={{ backgroundColor: "#0A1F44" }}
     >
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-        {/* Image */}
         <div className="relative hidden lg:block">
           <div
             className="rounded-2xl overflow-hidden"
@@ -65,7 +64,6 @@ export function Expertise() {
             />
           </div>
 
-          {/* Overlapping quote */}
           <div
             className="absolute bottom-6 left-6 right-6 p-6 rounded-xl"
             style={{
@@ -91,7 +89,6 @@ export function Expertise() {
           </div>
         </div>
 
-        {/* Text */}
         <div>
           <p
             className="text-xs tracking-widest uppercase mb-3"
@@ -152,7 +149,6 @@ export function Expertise() {
             ))}
           </div>
 
-          {/* Mobile quote */}
           <div
             className="lg:hidden mt-8 p-5 rounded-xl border"
             style={{

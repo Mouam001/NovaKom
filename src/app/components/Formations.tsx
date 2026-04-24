@@ -126,7 +126,6 @@ function FormationCard({ f }: { f: Formation }) {
         border: `1px solid ${f.color}33`,
       }}
     >
-      {/* Card content */}
       <div className="p-8">
         <div className="flex items-start gap-4 mb-6">
           <div
@@ -169,7 +168,6 @@ function FormationCard({ f }: { f: Formation }) {
           </div>
         </div>
 
-        {/* Description */}
         <p
           className="text-white/60 mb-6 text-sm"
           style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.75 }}
@@ -177,7 +175,6 @@ function FormationCard({ f }: { f: Formation }) {
           {f.description}
         </p>
 
-        {/* Benefits */}
         <ul className="space-y-2.5 mb-7">
           {f.benefits.map((benefit, i) => (
             <li key={`benefit-${i}`} className="flex items-start gap-2.5">
@@ -195,7 +192,6 @@ function FormationCard({ f }: { f: Formation }) {
           ))}
         </ul>
 
-        {/* CTA */}
         <a
           href="#contact"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm text-white transition-all hover:scale-105"
@@ -223,7 +219,6 @@ export function Formations() {
       style={{ backgroundColor: "#081733" }}
     >
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-16">
           <p
             className="text-xs tracking-widest uppercase mb-3"
@@ -251,7 +246,6 @@ export function Formations() {
           </p>
         </div>
 
-        {/* Trust badges */}
         <div className="flex flex-wrap justify-center gap-4 mb-14">
           {[
             { icon: <Award className="w-4 h-4" />, label: isFr ? "Formateurs experts en terrain" : "Field expert trainers" },
@@ -276,14 +270,12 @@ export function Formations() {
           ))}
         </div>
 
-        {/* Formations grid */}
         <div className="grid md:grid-cols-2 gap-6 mb-14">
           {formations.map((f) => (
             <FormationCard key={f.id} f={f} />
           ))}
         </div>
 
-        {/* CTA Section */}
         <div
           className="rounded-2xl p-8 md:p-10 text-center"
           style={{

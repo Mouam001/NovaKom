@@ -1,13 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 
-// URL du projet Supabase
+// Point d'entrée Supabase du projet.
 const supabaseUrl = `https://${projectId}.supabase.co`;
 
-// Client Supabase pour le frontend
+// Client utilisé côté frontend.
 export const supabase = createClient(supabaseUrl, publicAnonKey);
 
-// URL de l'API serveur
+// Base URL des fonctions Edge utilisées comme API backend.
 export const API_URL = `${supabaseUrl}/functions/v1/server`;
 
 export async function apiRequest(

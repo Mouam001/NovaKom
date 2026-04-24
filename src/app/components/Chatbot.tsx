@@ -215,7 +215,6 @@ export function Chatbot() {
 
   return (
     <>
-      {/* Chat window */}
       {open && (
         <div
           ref={chatRef}
@@ -226,7 +225,6 @@ export function Chatbot() {
             height: "480px",
           }}
         >
-          {/* Header */}
           <div
             className="flex items-center justify-between px-5 py-4"
             style={{ background: "linear-gradient(135deg, #00A86B, #007a4e)" }}
@@ -252,7 +250,6 @@ export function Chatbot() {
             </button>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} items-end gap-2`}>
@@ -310,7 +307,6 @@ export function Chatbot() {
               </div>
             ))}
 
-            {/* Options */}
             {options.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-1">
                 {options.map((opt) => (
@@ -333,7 +329,6 @@ export function Chatbot() {
             <div ref={bottomRef} />
           </div>
 
-          {/* Input */}
           <form
             onSubmit={handleSubmit}
             className="flex items-center gap-2 px-4 py-3"
@@ -357,7 +352,6 @@ export function Chatbot() {
         </div>
       )}
 
-      {/* Toggle button */}
       <button
         ref={toggleRef}
         onClick={() => {

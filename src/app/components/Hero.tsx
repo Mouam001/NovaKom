@@ -26,7 +26,6 @@ export function Hero() {
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ backgroundColor: "#0A1F44" }}
     >
-      {/* Network pattern background */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -41,7 +40,6 @@ export function Hero() {
         </svg>
       </div>
 
-      {/* Gradient overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -51,7 +49,6 @@ export function Hero() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-16 grid lg:grid-cols-2 gap-16 items-center">
-        {/* Text */}
         <div>
           <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs mb-6 border"
@@ -115,7 +112,6 @@ export function Hero() {
             </a>
           </div>
 
-          {/* Stats */}
           <div className="mt-14 flex flex-wrap gap-10">
             {stats.map((s) => (
               <div key={s.label}>
@@ -133,7 +129,6 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Image */}
         <div className="relative hidden lg:block">
           <div
             className="rounded-2xl overflow-hidden shadow-2xl"
@@ -152,7 +147,6 @@ export function Hero() {
               }}
             />
           </div>
-          {/* Floating badge */}
           <div
             className="absolute -bottom-5 -left-6 flex items-center gap-3 px-5 py-3 rounded-xl shadow-xl"
             style={{ backgroundColor: "#0d2850", border: "1px solid rgba(0,168,107,0.3)" }}

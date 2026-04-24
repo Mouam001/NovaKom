@@ -171,7 +171,7 @@ export function AppointmentPage() {
     }
   };
 
-  // Grouper les créneaux par date
+  // Regroupe les créneaux par date pour simplifier l'affichage par sections.
   const slotsByDate = slots.reduce((acc, slot) => {
     if (!acc[slot.date]) {
       acc[slot.date] = [];
@@ -232,7 +232,6 @@ export function AppointmentPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] py-12 md:py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
             {isFr ? 'Prenez rendez-vous avec nous' : 'Book an appointment with us'}
@@ -243,7 +242,6 @@ export function AppointmentPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Sélection du créneau */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Calendar className="w-6 h-6 text-[#ff6b35]" />
@@ -294,7 +292,6 @@ export function AppointmentPage() {
             )}
           </div>
 
-          {/* Formulaire */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <User className="w-6 h-6 text-[#ff6b35]" />

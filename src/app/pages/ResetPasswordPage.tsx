@@ -15,7 +15,7 @@ export function ResetPasswordPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Chercher le token dans les query params (?token_hash=...)
+    // Priorité au flux OTP: token transmis via query params.
     const params = new URLSearchParams(window.location.search);
     const tokenHash = params.get('token_hash');
     const type = params.get('type');
@@ -34,7 +34,7 @@ export function ResetPasswordPage() {
       return;
     }
 
-    // Chercher le token dans le hash URL (#access_token=...)
+    // Fallback: token transmis dans le hash URL.
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = hashParams.get('access_token');
     const refreshToken = hashParams.get('refresh_token');
@@ -53,7 +53,7 @@ export function ResetPasswordPage() {
       return;
     }
 
-    // Aucun token trouvé
+    // Aucun token exploitable trouvé dans l'URL.
     setError(isFr ? 'Lien invalide ou expiré. Veuillez faire une nouvelle demande.' : 'Invalid or expired link. Please submit a new request.');
   }, []);
   const [password, setPassword] = useState('');

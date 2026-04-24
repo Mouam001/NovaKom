@@ -125,7 +125,6 @@ export function Interventions() {
       style={{ backgroundColor: "#0A1F44" }}
     >
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-14">
           <p
             className="text-xs tracking-widest uppercase mb-3"
@@ -155,7 +154,6 @@ export function Interventions() {
           </p>
         </div>
 
-        {/* Tabs */}
         <div className="flex items-center gap-2 mb-10 bg-[#0d2254] rounded-xl p-1.5 max-w-sm mx-auto border border-white/5">
           {(["photos", "videos", "avis"] as const).map((tab) => (
             <button
@@ -174,7 +172,6 @@ export function Interventions() {
           ))}
         </div>
 
-        {/* PHOTOS */}
         {activeTab === "photos" && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {photos.map((photo) => (
@@ -189,7 +186,6 @@ export function Interventions() {
                   alt={photo.label}
                   className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                {/* Overlay */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                   style={{ background: "rgba(10,31,68,0.6)", backdropFilter: "blur(2px)" }}
@@ -203,7 +199,6 @@ export function Interventions() {
                     </svg>
                   </div>
                 </div>
-                {/* Bottom bar */}
                 <div
                   className="absolute bottom-0 left-0 right-0 p-4"
                   style={{ background: "linear-gradient(to top, rgba(10,31,68,0.95), transparent)" }}
@@ -231,7 +226,6 @@ export function Interventions() {
           </div>
         )}
 
-        {/* VIDEOS */}
         {activeTab === "videos" && (
           <div className="max-w-2xl mx-auto">
             <div
@@ -263,10 +257,8 @@ export function Interventions() {
           </div>
         )}
 
-        {/* TESTIMONIALS */}
         {activeTab === "avis" && (
           <div>
-            {/* Stats bar */}
             <div className="flex flex-wrap justify-center gap-8 mb-12">
               {[
                 { val: `${averageRating.toFixed(1)}/5`, label: isFr ? "Note moyenne clients" : "Average rating" },
@@ -287,7 +279,6 @@ export function Interventions() {
               ))}
             </div>
 
-            {/* Bouton Laisser un avis */}
             <div className="text-center mb-12">
               <button
                 onClick={() => user ? navigate('/review') : navigate('/login', { state: { from: '/review' } })}
@@ -302,7 +293,6 @@ export function Interventions() {
               </button>
             </div>
 
-            {/* Description */}
             <div className="max-w-4xl mx-auto text-center">
               <Quote className="w-10 h-10 mb-5 opacity-30 mx-auto" style={{ color: "#00A86B" }} />
               <p
@@ -376,7 +366,6 @@ export function Interventions() {
         )}
       </div>
 
-      {/* Lightbox */}
       {lightbox !== null && currentPhoto && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"

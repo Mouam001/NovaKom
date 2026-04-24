@@ -195,7 +195,6 @@ export function Team() {
                   border: "1px solid rgba(255,255,255,0.07)",
                 }}
               >
-              {/* Photo */}
               <div className="relative h-64 overflow-hidden">
                 <img
                   src={member.img}
@@ -203,7 +202,6 @@ export function Team() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   style={{ objectPosition: member.objectPosition || "center 8%" }}
                 />
-                {/* Badge */}
                 <div
                   className="absolute top-4 left-4 px-2.5 py-1 rounded-full text-xs"
                   style={{
@@ -217,7 +215,6 @@ export function Team() {
                 </div>
               </div>
 
-              {/* Info */}
               <div className="p-6">
                 <h3
                   className="text-white mb-0.5"

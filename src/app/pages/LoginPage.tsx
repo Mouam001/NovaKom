@@ -24,7 +24,7 @@ export function LoginPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Rediriger si déjà connecté
+  // Redirige l'utilisateur déjà authentifié vers la page demandée.
   useEffect(() => {
     if (user) {
       const from = (location.state as any)?.from || '/';
@@ -83,7 +83,6 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#ff6b35] to-[#f9a826] rounded-lg flex items-center justify-center">
@@ -96,9 +95,7 @@ export function LoginPage() {
           </p>
         </div>
 
-        {/* Formulaire */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
-          {/* Tabs */}
           <div className="flex gap-2 mb-6 bg-white/5 rounded-lg p-1">
             <button
               onClick={() => {
@@ -134,7 +131,6 @@ export function LoginPage() {
             </button>
           </div>
 
-          {/* Message d'erreur */}
           {error && (
             <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">
               {error}
@@ -147,7 +143,6 @@ export function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Nom (inscription uniquement) */}
             {!isLogin && (
               <>
                 <div>
@@ -185,7 +180,6 @@ export function LoginPage() {
               </>
             )}
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email *
@@ -203,7 +197,6 @@ export function LoginPage() {
               </div>
             </div>
 
-            {/* Mot de passe */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {isFr ? 'Mot de passe *' : 'Password *'}
@@ -272,7 +265,6 @@ export function LoginPage() {
               </div>
             )}
 
-            {/* Bouton submit */}
             <button
               type="submit"
               disabled={loading}
@@ -301,7 +293,6 @@ export function LoginPage() {
             </button>
           </form>
 
-          {/* Lien retour */}
           <div className="mt-6 text-center">
             <button
               onClick={() => navigate('/')}
@@ -312,7 +303,6 @@ export function LoginPage() {
           </div>
         </div>
 
-        {/* Info admin */}
         <div className="mt-6 text-center text-xs text-gray-400 bg-white/5 rounded-lg p-3">
           💡 <strong>{isFr ? 'Compte admin :' : 'Admin account:'}</strong> contactus@novakom.tech
         </div>

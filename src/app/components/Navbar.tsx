@@ -170,7 +170,6 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 border-b border-white/10"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
         <Link
           to="/"
           className="flex items-center"
@@ -185,7 +184,6 @@ export function Navbar() {
           <NovaKomLogo size={42} showText={true} variant="dark" />
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-6 xl:gap-8">
           {links.map((l) => (
             <button
@@ -231,7 +229,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div
           className="lg:hidden px-4 md:px-6 pb-6 flex flex-col gap-4"

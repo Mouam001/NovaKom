@@ -154,7 +154,6 @@ export function Services() {
                 border: `1px solid ${p.color}33`,
               }}
             >
-              {/* Icon */}
               <div
                 className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
                 style={{ backgroundColor: p.color + "22", color: p.color }}
@@ -176,7 +175,6 @@ export function Services() {
                 {p.desc}
               </p>
 
-              {/* List */}
               <ul className="flex flex-col gap-2.5 mt-auto">
                 {p.items.map((item) => (
                   <li key={item} className="flex items-center gap-2.5">
@@ -212,7 +210,6 @@ export function Services() {
                 </p>
               </div>
 
-              {/* Bottom line */}
               <div
                 className="mt-7 h-0.5 rounded-full"
                 style={{ background: `linear-gradient(90deg, ${p.color}, transparent)` }}

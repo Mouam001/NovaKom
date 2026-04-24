@@ -36,7 +36,6 @@ export function Footer() {
     <footer style={{ backgroundColor: "#060f22", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand */}
           <div className="lg:col-span-2">
             <div className="mb-5">
               <NovaKomLogo size={44} showText={true} variant="dark" />
@@ -67,7 +66,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Services */}
           <div>
             <p
               className="text-white text-sm mb-5"
@@ -90,7 +88,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
             <p
               className="text-white text-sm mb-5"
