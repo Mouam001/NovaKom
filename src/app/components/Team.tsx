@@ -242,25 +242,46 @@ export function Team() {
                     </span>
                   )}
                 </p>
-                <div className="flex gap-4">
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-                    style={{ color: "#0077B5", fontFamily: "Inter, sans-serif" }}
-                  >
-                    <Linkedin className="w-4 h-4" /> LinkedIn
-                  </a>
-                  <a
-                    href={member.portfolio}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-                    style={{ color: "#FFD700", fontFamily: "Inter, sans-serif" }}
-                  >
-                    <Globe className="w-4 h-4" /> {isFr ? "Portfolio" : "Portfolio"}
-                  </a>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+                  {member.linkedin && member.linkedin !== "#" ? (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+                      style={{ color: "#0077B5", fontFamily: "Inter, sans-serif" }}
+                    >
+                      <Linkedin className="w-4 h-4" /> LinkedIn
+                    </a>
+                  ) : (
+                    <span
+                      className="inline-flex items-center gap-2 text-sm opacity-80"
+                      style={{ color: "#9CA3AF", fontFamily: "Inter, sans-serif" }}
+                    >
+                      <Linkedin className="w-4 h-4" />
+                      {isFr ? "Profil LinkedIn en cours de construction" : "LinkedIn profile under construction"}
+                    </span>
+                  )}
+
+                  {member.portfolio && member.portfolio !== "#" ? (
+                    <a
+                      href={member.portfolio}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+                      style={{ color: "#FFD700", fontFamily: "Inter, sans-serif" }}
+                    >
+                      <Globe className="w-4 h-4" /> {isFr ? "Portfolio" : "Portfolio"}
+                    </a>
+                  ) : (
+                    <span
+                      className="inline-flex items-center gap-2 text-sm opacity-80"
+                      style={{ color: "#9CA3AF", fontFamily: "Inter, sans-serif" }}
+                    >
+                      <Globe className="w-4 h-4" />
+                      {isFr ? "Portfolio en cours de construction" : "Portfolio under construction"}
+                    </span>
+                  )}
                 </div>
               </div>
               </div>
