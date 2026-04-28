@@ -1,6 +1,6 @@
 import ImgMou from "@/assets/images/nicolas.jpg";
 import Houlam from "@/assets/images/Houlam.jpeg"
-import Abdel from "@/assets/images/Abdel.png"
+import Abdel from "@/assets/images/Abdel2.png"
 import Djae from "@/assets/images/djae.jpeg"
 import Isak from "@/assets/images/isak.jpeg"
 import { Linkedin, Globe } from "lucide-react";
