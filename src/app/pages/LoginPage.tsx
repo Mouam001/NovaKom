@@ -303,9 +303,6 @@ export function LoginPage() {
           </div>
         </div>
 
-        <div className="mt-6 text-center text-xs text-gray-400 bg-white/5 rounded-lg p-3">
-          💡 <strong>{isFr ? 'Compte admin :' : 'Admin account:'}</strong> contactus@novakom.tech
-        </div>
       </div>
     </div>
   );
