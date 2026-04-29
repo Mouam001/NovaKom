@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Phone, Mail, MapPin, Calendar, Send } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import emailjs from '@emailjs/browser';
 
 export function Contact() {
   const { language } = useLanguage();
@@ -12,11 +13,45 @@ export function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    setForm({ name: "", company: "", email: "", phone: "", subject: "", message: "" });
+    
+    try {
+      // Envoi du message principal à NovaKom
+      await emailjs.send(
+        'service_3bt9ibq',
+        'template_6nymd8c',
+        {
+          name: form.name,
+          company: form.company,
+          email: form.email,
+          phone: form.phone,
+          subject: form.subject,
+          message: form.message,
+          time: new Date().toLocaleString('fr-FR'),
+        },
+        '2SzEum3OAkieJsLy7'
+      );
+  
+      // Envoi de l'auto-reply au client
+      await emailjs.send(
+        'service_3bt9ibq',
+        'template_xer452v',
+        {
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+        },
+        '2SzEum3OAkieJsLy7'
+      );
+  
+      setSent(true);
+      setTimeout(() => setSent(false), 4000);
+      setForm({ name: "", company: "", email: "", phone: "", subject: "", message: "" });
+    } catch (error) {
+      console.error('Erreur envoi email:', error);
+      alert('Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter directement à contactus@novakom.tech');
+    }
   };
 
   const inputStyle = {
