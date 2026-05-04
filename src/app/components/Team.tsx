@@ -72,7 +72,7 @@ const team = [
     },
     color: "#a855f7",
     linkedin: "https://www.linkedin.com/in/abdelwahab28/",
-    portfolio: "#",
+    portfolio: "https://abdel-port-folio-nine.vercel.app/",
   },
 
   {
