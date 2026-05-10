@@ -47,11 +47,11 @@ Construire la prochaine génération d'infrastructures numériques comoriennes a
 - Intégration de systèmes
 
 ### 🎓 Centre de Formation
-- **Sécurité Informatique & Cyber Défense** (40h)
-- **Développement Web & Applications** (60h)
-- **Compétences Numériques Essentielles** (16h)
-- **Administration Réseaux & Systèmes** (80h)
-- **Introduction à la Data & IA** (32h)
+- **Sécurité Informatique & CyberSécurité** 
+- **Développement Web & Applications** 
+- **Compétences Numériques Essentielles**
+- **Administration Réseaux & Systèmes**
+- **Introduction à la Data & IA**
 
 Toutes nos formations sont certifiantes et préparatoires aux certifications internationales (CCNA, Security+, Power BI).
 
