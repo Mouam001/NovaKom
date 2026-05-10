@@ -85,6 +85,86 @@ Spécialiste déploiement sécurisé et automatisation CI/CD. Expert en intégra
 - **PostCSS** - Outil de transformation CSS
 - **Autoprefixer** - Ajout automatique des préfixes CSS
 
+## ⚙️ Installation et Exécution
+
+### Prérequis
+- **Node.js** 20+ (recommandé)
+- **npm** 10+
+- **Supabase CLI** (optionnel mais recommandé pour les fonctions Edge)
+
+### 1) Cloner le projet
+```bash
+git clone <URL_DU_REPO>
+cd NovaKom
+```
+
+### 2) Installer les dépendances
+```bash
+npm install
+```
+
+### 3) Lancer en développement
+```bash
+npm run dev
+```
+Le site sera disponible sur l'URL affichée par Vite (généralement `http://localhost:5173`).
+
+### 4) Build de production
+```bash
+npm run build
+```
+
+## 🗄️ Configuration Supabase
+
+Le frontend utilise Supabase via `src/app/lib/supabase.ts` et l'API Edge Function `server`.
+
+### Frontend
+Le projet attend ces valeurs :
+- `projectId`
+- `publicAnonKey`
+
+Si vous changez de projet Supabase, mettez à jour la source utilisée par :
+`import { projectId, publicAnonKey } from '/utils/supabase/info'`
+
+### Fonctions Edge (optionnel en local)
+Depuis la racine du repo :
+```bash
+supabase login
+supabase link --project-ref <PROJECT_ID>
+supabase functions serve server --no-verify-jwt
+```
+
+Déploiement de la fonction :
+```bash
+supabase functions deploy server
+```
+
+## ✍️ Modifier le projet
+
+### Structure utile
+- `src/app/components` : composants de sections/pages
+- `src/app/pages` : pages de l'application
+- `src/app/contexts` : contextes React
+- `src/app/lib` : intégrations (dont Supabase)
+- `supabase/functions/server` : backend Edge Function
+
+### Workflow recommandé
+1. Créer une branche :
+   ```bash
+   git checkout -b feature/ma-modification
+   ```
+2. Faire les changements.
+3. Vérifier que le build passe :
+   ```bash
+   npm run build
+   ```
+4. Commit et push :
+   ```bash
+   git add .
+   git commit -m "feat: description du changement"
+   git push origin feature/ma-modification
+   ```
+
 ## 🤝 Contribution
 
 Nous accueillons les contributions ! Pour contribuer :
