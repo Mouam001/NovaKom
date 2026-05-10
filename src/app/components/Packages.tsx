@@ -87,6 +87,33 @@ export function Packages() {
             "External CISO",
           ],
     },
+    {
+      name: isFr ? "Pack Digitalisation" : "Digitalization Pack",
+      tag: isFr ? "Développement" : "Development",
+      price: isFr ? "Sur devis" : "On request",
+      highlight: false,
+      color: "#f59e0b",
+      desc: isFr
+        ? "Pour les structures qui veulent créer leurs outils digitaux et accélérer leur transformation."
+        : "For organizations that want to build digital tools and accelerate transformation.",
+      features: isFr
+        ? [
+            "Développement des sites web",
+            "Développement application web/métier",
+            "Digitalisation des processus internes",
+            "Automatisation des tâches récurrentes",
+            "Intégration API & outils tiers",
+            "Accompagnement au déploiement",
+          ]
+        : [
+            "Showcase or corporate website development",
+            "Web/business application development",
+            "Internal process digitalization",
+            "Recurring task automation",
+            "API and third-party tool integration",
+            "Deployment support",
+          ],
+    },
   ];
 
   return (
@@ -123,7 +150,7 @@ export function Packages() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 items-stretch">
           {packs.map((pack) => (
             <div
               key={pack.name}

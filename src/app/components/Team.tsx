@@ -116,7 +116,7 @@ const team = [
       en: "Data & Finance",
     },
     color: "#0ea5e9",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/insa-djae-aaa953403/",
     portfolio: "#",
   },
     

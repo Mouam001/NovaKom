@@ -89,7 +89,7 @@ Spécialiste déploiement sécurisé et automatisation CI/CD. Expert en intégra
 
 Nous accueillons les contributions ! Pour contribuer :
 
-1. Fork le projet
+1. Cloner le projet
 2. Créer une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
 3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
 4. Push vers la branche (`git push origin feature/AmazingFeature`)
@@ -109,8 +109,8 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 - **Site web** : [novakom](https://novakom.tech) 
 - **Email** : contactus@novakom.tech
-- **LinkedIn** : [NovaKom](à venir)
-- **Facebook** : [NovaKom](à venir)
+- **LinkedIn** : [NovaKom](https://www.linkedin.com/company/novakom])
+- **Facebook** : [NovaKom](https://www.facebook.com/share/1NngdbA5Q6/?mibextid=wwXIfr)
 - **Adresse** : Moroni, Union des Comores
 
 ---
