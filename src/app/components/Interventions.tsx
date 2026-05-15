@@ -4,37 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
+import posteTravail from "@/assets/images/realisation/poste_travaill.png";
+import reseau from "@/assets/images/realisation/reseau.png";
+import serveur from "@/assets/images/realisation/serveur.png";
+import fireWall from "@/assets/images/realisation/fireWall.png";
+import developpement from "@/assets/images/realisation/developpement.png";
 
 const photos = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1758101755915-462eddc23f57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxJVCUyMHRlY2huaWNpYW4lMjB3b3JraW5nJTIwYnVzaW5lc3MlMjBzaG9wJTIwbmV0d29yayUyMGluc3RhbGxhdGlvbnxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Déploiement des réseaux",
-    tag: "Installation réseau",
+    src: posteTravail,
+    label: "Configuration des postes de travail ",
+    tag: "Support IT",
+    detail: "Installation, optimisation et tests des postes de travail sur site.",
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1735825764457-ffdf0b5aa5dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wdXRlciUyMHNldHVwJTIwc21hbGwlMjBidXNpbmVzcyUyMG9mZmljZSUyMHByb2Zlc3Npb25hbHxlbnwxfHx8fDE3NzI0OTcwNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Configuration des postes de travail ",
-    tag: "Support IT",
+    src: reseau,
+    label: "Câblage bien structuré & Déploiement des réseaux",
+    tag: "Infrastructure réseau",
+    detail: "Déploiement réseau propre et stable pour bureaux et commerces.",
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1663932210347-164a05ed0ccd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZXR3b3JrJTIwY2FibGUlMjByb3V0ZXIlMjBpbnN0YWxsYXRpb24lMjB0ZWNobmljaWFufGVufDF8fHx8MTc3MjQ5NzA2M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Câblage bien structuré",
-    tag: "Infrastructure réseau",
+    src: serveur,
+    label: "Installation des salles serveurs",
+    tag: "Serveurs",
+    detail: "Mise en place de baies, stockage et supervision des serveurs.",
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwaW5zdGFsbGF0aW9uJTIwZGF0YSUyMGNlbnRlciUyMG1haW50ZW5hbmNlfGVufDF8fHx8MTc3MjQ5NzA2NXww&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Installation des salles serveurs",
-    tag: "Serveurs",
+    src: fireWall,
+    label: "Mise en place des firewalls",
+    tag: "Cybersécurité",
+    detail: "Protection du réseau via règles de filtrage et sécurisation avancée.",
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1585216274151-e3debff99c0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXJld2FsbCUyMHNlY3VyaXR5JTIwb2ZmaWNlJTIwaW50ZXJ2ZW50aW9uJTIwcHJvZmVzc2lvbmFsJTIwc2V0dXB8ZW58MXx8fHwxNzcyNDk3MDY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    label: "Mise en place des firewalls",
-    tag: "Cybersécurité",
+    src: developpement,
+    label: "Développement Web/Mobile",
+    tag: "Développement",
+    detail: "Conception d'applications web et mobile adaptées aux besoins métiers.",
   },
 ];
 
@@ -116,6 +126,7 @@ export function Interventions() {
     "Infrastructure réseau": "#a855f7",
     Serveurs: "#f59e0b",
     Cybersécurité: "#ef4444",
+    Développement: "#14b8a6",
   };
 
   return (
@@ -203,17 +214,22 @@ export function Interventions() {
                   className="absolute bottom-0 left-0 right-0 p-4"
                   style={{ background: "linear-gradient(to top, rgba(10,31,68,0.95), transparent)" }}
                 >
-                  <span
-                    className="inline-block px-2 py-0.5 rounded-full text-xs mb-1.5"
+                  <button
+                    type="button"
+                    className="inline-block px-2 py-0.5 rounded-full text-xs mb-1.5 cursor-pointer"
                     style={{
                       backgroundColor: (tagColors[photo.tag] || "#00A86B") + "22",
                       color: tagColors[photo.tag] || "#00A86B",
                       border: `1px solid ${(tagColors[photo.tag] || "#00A86B")}44`,
                       fontFamily: "Inter, sans-serif",
                     }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openLight(photo.id);
+                    }}
                   >
                     {photo.tag}
-                  </span>
+                  </button>
                   <p
                     className="text-white text-xs leading-tight"
                     style={{ fontFamily: "Inter, sans-serif" }}
@@ -377,6 +393,12 @@ export function Interventions() {
             onClick={(e) => e.stopPropagation()}
             style={{ border: "1px solid rgba(0,168,107,0.3)" }}
           >
+            <div
+              className="px-4 py-2 text-xs text-white/70"
+              style={{ backgroundColor: "#0b1d48", fontFamily: "Inter, sans-serif" }}
+            >
+              {currentPhoto.detail}
+            </div>
             <img src={currentPhoto.src} alt={currentPhoto.label} className="w-full max-h-[75vh] object-cover" />
             <div
               className="p-4 flex items-center justify-between"

@@ -60,10 +60,10 @@ Toutes nos formations sont certifiantes et préparatoires aux certifications int
 ### Mouammar Soulé - Dev & Architecture
 Ingénieur Logiciel spécialisé en développement et architecture applicative. Expert en systèmes distribués et solutions cloud-native.
 
-### Houlam - Cybersécurité
+### Abdourahamane - Cybersécurité
 Ingénieur Cybersécurité expert en protection réseau et audit sécurité. Certifié Security+ avec une expertise en tests d'intrusion.
 
-### Abdel - DevSecOps
+### DJOUNEID MOHAMED - DevSecOps
 Spécialiste déploiement sécurisé et automatisation CI/CD. Expert en intégration de la sécurité dans les pipelines DevOps.
 
 ## 🛠️ Technologies Utilisées

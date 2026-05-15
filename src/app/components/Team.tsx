@@ -3,6 +3,7 @@ import Houlam from "@/assets/images/Houlam.jpeg"
 import Abdel from "@/assets/images/Abdel2.png"
 import Djae from "@/assets/images/djae.jpeg"
 import Isak from "@/assets/images/isak.jpeg"
+import Khadidja from "@/assets/images/khadidja.png"
 import { Linkedin, Globe } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
@@ -31,7 +32,7 @@ const team = [
     portfolio: "https://www.mouammarsoule.fr/",
   },
   {
-    name: "DJOUNEID MOHAMED",
+    name: "Djouneid Mohamed",
     role: {
       fr: "Ingénieur Sécurité | Pentester | Cybersécurité pilotée par l'IA",
       en: "Security Engineer | Pentester | AI-Driven Cybersecurity",
@@ -119,6 +120,32 @@ const team = [
     linkedin: "https://www.linkedin.com/in/insa-djae-aaa953403/",
     portfolio: "#",
   },
+
+  {
+    name: "Khadidjat Youssouf",
+    role: {
+      fr: "Administratrice Réseau & Infrastructure IT",
+      en: "Network & IT Infrastructure Administrator",
+    },
+    desc: {
+      fr:
+          "Titulaire d’une Licence 3 en Administration Réseau Informatique, je suis spécialisée dans la gestion, la sécurisation et l’optimisation des infrastructures réseau et systèmes. " +
+          "Chez NovaKom, j’interviens sur le déploiement des réseaux, la configuration des équipements, l’administration des postes de travail et la mise en place de solutions fiables pour garantir la performance et la continuité des services informatiques.",
+
+      en:
+          "Holding a Bachelor's degree in Network Administration, I specialize in managing, securing, and optimizing network and IT infrastructures. " +
+          "At NovaKom, I contribute to network deployment, equipment configuration, workstation administration, and the implementation of reliable solutions to ensure performance and business continuity.",
+    },
+    img: Khadidja,
+    objectPosition: "center 10%",
+    badge: {
+      fr: "Réseaux & Infrastructure",
+      en: "Networks & Infrastructure",
+    },
+    color: "#2563eb",
+    linkedin: "https://www.linkedin.com/in/khadidjat-youssouf-570977408/",
+    portfolio: "#",
+  }
     
 ];
 
