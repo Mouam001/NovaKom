@@ -65,11 +65,10 @@ export function Expertise() {
           </div>
 
           <div
-            className="absolute bottom-6 left-6 right-6 p-6 rounded-xl"
+            className="absolute bottom-6 left-6 right-6 p-6 rounded-xl safe-backdrop-blur"
             style={{
               backgroundColor: "#0d2254ee",
               border: "1px solid rgba(0,168,107,0.3)",
-              backdropFilter: "blur(8px)",
             }}
           >
             <p

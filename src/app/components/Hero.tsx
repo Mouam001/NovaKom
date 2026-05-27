@@ -59,7 +59,7 @@ export function Hero() {
               fontFamily: "Inter, sans-serif",
             }}
           >
-            <span className="w-2 h-2 rounded-full bg-[#00A86B] animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#00A86B] motion-safe:animate-pulse" />
             {isFr ? "Basé à Moroni – Union des Comores" : "Based in Moroni – Comoros"}
           </div>
 
@@ -127,6 +127,25 @@ export function Hero() {
               </div>
             ))}
           </div>
+
+          <div
+            className="relative mt-10 lg:hidden rounded-2xl overflow-hidden"
+            style={{ border: "1px solid rgba(0,168,107,0.25)" }}
+          >
+            <img
+              src={heroImage}
+              alt={isFr ? "Infrastructure IT sécurisée" : "Secure IT infrastructure"}
+              className="w-full h-[260px] object-cover"
+              loading="eager"
+              decoding="async"
+            />
+            <div
+              className="absolute inset-0 rounded-2xl"
+              style={{
+                background: "linear-gradient(to top, #0A1F44cc 0%, transparent 50%)",
+              }}
+            />
+          </div>
         </div>
 
         <div className="relative hidden lg:block">
@@ -138,6 +157,8 @@ export function Hero() {
               src={heroImage}
               alt={isFr ? "Infrastructure IT sécurisée" : "Secure IT infrastructure"}
               className="w-full h-[480px] object-cover"
+              loading="eager"
+              decoding="async"
             />
             <div
               className="absolute inset-0 rounded-2xl"

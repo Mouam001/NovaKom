@@ -1,14 +1,3 @@
-/* Fichier généré automatiquement : à ne modifier qu'en connaissance de cause. */
-
-/* Schéma de table:
-CREATE TABLE kv_store_04c0d8ba (
-  key TEXT NOT NULL PRIMARY KEY,
-  value JSONB NOT NULL
-);
-*/
-
-// Référence table: https://supabase.com/dashboard/project/ggmhoyqhrinpkqdqqzni/database/tables
-
 // Interface clé-valeur utilisée par la fonction serveur.
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 

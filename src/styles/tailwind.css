@@ -2,3 +2,17 @@
 @source '../**/*.{js,ts,jsx,tsx}';
 
 @import 'tw-animate-css';
+
+@layer utilities {
+  .safe-backdrop-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+    .safe-backdrop-blur {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
