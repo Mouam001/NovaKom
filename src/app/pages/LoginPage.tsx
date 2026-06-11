@@ -95,7 +95,7 @@ export function LoginPage() {
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+        <div className="mobile-glass-safe rounded-2xl p-6 md:p-8 border border-white/20">
           <div className="flex gap-2 mb-6 bg-white/5 rounded-lg p-1">
             <button
               onClick={() => {
@@ -104,7 +104,7 @@ export function LoginPage() {
                 setSuccessMessage('');
                 setConfirmPassword('');
               }}
-              className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
+              className={`flex-1 py-2.5 rounded-md font-medium transition-colors text-sm md:text-base ${
                 isLogin
                   ? 'bg-[#ff6b35] text-white shadow-lg'
                   : 'text-gray-300 hover:text-white'
@@ -120,7 +120,7 @@ export function LoginPage() {
                 setSuccessMessage('');
                 setConfirmPassword('');
               }}
-              className={`flex-1 py-2.5 rounded-md font-medium transition-all text-sm md:text-base ${
+              className={`flex-1 py-2.5 rounded-md font-medium transition-colors text-sm md:text-base ${
                 !isLogin
                   ? 'bg-[#ff6b35] text-white shadow-lg'
                   : 'text-gray-300 hover:text-white'
@@ -268,7 +268,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+              className="w-full py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

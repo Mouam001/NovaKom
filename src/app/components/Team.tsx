@@ -216,7 +216,7 @@ export function Team() {
             return (
               <div
                 key={member.name}
-                className="rounded-2xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300"
+                className="rounded-2xl overflow-hidden group transition-transform duration-300 lg:hover:-translate-y-2"
                 style={{
                   backgroundColor: "#0d2254",
                   border: "1px solid rgba(255,255,255,0.07)",
@@ -226,7 +226,9 @@ export function Team() {
                 <img
                   src={member.img}
                   alt={member.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500 lg:group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
                   style={{ objectPosition: member.objectPosition || "center 8%" }}
                 />
                 <div

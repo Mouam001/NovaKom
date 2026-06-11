@@ -170,7 +170,7 @@ export function Interventions() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className="flex-1 py-2.5 rounded-lg text-sm capitalize transition-all"
+              className="flex-1 py-2.5 rounded-lg text-sm capitalize transition-colors"
               style={{
                 backgroundColor: activeTab === tab ? "#00A86B" : "transparent",
                 color: activeTab === tab ? "#fff" : "rgba(255,255,255,0.4)",
@@ -195,11 +195,13 @@ export function Interventions() {
                 <img
                   src={photo.src}
                   alt={photo.label}
-                  className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-56 object-cover transition-transform duration-500 lg:group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                  style={{ background: "rgba(10,31,68,0.6)", backdropFilter: "blur(2px)" }}
+                  className="desktop-backdrop-blur-sm absolute inset-0 opacity-0 transition-opacity flex items-center justify-center lg:group-hover:opacity-100"
+                  style={{ background: "rgba(10,31,68,0.6)" }}
                 >
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
@@ -298,7 +300,7 @@ export function Interventions() {
             <div className="text-center mb-12">
               <button
                 onClick={() => user ? navigate('/review') : navigate('/login', { state: { from: '/review' } })}
-                className="px-6 py-3 rounded-lg text-white font-semibold transition-all hover:scale-105 shadow-lg inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-lg text-white font-semibold transition-transform lg:hover:scale-105 shadow-lg inline-flex items-center gap-2"
                 style={{
                   background: "linear-gradient(135deg, #ff6b35, #f9a826)",
                   fontFamily: "Inter, sans-serif",
@@ -384,8 +386,7 @@ export function Interventions() {
 
       {lightbox !== null && currentPhoto && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: "rgba(5,12,30,0.95)", backdropFilter: "blur(10px)" }}
+          className="desktop-lightbox-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={closeLight}
         >
           <div
@@ -399,7 +400,7 @@ export function Interventions() {
             >
               {currentPhoto.detail}
             </div>
-            <img src={currentPhoto.src} alt={currentPhoto.label} className="w-full max-h-[75vh] object-cover" />
+            <img src={currentPhoto.src} alt={currentPhoto.label} className="w-full max-h-[75vh] object-cover" decoding="async" />
             <div
               className="p-4 flex items-center justify-between"
               style={{ backgroundColor: "#0d2254" }}

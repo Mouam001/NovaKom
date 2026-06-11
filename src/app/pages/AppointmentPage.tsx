@@ -195,7 +195,7 @@ export function AppointmentPage() {
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center px-4 py-12">
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 text-center">
+        <div className="mobile-glass-safe max-w-md w-full rounded-2xl p-8 border border-white/20 text-center">
           <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-10 h-10 text-green-400" />
           </div>
@@ -220,7 +220,7 @@ export function AppointmentPage() {
           </p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105"
           >
             {isFr ? "Retour à l'accueil" : 'Back to home'}
           </button>
@@ -242,7 +242,7 @@ export function AppointmentPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+          <div className="mobile-glass-safe rounded-2xl p-6 md:p-8 border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Calendar className="w-6 h-6 text-[#ff6b35]" />
               {isFr ? 'Créneaux disponibles' : 'Available slots'}
@@ -275,7 +275,7 @@ export function AppointmentPage() {
                         <button
                           key={`${slot.date}_${slot.time}`}
                           onClick={() => setSelectedSlot(slot)}
-                          className={`p-3 rounded-lg border-2 transition-all text-sm md:text-base ${
+                          className={`p-3 rounded-lg border-2 transition-colors text-sm md:text-base ${
                             selectedSlot?.date === slot.date && selectedSlot?.time === slot.time
                               ? 'border-[#ff6b35] bg-[#ff6b35]/20 text-white'
                               : 'border-white/10 bg-white/5 text-gray-300 hover:border-[#ff6b35]/50 hover:bg-white/10'
@@ -292,7 +292,7 @@ export function AppointmentPage() {
             )}
           </div>
 
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+          <div className="mobile-glass-safe rounded-2xl p-6 md:p-8 border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <User className="w-6 h-6 text-[#ff6b35]" />
               {isFr ? 'Vos informations' : 'Your information'}
@@ -394,7 +394,7 @@ export function AppointmentPage() {
               <button
                 type="submit"
                 disabled={submitting || !selectedSlot}
-                className="w-full py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                className="w-full py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
               >
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">
@@ -418,7 +418,7 @@ export function AppointmentPage() {
           </div>
         </div>
 
-        <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+        <div className="mobile-glass-safe mt-8 rounded-2xl p-6 md:p-8 border border-white/20">
           <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
             {isFr ? 'Mon espace - Mes rendez-vous' : 'My space - My appointments'}
           </h2>

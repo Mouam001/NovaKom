@@ -23,6 +23,13 @@ export function AdminPage() {
   const [slots, setSlots] = useState<any[]>([]);
   const [newSlotDate, setNewSlotDate] = useState('');
   const [newSlotTime, setNewSlotTime] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedDays, setSelectedDays] = useState([1, 2, 3, 4, 5, 6]);
+  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  const [newTime, setNewTime] = useState('');
+  const [preview, setPreview] = useState<any[]>([]);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
   
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -32,6 +39,16 @@ export function AdminPage() {
   const [reviewRatings, setReviewRatings] = useState<Record<string, number>>({});
   const [reviewEdits, setReviewEdits] = useState<Record<string, { userName: string; company: string; message: string }>>({});
   const [loadingReviews, setLoadingReviews] = useState(false);
+
+  const weekDays = [
+    { label: 'Lun', value: 1 },
+    { label: 'Mar', value: 2 },
+    { label: 'Mer', value: 3 },
+    { label: 'Jeu', value: 4 },
+    { label: 'Ven', value: 5 },
+    { label: 'Sam', value: 6 },
+    { label: 'Dim', value: 0 },
+  ];
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -121,6 +138,113 @@ export function AdminPage() {
       }
     } catch (err) {
       console.error('Error adding slot:', err);
+    }
+  };
+
+  const resetPreview = () => {
+    setPreview([]);
+    setShowConfirm(false);
+  };
+
+  const toggleDay = (dayIndex: number) => {
+    resetPreview();
+    setSelectedDays((days) =>
+      days.includes(dayIndex)
+        ? days.filter((day) => day !== dayIndex)
+        : [...days, dayIndex]
+    );
+  };
+
+  const addTime = () => {
+    if (!newTime) {
+      alert('Heure requise');
+      return;
+    }
+
+    if (selectedTimes.includes(newTime)) {
+      setNewTime('');
+      return;
+    }
+
+    resetPreview();
+    setSelectedTimes((times) => [...times, newTime].sort());
+    setNewTime('');
+  };
+
+  const removeTime = (timeToRemove: string) => {
+    resetPreview();
+    setSelectedTimes((times) => times.filter((time) => time !== timeToRemove));
+  };
+
+  const generateSlots = () => {
+    const slots: any[] = [];
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const current = new Date(start);
+
+    while (current <= end) {
+      const dayIndex = current.getDay();
+      if (selectedDays.includes(dayIndex)) {
+        for (const time of selectedTimes) {
+          slots.push({
+            date: current.toISOString().split('T')[0],
+            time: time
+          });
+        }
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return slots;
+  };
+
+  const prepareSlotsPreview = () => {
+    if (!startDate || !endDate) {
+      alert('Date de début et date de fin requises');
+      return;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+      alert('La date de fin doit être après la date de début');
+      return;
+    }
+
+    if (selectedDays.length === 0) {
+      alert('Sélectionnez au moins un jour');
+      return;
+    }
+
+    if (selectedTimes.length === 0) {
+      alert('Ajoutez au moins une heure');
+      return;
+    }
+
+    const generatedSlots = generateSlots();
+    setPreview(generatedSlots);
+    setShowConfirm(true);
+  };
+
+  const createGeneratedSlots = async () => {
+    if (preview.length === 0) return;
+
+    try {
+      const response = await apiRequest('/slots/create', {
+        method: 'POST',
+        body: JSON.stringify({
+          slots: preview
+        }),
+      });
+
+      if (response.ok) {
+        setStartDate('');
+        setEndDate('');
+        setSelectedTimes([]);
+        setNewTime('');
+        setPreview([]);
+        setShowConfirm(false);
+        loadSlots();
+      }
+    } catch (err) {
+      console.error('Error adding slots:', err);
     }
   };
 
@@ -247,7 +371,7 @@ export function AdminPage() {
         <div className="flex flex-wrap gap-2 mb-8 bg-white/5 rounded-lg p-2">
           <button
             onClick={() => setActiveTab('slots')}
-            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-all text-sm md:text-base ${
+            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-colors text-sm md:text-base ${
               activeTab === 'slots'
                 ? 'bg-[#ff6b35] text-white shadow-lg'
                 : 'text-gray-300 hover:text-white'
@@ -258,7 +382,7 @@ export function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('appointments')}
-            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-all text-sm md:text-base ${
+            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-colors text-sm md:text-base ${
               activeTab === 'appointments'
                 ? 'bg-[#ff6b35] text-white shadow-lg'
                 : 'text-gray-300 hover:text-white'
@@ -269,7 +393,7 @@ export function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-all text-sm md:text-base ${
+            className={`flex-1 min-w-[140px] py-3 px-4 rounded-md font-medium transition-colors text-sm md:text-base ${
               activeTab === 'reviews'
                 ? 'bg-[#ff6b35] text-white shadow-lg'
                 : 'text-gray-300 hover:text-white'
@@ -282,35 +406,169 @@ export function AdminPage() {
 
         {activeTab === 'slots' && (
           <div className="space-y-6">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
+            <div className="mobile-glass-safe rounded-2xl p-6 border border-white/20">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Ajouter des créneaux
               </h2>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <input
-                  type="date"
-                  value={newSlotDate}
-                  onChange={(e) => setNewSlotDate(e.target.value)}
-                  className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
-                  min={new Date().toISOString().split('T')[0]}
-                />
-                <input
-                  type="time"
-                  value={newSlotTime}
-                  onChange={(e) => setNewSlotTime(e.target.value)}
-                  className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
-                />
-                <button
-                  onClick={addSlot}
-                  className="px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all whitespace-nowrap"
-                >
-                  <Plus className="w-5 h-5 inline mr-2" />
-                  Ajouter
-                </button>
+
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    Générateur par plage de dates
+                  </h3>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <label className="space-y-2">
+                      <span className="text-sm text-gray-300">Date de début</span>
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => {
+                          resetPreview();
+                          setStartDate(e.target.value);
+                        }}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                        min={new Date().toISOString().split('T')[0]}
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-sm text-gray-300">Date de fin</span>
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => {
+                          resetPreview();
+                          setEndDate(e.target.value);
+                        }}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                        min={startDate || new Date().toISOString().split('T')[0]}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-300">Jours de la semaine</p>
+                    <div className="flex flex-wrap gap-2">
+                      {weekDays.map((day) => {
+                        const isSelected = selectedDays.includes(day.value);
+
+                        return (
+                          <button
+                            key={day.value}
+                            type="button"
+                            onClick={() => toggleDay(day.value)}
+                            className={`px-4 py-2 rounded-lg border font-medium transition-colors ${
+                              isSelected
+                                ? 'bg-gradient-to-r from-[#ff6b35] to-[#f9a826] border-transparent text-white'
+                                : 'bg-white/5 border-white/10 text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {day.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="text-sm text-gray-300">Horaires</p>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <input
+                        type="time"
+                        value={newTime}
+                        onChange={(e) => setNewTime(e.target.value)}
+                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                      />
+                      <button
+                        type="button"
+                        onClick={addTime}
+                        className="px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105 whitespace-nowrap"
+                      >
+                        <Plus className="w-5 h-5 inline mr-2" />
+                        Ajouter l'heure
+                      </button>
+                    </div>
+
+                    {selectedTimes.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedTimes.map((time) => (
+                          <button
+                            key={time}
+                            type="button"
+                            onClick={() => removeTime(time)}
+                            className="px-3 py-2 bg-white/10 border border-white/10 rounded-full text-white text-sm hover:bg-red-500/20 transition-colors"
+                          >
+                            {time} ✕
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={prepareSlotsPreview}
+                    className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105 whitespace-nowrap"
+                  >
+                    Générer les créneaux
+                  </button>
+
+                  {showConfirm && (
+                    <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                      <p className="text-white font-medium mb-4">
+                        Cela va créer {preview.length} créneaux. Confirmer ?
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          type="button"
+                          onClick={createGeneratedSlots}
+                          className="px-5 py-2 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105"
+                        >
+                          Confirmer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={resetPreview}
+                          className="px-5 py-2 bg-white/5 border border-white/10 text-gray-300 hover:text-white rounded-lg transition-colors"
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 border-t border-white/10 space-y-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    Ajouter un créneau unique
+                  </h3>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <input
+                      type="date"
+                      value={newSlotDate}
+                      onChange={(e) => setNewSlotDate(e.target.value)}
+                      className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                    <input
+                      type="time"
+                      value={newSlotTime}
+                      onChange={(e) => setNewSlotTime(e.target.value)}
+                      className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                    />
+                    <button
+                      onClick={addSlot}
+                      className="px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105 whitespace-nowrap"
+                    >
+                      <Plus className="w-5 h-5 inline mr-2" />
+                      Ajouter
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
+            <div className="mobile-glass-safe rounded-2xl p-6 border border-white/20">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Tous les créneaux ({slots.length})
               </h2>
@@ -370,7 +628,7 @@ export function AdminPage() {
         )}
 
         {activeTab === 'appointments' && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
+          <div className="mobile-glass-safe rounded-2xl p-6 border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Rendez-vous ({appointments.length})
             </h2>
@@ -430,7 +688,7 @@ export function AdminPage() {
         )}
 
         {activeTab === 'reviews' && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/20">
+          <div className="mobile-glass-safe rounded-2xl p-6 border border-white/20">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Avis clients ({reviews.length})
             </h2>

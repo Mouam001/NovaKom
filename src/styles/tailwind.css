@@ -9,10 +9,79 @@
     backdrop-filter: blur(8px);
   }
 
+  .desktop-backdrop-blur-sm,
+  .desktop-lightbox-backdrop,
+  .mobile-gpu-safe {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    filter: none;
+    will-change: auto;
+  }
+
+  .desktop-lightbox-backdrop {
+    background-color: rgba(5, 12, 30, 0.98);
+  }
+
+  .mobile-glass-safe {
+    background-color: #0d2254;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .desktop-gpu-glow {
+    box-shadow: none;
+  }
+
   @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
     .safe-backdrop-blur {
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .mobile-nav-safe {
+      background-color: #0A1F44f5 !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .mobile-gpu-safe {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      filter: none !important;
+      transform: none !important;
+      will-change: auto !important;
+      animation: none !important;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-backdrop-blur-sm {
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+
+    .desktop-lightbox-backdrop {
+      background-color: rgba(5, 12, 30, 0.95);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-glass-safe {
+      background-color: rgba(255, 255, 255, 0.1);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .desktop-gpu-glow {
+      box-shadow: var(--gpu-glow-shadow, none);
     }
   }
 }

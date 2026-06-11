@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Check, Star } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
@@ -154,12 +155,12 @@ export function Packages() {
           {packs.map((pack) => (
             <div
               key={pack.name}
-              className="rounded-2xl p-8 flex flex-col relative overflow-hidden transition-transform hover:-translate-y-1 duration-300"
+              className="desktop-gpu-glow rounded-2xl p-8 flex flex-col relative overflow-hidden transition-transform lg:hover:-translate-y-1 duration-300"
               style={{
                 backgroundColor: pack.highlight ? pack.color + "18" : "#0d2254",
                 border: `1.5px solid ${pack.highlight ? pack.color : pack.color + "33"}`,
-                boxShadow: pack.highlight ? `0 0 40px ${pack.color}22` : "none",
-              }}
+                "--gpu-glow-shadow": pack.highlight ? `0 0 40px ${pack.color}22` : "none",
+              } as CSSProperties}
             >
               {pack.highlight && (
                 <div
@@ -229,7 +230,7 @@ export function Packages() {
                 </p>
                 <a
                   href="#contact"
-                  className="block text-center px-5 py-3 rounded-xl text-sm text-white transition-all hover:opacity-90"
+                  className="block text-center px-5 py-3 rounded-xl text-sm text-white transition-opacity hover:opacity-90"
                   style={{
                     background: pack.highlight
                       ? `linear-gradient(135deg, ${pack.color}, #007a4e)`

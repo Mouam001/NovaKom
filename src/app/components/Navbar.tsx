@@ -84,7 +84,7 @@ export function Navbar() {
         onClick={() => setUserMenuOpen((prev) => !prev)}
         aria-haspopup="menu"
         aria-expanded={userMenuOpen}
-        className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-white transition-all hover:bg-white/20"
+        className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-white transition-colors hover:bg-white/20"
       >
         <User className="h-4 w-4" />
         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
@@ -92,7 +92,7 @@ export function Navbar() {
 
       {userMenuOpen && (
         <div
-          className="absolute right-0 top-full z-[60] mt-2 w-56 rounded-xl border border-blue-200/20 bg-[#0c2854]/95 p-2 shadow-2xl backdrop-blur-xl"
+          className="absolute right-0 top-full z-[60] mt-2 w-56 rounded-xl border border-blue-200/20 bg-[#0c2854] p-2 shadow-lg lg:bg-[#0c2854]/95 lg:shadow-2xl lg:backdrop-blur-xl"
           role="menu"
         >
           <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
@@ -167,7 +167,7 @@ export function Navbar() {
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition: "background-color 0.3s ease",
       }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-white/10"
+      className="mobile-nav-safe fixed top-0 left-0 right-0 z-50 border-b border-white/10"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
         <Link
@@ -189,7 +189,7 @@ export function Navbar() {
             <button
               key={l.href}
               onClick={() => handleNavClick(l.href)}
-              className="relative cursor-pointer text-white/70 text-sm transition-all duration-300 ease-in-out hover:text-[#ff6b35] hover:scale-105 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              className="relative cursor-pointer text-white/70 text-sm transition-colors duration-300 ease-in-out hover:text-[#ff6b35] lg:hover:scale-105 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-[width] after:duration-300 after:ease-in-out hover:after:w-full"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               {l.label}
@@ -197,7 +197,7 @@ export function Navbar() {
           ))}
           <button
             onClick={() => handleNavClick('/appointment')}
-            className="px-4 py-2 rounded-lg text-sm text-white transition-all hover:scale-105 flex items-center gap-2"
+            className="px-4 py-2 rounded-lg text-sm text-white transition-transform lg:hover:scale-105 flex items-center gap-2"
             style={{
               background: "linear-gradient(135deg, #ff6b35, #f9a826)",
               fontFamily: "Inter, sans-serif",
@@ -209,7 +209,7 @@ export function Navbar() {
           {isAdmin && (
             <button
               onClick={() => handleNavClick('/admin')}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-all flex items-center gap-2"
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm text-white transition-colors flex items-center gap-2"
             >
               <Shield className="w-4 h-4" />
               {isFr ? "Admin" : "Admin"}
@@ -238,7 +238,7 @@ export function Navbar() {
             <button
               key={l.href}
               onClick={() => handleNavClick(l.href)}
-              className="relative cursor-pointer text-white/80 text-sm border-b border-white/10 pb-3 text-left transition-all duration-300 ease-in-out hover:text-[#ff6b35] hover:scale-105 after:content-[''] after:absolute after:left-0 after:bottom-2 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              className="relative cursor-pointer text-white/80 text-sm border-b border-white/10 pb-3 text-left transition-colors duration-300 ease-in-out hover:text-[#ff6b35] after:content-[''] after:absolute after:left-0 after:bottom-2 after:h-0.5 after:w-0 after:bg-[#ff6b35] after:transition-[width] after:duration-300 after:ease-in-out hover:after:w-full"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               {l.label}

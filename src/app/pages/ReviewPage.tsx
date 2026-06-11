@@ -72,7 +72,7 @@ export function ReviewPage() {
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#1a202c] via-[#2d3748] to-[#1a202c] flex items-center justify-center px-4 py-12">
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 text-center">
+        <div className="mobile-glass-safe max-w-md w-full rounded-2xl p-8 border border-white/20 text-center">
           <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-10 h-10 text-green-400" />
           </div>
@@ -87,7 +87,7 @@ export function ReviewPage() {
           <div className="flex gap-3">
             <button
               onClick={() => navigate('/')}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all"
+              className="flex-1 px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-105"
             >
               {isFr ? "Retour à l'accueil" : 'Back to home'}
             </button>
@@ -109,7 +109,7 @@ export function ReviewPage() {
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20">
+        <div className="mobile-glass-safe rounded-2xl p-6 md:p-8 border border-white/20">
           <div className="mb-6">
             <p className="text-gray-300">
               {isFr ? 'Connecté en tant que :' : 'Signed in as:'}{' '}
@@ -136,7 +136,7 @@ export function ReviewPage() {
                     key={star}
                     type="button"
                     onClick={() => setRating(star)}
-                    className="transition-transform hover:scale-110"
+                    className="transition-transform lg:hover:scale-110"
                   >
                     <Star
                       className={`w-10 h-10 md:w-12 md:h-12 ${
@@ -210,14 +210,14 @@ export function ReviewPage() {
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="flex-1 px-6 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all"
+                className="flex-1 px-6 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
               >
                 {isFr ? 'Annuler' : 'Cancel'}
               </button>
               <button
                 type="submit"
                 disabled={submitting || message.length < 20}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f9a826] text-white font-semibold rounded-lg transition-transform lg:hover:shadow-lg lg:hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">

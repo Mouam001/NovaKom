@@ -148,7 +148,7 @@ export function Services() {
           {poles.map((p, i) => (
             <div
               key={i}
-              className="rounded-2xl p-8 flex flex-col group hover:-translate-y-2 transition-transform duration-300"
+              className="rounded-2xl p-8 flex flex-col group transition-transform duration-300 lg:hover:-translate-y-2"
               style={{
                 backgroundColor: "#0d2254",
                 border: `1px solid ${p.color}33`,

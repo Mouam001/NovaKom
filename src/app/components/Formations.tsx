@@ -120,7 +120,7 @@ function FormationCard({ f }: { f: Formation }) {
 
   return (
     <div
-      className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2"
+      className="rounded-2xl overflow-hidden transition-transform duration-300 lg:hover:-translate-y-2"
       style={{
         backgroundColor: "#0d2254",
         border: `1px solid ${f.color}33`,
@@ -194,7 +194,7 @@ function FormationCard({ f }: { f: Formation }) {
 
         <a
           href="#contact"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm text-white transition-all hover:scale-105"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm text-white transition-transform lg:hover:scale-105"
           style={{
             background: `linear-gradient(135deg, ${f.color}, ${f.color}cc)`,
             fontFamily: "Inter, sans-serif",
@@ -300,7 +300,7 @@ export function Formations() {
           <div className="flex flex-wrap gap-4 justify-center">
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-white text-sm transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-white text-sm transition-transform lg:hover:scale-105"
               style={{
                 background: "linear-gradient(135deg, #00A86B, #007a4e)",
                 fontFamily: "Inter, sans-serif",
@@ -312,7 +312,7 @@ export function Formations() {
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-sm border transition-all hover:bg-white/5"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-sm border transition-colors hover:bg-white/5"
               style={{
                 borderColor: "rgba(255,255,255,0.15)",
                 color: "rgba(255,255,255,0.6)",
