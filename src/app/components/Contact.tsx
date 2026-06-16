@@ -107,7 +107,7 @@ export function Contact() {
               {
                 icon: <Phone className="w-5 h-5" />,
                 label: isFr ? "Téléphone" : "Phone",
-                value: "+33 7 73 77 91 64",
+                value: "+33 7 43 34 25 58",
                 sub: isFr ? "Lun – Sam, 8h – 18h" : "Mon – Sat, 8am – 6pm",
               },
               {
@@ -166,7 +166,7 @@ export function Contact() {
             </a>
 
             <a
-              href="https://wa.me/33773779164?text=Bonjour%20je%20vous%20contacte"
+              href="https://wa.me/33743342558?text=Bonjour%20je%20vous%20contacte"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 py-4 rounded-xl text-white border transition-all hover:bg-white/5"
