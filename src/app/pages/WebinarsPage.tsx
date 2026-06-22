@@ -37,6 +37,26 @@ type Webinar = {
 
 const webinars: Webinar[] = [
   {
+    id: "sensibilisation-cybersecurite",
+    title: "Sensibilisation à la cybersécurité",
+    date: "Dimanche 28 Juin 2026",
+    moroniTime: "20h",
+    parisTime: "19h",
+    location: "Google Meet",
+    description:
+      "Formation gratuite en ligne pour reconnaître les menaces numériques, sécuriser vos comptes, protéger vos données personnelles et adopter les bons réflexes de sécurité au quotidien.",
+    poster: securityPoster,
+    registrationUrl: "https://forms.cloud.microsoft/r/2ZMCHmz9cx?origin=lprLink",
+    tags: ["Cybersécurité", "Phishing", "2FA", "Bonnes pratiques"],
+    awakening:
+      "Cette formation réveille les bons réflexes numériques : reconnaître les pièges, protéger ses accès et utiliser Internet avec plus de confiance.",
+    outcomes: [
+      "Identifier les menaces courantes avant de cliquer",
+      "Protéger ses comptes, appareils et données",
+      "Se préparer aux risques numériques du quotidien",
+    ],
+  },
+  {
     id: "microsoft-365-google-drive-outils-collaboratifs",
     title: "Microsoft 365, Google Drive & Outils Collaboratifs",
     date: "Samedi 04/07/2026",
@@ -74,26 +94,6 @@ const webinars: Webinar[] = [
       "Découvrir les outils IA qui transforment déjà les métiers",
       "Savoir poser de bonnes questions aux IA",
       "Voir comment rester productif dans le monde de demain",
-    ],
-  },
-  {
-    id: "sensibilisation-cybersecurite",
-    title: "Sensibilisation à la cybersécurité",
-    date: "Dimanche 28 Juin 2026",
-    moroniTime: "20h",
-    parisTime: "19h",
-    location: "Google Meet",
-    description:
-      "Formation gratuite en ligne pour reconnaître les menaces numériques, sécuriser vos comptes, protéger vos données personnelles et adopter les bons réflexes de sécurité au quotidien.",
-    poster: securityPoster,
-    registrationUrl: "https://forms.cloud.microsoft/r/2ZMCHmz9cx?origin=lprLink",
-    tags: ["Cybersécurité", "Phishing", "2FA", "Bonnes pratiques"],
-    awakening:
-      "Cette formation réveille les bons réflexes numériques : reconnaître les pièges, protéger ses accès et utiliser Internet avec plus de confiance.",
-    outcomes: [
-      "Identifier les menaces courantes avant de cliquer",
-      "Protéger ses comptes, appareils et données",
-      "Se préparer aux risques numériques du quotidien",
     ],
   },
 ];
