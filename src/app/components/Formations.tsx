@@ -10,7 +10,9 @@ import {
   GraduationCap,
   Star,
   ArrowRight,
+  CalendarDays,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 
 
@@ -268,6 +270,25 @@ export function Formations() {
               <span>{b.label}</span>
             </div>
           ))}
+        </div>
+
+        <div className="mb-14 flex justify-center">
+          <Link
+            to="/webinars"
+            className="inline-flex max-w-full items-center justify-center gap-3 rounded-xl px-7 py-4 text-center text-base text-white transition-all duration-300 sm:px-9 sm:text-lg lg:hover:-translate-y-1 lg:hover:scale-[1.03]"
+            style={{
+              background: "linear-gradient(135deg, #00C878 0%, #009B63 48%, #0A1F44 100%)",
+              border: "1px solid rgba(255,255,255,0.32)",
+              boxShadow: "0 20px 45px rgba(0,168,107,0.32), inset 0 1px 0 rgba(255,255,255,0.28)",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 800,
+              letterSpacing: "0",
+            }}
+          >
+            <CalendarDays className="h-5 w-5 flex-shrink-0" />
+            <span>{isFr ? "S'inscrire aux webinaires gratuits" : "Register for free webinars"}</span>
+            <ArrowRight className="h-5 w-5 flex-shrink-0" />
+          </Link>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-14">

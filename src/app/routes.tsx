@@ -6,6 +6,7 @@ import { AdminPage } from "./pages/AdminPage";
 import { ReviewPage } from "./pages/ReviewPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { WebinarsPage } from "./pages/WebinarsPage";
 import { useLanguage } from "./contexts/LanguageContext";
 
 function NotFoundPage() {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
   {
     path: "/reset-password",
     Component: ResetPasswordPage,
+  },
+  {
+    path: "/webinars",
+    Component: WebinarsPage,
   },
   {
     path: "*",
