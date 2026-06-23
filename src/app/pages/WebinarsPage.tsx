@@ -10,7 +10,7 @@ import {
   Sparkles,
   Video,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Chatbot } from "../components/Chatbot";
 import { Footer } from "../components/Footer";
@@ -30,10 +30,21 @@ type Webinar = {
   description: string;
   poster: string;
   registrationUrl: string;
+  registrationOpensAt?: string;
   tags: string[];
   awakening: string;
   outcomes: string[];
 };
+
+function getRemainingTime(targetDate: Date, currentDate: Date) {
+  const totalMinutes = Math.max(0, Math.ceil((targetDate.getTime() - currentDate.getTime()) / 60000));
+
+  return {
+    days: Math.floor(totalMinutes / 1440),
+    hours: Math.floor((totalMinutes % 1440) / 60),
+    minutes: totalMinutes % 60,
+  };
+}
 
 const webinars: Webinar[] = [
   {
@@ -67,6 +78,7 @@ const webinars: Webinar[] = [
       "Formation gratuite pour apprendre à utiliser Microsoft 365, Google Drive, les outils collaboratifs, le stockage, le partage de documents et les bonnes pratiques de sécurité.",
     poster: microsoftPoster,
     registrationUrl: "https://forms.cloud.microsoft/r/wE6axQjWPa?origin=lprLink",
+    registrationOpensAt: "2026-06-28T00:00:00",
     tags: ["Microsoft 365", "Google Drive", "Collaboration", "Sécurité"],
     awakening:
       "Une session pour passer de l'utilisation occasionnelle au vrai travail collaboratif : organiser, partager, coéditer et sécuriser les documents avec les outils du quotidien.",
@@ -87,6 +99,7 @@ const webinars: Webinar[] = [
       "Formation gratuite pour découvrir les 5 outils IA les plus utilisés, apprendre à rédiger des prompts, rechercher, résumer, créer du contenu et gagner du temps.",
     poster: aiPoster,
     registrationUrl: "https://forms.cloud.microsoft/r/U2LkKKe0by?origin=lprLink",
+    registrationOpensAt: "2026-07-04T00:00:00",
     tags: ["IA", "Prompts", "Productivité", "Création de contenu"],
     awakening:
       "L'objectif est de démystifier l'IA et de montrer comment elle peut devenir un assistant simple pour apprendre, créer, résumer et mieux décider.",
@@ -101,6 +114,39 @@ const webinars: Webinar[] = [
 function WebinarCard({ webinar }: { webinar: Webinar }) {
   const hasRegistrationUrl = webinar.registrationUrl.trim().length > 0;
   const hasPoster = webinar.poster.trim().length > 0;
+  const [isRegistrationNoticeOpen, setIsRegistrationNoticeOpen] = useState(false);
+  const [now, setNow] = useState(() => new Date());
+  const registrationOpenDate = webinar.registrationOpensAt
+    ? new Date(webinar.registrationOpensAt)
+    : null;
+  const isRegistrationLocked = registrationOpenDate
+    ? registrationOpenDate.getTime() > now.getTime()
+    : false;
+  const remainingTime = registrationOpenDate
+    ? getRemainingTime(registrationOpenDate, now)
+    : { days: 0, hours: 0, minutes: 0 };
+
+  useEffect(() => {
+    if (!isRegistrationNoticeOpen) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setNow(new Date());
+    }, 30000);
+
+    return () => window.clearInterval(timer);
+  }, [isRegistrationNoticeOpen]);
+
+  function handleRegistrationClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!isRegistrationLocked) {
+      return;
+    }
+
+    event.preventDefault();
+    setNow(new Date());
+    setIsRegistrationNoticeOpen(true);
+  }
 
   return (
     <article
@@ -242,6 +288,7 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
                 href={webinar.registrationUrl}
                 target="_blank"
                 rel="noreferrer"
+                onClick={handleRegistrationClick}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-extrabold text-white transition-all duration-300 sm:w-auto lg:hover:-translate-y-0.5 lg:hover:scale-105"
                 style={{
                   background: "linear-gradient(135deg, #00C878, #007a4e)",
@@ -261,6 +308,80 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
               </span>
             )}
           </div>
+
+          {isRegistrationNoticeOpen && registrationOpenDate ? (
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020817]/75 px-4 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`${webinar.id}-registration-title`}
+              onClick={() => setIsRegistrationNoticeOpen(false)}
+            >
+              <div
+                className="w-full max-w-md rounded-2xl border border-[#00A86B3d] bg-[#0d2254] p-6 text-center"
+                style={{ boxShadow: "0 28px 80px rgba(0,0,0,0.42)" }}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#00A86B18] text-[#00D084]">
+                  <Clock3 className="h-7 w-7" />
+                </div>
+                <h3
+                  id={`${webinar.id}-registration-title`}
+                  className="mb-3 text-white"
+                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "1.35rem", fontWeight: 800 }}
+                >
+                  Inscriptions bientôt ouvertes
+                </h3>
+                <p
+                  className="mb-5 text-sm text-white/68"
+                  style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.75 }}
+                >
+                  Les inscriptions pour « {webinar.title} » ne sont pas encore ouvertes.
+                </p>
+                <div className="mb-6 grid grid-cols-3 gap-3">
+                  {[
+                    { label: "Jours", value: remainingTime.days },
+                    { label: "Heures", value: remainingTime.hours },
+                    { label: "Minutes", value: remainingTime.minutes },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.05] p-3">
+                      <div
+                        className="text-2xl font-extrabold text-[#00D084]"
+                        style={{ fontFamily: "Poppins, sans-serif" }}
+                      >
+                        {item.value}
+                      </div>
+                      <div
+                        className="text-xs font-semibold uppercase text-white/52"
+                        style={{ fontFamily: "Inter, sans-serif" }}
+                      >
+                        {item.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p
+                  className="mb-6 text-xs text-white/52"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  Ouverture le {registrationOpenDate.toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}.
+                </p>
+                <button
+                  type="button"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-[#00A86B] px-5 py-3 text-sm font-bold text-white transition-colors lg:hover:bg-[#00C878]"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                  onClick={() => setIsRegistrationNoticeOpen(false)}
+                >
+                  Compris
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </article>
