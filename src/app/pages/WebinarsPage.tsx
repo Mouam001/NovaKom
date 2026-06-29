@@ -18,6 +18,7 @@ import { Navbar } from "../components/Navbar";
 import { useLanguage } from "../contexts/LanguageContext";
 import microsoftPoster from "../../assets/images/novakom_pub_2222.png";
 import aiPoster from "../../assets/images/novakom_IA.png";
+import securityPoster from "../../assets/images/SECURITE_nOVAKOM.png";
 
 type Webinar = {
   id: string;
@@ -25,6 +26,7 @@ type Webinar = {
   date: string;
   moroniTime: string;
   parisTime: string;
+  endsAt: string;
   location: string;
   description: string;
   poster: string;
@@ -45,6 +47,14 @@ function getRemainingTime(targetDate: Date, currentDate: Date) {
   };
 }
 
+function getWebinarEndDate(webinar: Webinar) {
+  return new Date(webinar.endsAt);
+}
+
+function isWebinarCompleted(webinar: Webinar, currentDate: Date) {
+  return getWebinarEndDate(webinar).getTime() < currentDate.getTime();
+}
+
 const webinars: Webinar[] = [
   {
     id: "microsoft-365-google-drive-outils-collaboratifs",
@@ -52,6 +62,7 @@ const webinars: Webinar[] = [
     date: "Samedi 04/07/2026",
     moroniTime: "20h",
     parisTime: "19h",
+    endsAt: "2026-07-04T21:30:00+03:00",
     location: "Google Meet",
     description:
       "Formation gratuite pour apprendre à utiliser Microsoft 365, Google Drive, les outils collaboratifs, le stockage, le partage de documents et les bonnes pratiques de sécurité.",
@@ -73,6 +84,7 @@ const webinars: Webinar[] = [
     date: "Dimanche 12/07/2026",
     moroniTime: "20h",
     parisTime: "19h",
+    endsAt: "2026-07-12T21:30:00+03:00",
     location: "Google Meet",
     description:
       "Formation gratuite pour découvrir les 5 outils IA les plus utilisés, apprendre à rédiger des prompts, rechercher, résumer, créer du contenu et gagner du temps.",
@@ -88,18 +100,41 @@ const webinars: Webinar[] = [
       "Voir comment rester productif dans le monde de demain",
     ],
   },
+  {
+    id: "sensibilisation-cybersecurite",
+    title: "Sensibilisation à la cybersécurité",
+    date: "Dimanche 28 Juin 2026",
+    moroniTime: "20h",
+    parisTime: "19h",
+    endsAt: "2026-06-28T21:30:00+03:00",
+    location: "Google Meet",
+    description:
+      "Formation gratuite en ligne pour reconnaître les menaces numériques, sécuriser vos comptes, protéger vos données personnelles et adopter les bons réflexes de sécurité au quotidien.",
+    poster: securityPoster,
+    registrationUrl: "https://forms.cloud.microsoft/r/2ZMCHmz9cx?origin=lprLink",
+    tags: ["Cybersécurité", "Phishing", "2FA", "Bonnes pratiques"],
+    awakening:
+      "Cette formation réveille les bons réflexes numériques : reconnaître les pièges, protéger ses accès et utiliser Internet avec plus de confiance.",
+    outcomes: [
+      "Identifier les menaces courantes avant de cliquer",
+      "Protéger ses comptes, appareils et données",
+      "Se préparer aux risques numériques du quotidien",
+    ],
+  },
 ];
 
 function WebinarCard({ webinar }: { webinar: Webinar }) {
   const hasRegistrationUrl = webinar.registrationUrl.trim().length > 0;
   const hasPoster = webinar.poster.trim().length > 0;
   const [isRegistrationNoticeOpen, setIsRegistrationNoticeOpen] = useState(false);
+  const [isCompletedNoticeOpen, setIsCompletedNoticeOpen] = useState(false);
   const [now, setNow] = useState(() => new Date());
+  const isCompleted = isWebinarCompleted(webinar, now);
   const registrationOpenDate = webinar.registrationOpensAt
     ? new Date(webinar.registrationOpensAt)
     : null;
   const isRegistrationLocked = registrationOpenDate
-    ? registrationOpenDate.getTime() > now.getTime()
+    ? !isCompleted && registrationOpenDate.getTime() > now.getTime()
     : false;
   const remainingTime = registrationOpenDate
     ? getRemainingTime(registrationOpenDate, now)
@@ -118,6 +153,13 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
   }, [isRegistrationNoticeOpen]);
 
   function handleRegistrationClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (isCompleted) {
+      event.preventDefault();
+      setNow(new Date());
+      setIsCompletedNoticeOpen(true);
+      return;
+    }
+
     if (!isRegistrationLocked) {
       return;
     }
@@ -158,6 +200,14 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
         <div className="relative flex flex-col overflow-hidden p-6 sm:p-8 lg:p-10">
           <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#00A86B99] to-transparent" />
           <div className="mb-5 flex flex-wrap gap-2">
+            {isCompleted ? (
+              <span
+                className="rounded-full border border-white/12 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/60"
+                style={{ fontFamily: "Inter, sans-serif" }}
+              >
+                Formation terminée
+              </span>
+            ) : null}
             {webinar.tags.map((tag) => (
               <span
                 key={tag}
@@ -262,7 +312,17 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
           </div>
 
           <div className="mt-auto">
-            {hasRegistrationUrl ? (
+            {isCompleted ? (
+              <button
+                type="button"
+                onClick={() => setIsCompletedNoticeOpen(true)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.06] px-7 py-3.5 text-base font-extrabold text-white/60 transition-colors duration-300 sm:w-auto lg:hover:bg-white/[0.09]"
+                style={{ fontFamily: "Inter, sans-serif" }}
+              >
+                Formation terminée
+                <CheckCircle2 className="h-4 w-4" />
+              </button>
+            ) : hasRegistrationUrl ? (
               <a
                 href={webinar.registrationUrl}
                 target="_blank"
@@ -287,6 +347,47 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
               </span>
             )}
           </div>
+
+          {isCompletedNoticeOpen ? (
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020817]/75 px-4 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`${webinar.id}-completed-title`}
+              onClick={() => setIsCompletedNoticeOpen(false)}
+            >
+              <div
+                className="w-full max-w-md rounded-2xl border border-white/12 bg-[#0d2254] p-6 text-center"
+                style={{ boxShadow: "0 28px 80px rgba(0,0,0,0.42)" }}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.08] text-[#9EF2C9]">
+                  <CheckCircle2 className="h-7 w-7" />
+                </div>
+                <h3
+                  id={`${webinar.id}-completed-title`}
+                  className="mb-3 text-white"
+                  style={{ fontFamily: "Poppins, sans-serif", fontSize: "1.35rem", fontWeight: 800 }}
+                >
+                  Formation déjà réalisée
+                </h3>
+                <p
+                  className="mb-6 text-sm text-white/68"
+                  style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.75 }}
+                >
+                  Les inscriptions pour « {webinar.title} » sont fermées, car cette session a déjà eu lieu.
+                </p>
+                <button
+                  type="button"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-[#00A86B] px-5 py-3 text-sm font-bold text-white transition-colors lg:hover:bg-[#00C878]"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                  onClick={() => setIsCompletedNoticeOpen(false)}
+                >
+                  Compris
+                </button>
+              </div>
+            </div>
+          ) : null}
 
           {isRegistrationNoticeOpen && registrationOpenDate ? (
             <div
@@ -370,6 +471,17 @@ function WebinarCard({ webinar }: { webinar: Webinar }) {
 export function WebinarsPage() {
   const { language } = useLanguage();
   const isFr = language === "fr";
+  const sortedWebinars = [...webinars].sort((firstWebinar, secondWebinar) => {
+    const currentDate = new Date();
+    const firstIsCompleted = isWebinarCompleted(firstWebinar, currentDate);
+    const secondIsCompleted = isWebinarCompleted(secondWebinar, currentDate);
+
+    if (firstIsCompleted !== secondIsCompleted) {
+      return firstIsCompleted ? 1 : -1;
+    }
+
+    return getWebinarEndDate(firstWebinar).getTime() - getWebinarEndDate(secondWebinar).getTime();
+  });
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -427,7 +539,7 @@ export function WebinarsPage() {
             </div>
 
             <div className="grid gap-8">
-              {webinars.map((webinar) => (
+              {sortedWebinars.map((webinar) => (
                 <WebinarCard key={webinar.id} webinar={webinar} />
               ))}
             </div>
