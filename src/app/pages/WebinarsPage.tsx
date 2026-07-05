@@ -17,7 +17,7 @@ import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import { useLanguage } from "../contexts/LanguageContext";
 import microsoftPoster from "../../assets/images/novakom_pub_2222.png";
-import aiPoster from "../../assets/images/novakom_IA.png.png";
+import aiPoster from "../../assets/images/novakom_IA.png";
 import securityPoster from "../../assets/images/SECURITE_nOVAKOM.png";
 
 type Webinar = {
