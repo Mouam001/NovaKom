@@ -19,6 +19,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import microsoftPoster from "../../assets/images/novakom_pub_2222.png";
 import aiPoster from "../../assets/images/novakom_IA.png";
 import securityPoster from "../../assets/images/SECURITE_nOVAKOM.png";
+import dailyCybersecurityPoster from "../../assets/images/cybersecurite.png";
 
 type Webinar = {
   id: string;
@@ -32,6 +33,7 @@ type Webinar = {
   poster: string;
   registrationUrl: string;
   registrationOpensAt?: string;
+  completed?: boolean;
   tags: string[];
   awakening: string;
   outcomes: string[];
@@ -52,6 +54,10 @@ function getWebinarEndDate(webinar: Webinar) {
 }
 
 function isWebinarCompleted(webinar: Webinar, currentDate: Date) {
+  if (webinar.completed) {
+    return true;
+  }
+
   return getWebinarEndDate(webinar).getTime() < currentDate.getTime();
 }
 
@@ -91,6 +97,7 @@ const webinars: Webinar[] = [
     poster: aiPoster,
     registrationUrl: "https://forms.cloud.microsoft/r/U2LkKKe0by?origin=lprLink",
     registrationOpensAt: "2026-07-04T00:00:00",
+    completed: true,
     tags: ["IA", "Prompts", "Productivité", "Création de contenu"],
     awakening:
       "L'objectif est de démystifier l'IA et de montrer comment elle peut devenir un assistant simple pour apprendre, créer, résumer et mieux décider.",
@@ -98,6 +105,27 @@ const webinars: Webinar[] = [
       "Découvrir les outils IA qui transforment déjà les métiers",
       "Savoir poser de bonnes questions aux IA",
       "Voir comment rester productif dans le monde de demain",
+    ],
+  },
+  {
+    id: "cybersecurite-au-quotidien",
+    title: "Cybersécurité au quotidien",
+    date: "Jeudi 16/07/2026",
+    moroniTime: "20h",
+    parisTime: "19h",
+    endsAt: "2026-07-16T21:00:00+03:00",
+    location: "Microsoft Teams",
+    description:
+      "Formation gratuite pour découvrir les outils et les bonnes pratiques indispensables afin de protéger efficacement vos comptes, vos données et vos usages numériques au quotidien.",
+    poster: dailyCybersecurityPoster,
+    registrationUrl: "https://forms.office.com/r/QCgMA3yw9X?origin=lprLink",
+    tags: ["Cybersécurité", "Mots de passe", "2FA", "VPN"],
+    awakening:
+      "Une session pratique pour transformer les bons principes de sécurité en réflexes simples : mots de passe robustes, gestionnaires, authentification à deux facteurs et VPN.",
+    outcomes: [
+      "Créer des mots de passe forts et uniques",
+      "Utiliser un gestionnaire de mots de passe",
+      "Activer la double authentification et comprendre l'usage d'un VPN",
     ],
   },
   {
@@ -533,8 +561,8 @@ export function WebinarsPage() {
                 style={{ fontFamily: "Inter, sans-serif", lineHeight: 1.8 }}
               >
                 {isFr
-                  ? "Des sessions pratiques en ligne pour renforcer vos compétences numériques, collaboratives et IA avec l'équipe NovaKom."
-                  : "Practical online sessions to strengthen digital, collaboration and AI skills with the NovaKom team."}
+                  ? "Des sessions pratiques en ligne pour renforcer vos compétences numériques, cybersécurité, collaboratives et IA avec l'équipe NovaKom."
+                  : "Practical online sessions to strengthen digital, cybersecurity, collaboration and AI skills with the NovaKom team."}
               </p>
             </div>
 
