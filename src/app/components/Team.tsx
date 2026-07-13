@@ -4,6 +4,7 @@ import Abdel from "@/assets/images/Abdel2.png"
 import Djae from "@/assets/images/djae.jpeg"
 import Isak from "@/assets/images/isak.jpeg"
 import Khadidja from "@/assets/images/khadidja.jpeg"
+import DrIgnace from "@/assets/images/dr_ignace.jpeg"
 import { Linkedin, Globe } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
@@ -74,6 +75,28 @@ const team = [
     color: "#a855f7",
     linkedin: "https://www.linkedin.com/in/abdelwahab28/",
     portfolio: "https://abdel-port-folio-nine.vercel.app/",
+  },
+
+  {
+    name: "Dr. Haingonirina Ignace RAJAOSOLOMANANANTENA",
+    role: {
+      fr: "Collaborateur & Formateur | Cybersécurité | Deep Learning",
+      en: "Collaborator & Trainer | Cybersecurity | Deep Learning",
+    },
+    desc: {
+      fr: "Docteur en Sciences Cognitives et Applications en Cybersécurité et Deep Learning, spécialiste des systèmes de défense avancée et consultant-formateur national et international. " +
+        "Chez NovaKom, j’accompagne les organisations dans la montée en compétence, la protection des systèmes et la mise en place de solutions de cybersécurité innovantes.",
+      en: "Doctor in Cognitive Sciences and Applications in Cybersecurity and Deep Learning, specialist in advanced defense systems and national and international consultant-trainer. " +
+        "At NovaKom, I support organizations in skills development, system protection, and the implementation of innovative cybersecurity solutions.",
+    },
+    img: DrIgnace,
+    objectPosition: "center 12%",
+    badge: {
+      fr: "Cyber & Formation",
+      en: "Cyber & Training",
+    },
+    color: "#00A86B",
+    portfolio: "https://orcid.org/0009-0004-4298-8173",
   },
 
   {

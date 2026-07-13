@@ -110,10 +110,10 @@ const webinars: Webinar[] = [
   {
     id: "cybersecurite-au-quotidien",
     title: "Cybersécurité au quotidien",
-    date: "Jeudi 16/07/2026",
+    date: "Mercredi 15/07/2026",
     moroniTime: "20h",
     parisTime: "19h",
-    endsAt: "2026-07-16T21:00:00+03:00",
+    endsAt: "2026-07-15T21:00:00+03:00",
     location: "Microsoft Teams",
     description:
       "Formation gratuite pour découvrir les outils et les bonnes pratiques indispensables afin de protéger efficacement vos comptes, vos données et vos usages numériques au quotidien.",

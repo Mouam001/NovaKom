@@ -33,7 +33,7 @@ const formations: Formation[] = [
     id: "cybersec",
     icon: <Shield className="w-6 h-6" />,
     category: "Cybersécurité",
-    title: "Sécurité Informatique & Cyber Défense",
+    title: "Sécurité Informatique & Cybersécurité",
     color: "#00A86B",
     level: "Débutant → Avancé",
     price: "Sur devis",
