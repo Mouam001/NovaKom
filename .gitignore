@@ -91,3 +91,6 @@ temp/
 
 # Local Netlify folder
 .netlify
+
+# Local security reports
+vulnerabilite.md

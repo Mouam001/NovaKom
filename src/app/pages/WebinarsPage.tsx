@@ -20,6 +20,7 @@ import microsoftPoster from "../../assets/images/novakom_pub_2222.png";
 import aiPoster from "../../assets/images/novakom_IA.png";
 import securityPoster from "../../assets/images/SECURITE_nOVAKOM.png";
 import dailyCybersecurityPoster from "../../assets/images/cybersecurite.png";
+import deepfakePoster from "../../assets/images/deepFake.png";
 
 type Webinar = {
   id: string;
@@ -126,6 +127,27 @@ const webinars: Webinar[] = [
       "Créer des mots de passe forts et uniques",
       "Utiliser un gestionnaire de mots de passe",
       "Activer la double authentification et comprendre l'usage d'un VPN",
+    ],
+  },
+  {
+    id: "deepfake-hacker-identite-ia",
+    title: "Le Deepfake Hacker : comment l'IA vole votre identité",
+    date: "Jeudi 16/07/2026",
+    moroniTime: "20h",
+    parisTime: "19h",
+    endsAt: "2026-07-16T21:30:00+03:00",
+    location: "Microsoft Teams",
+    description:
+      "Webinaire gratuit pour comprendre comment les deepfakes, le voice cloning et l'IA générative peuvent copier une voix, un visage ou une identité, et apprendre les bons réflexes pour se protéger.",
+    poster: deepfakePoster,
+    registrationUrl: "https://chat.whatsapp.com/JF6R6M6Op2CDu0v3rgIfao",
+    tags: ["Deepfake", "IA générative", "Voice cloning", "Identité numérique"],
+    awakening:
+      "Une session de sensibilisation pour reconnaître les manipulations audio et vidéo, comprendre les scénarios d'escroquerie et protéger son identité numérique.",
+    outcomes: [
+      "Identifier les risques liés aux deepfakes vidéo et audio",
+      "Comprendre les méthodes d'usurpation d'identité par IA",
+      "Adopter les bonnes pratiques pour vérifier et sécuriser ses échanges",
     ],
   },
   {
